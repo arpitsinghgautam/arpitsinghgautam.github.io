@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+  <!-- Meta Tags -->
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords" content="Arpit Singh Gautam, Arpit, Arpit Singh, Arpit Gautam, ASG , data scientist, machine learning engineer, machine learning portfolio, portfolio website">
+  <meta name="description" content="Arpit Singh Gautam is a passionate AI & ML professional with expertise in data science, data analysis, Python programming, and machine learning techniques. Specializing in neural networks, deep learning, computer vision, and natural language processing, Arpit has a proven track record of delivering successful AI-based solutions.">
+  <!-- Page Title -->
+  <title>American Sign Language Recognition System : Project by ASG</title>
+  <!-- Favicon Icon -->
+  <link rel="icon" href="../assets/img/favicon.ico" />
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../assets/css/fontawesome.css" />
+  <link rel="stylesheet" href="../assets/css/slick.css" />
+  <link rel="stylesheet" href="../assets/css/lightgallery.min.css" />
+  <link rel="stylesheet" href="../assets/css/animate.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+
+<body id="home">
+  <body id="home">
+    <!-- Start Header Section -->
+    <header class="st-site-header st-style1 st-sticky-header">
+      <div class="st-main-header">
+        <div class="container">
+          <div class="st-main-header-in">
+            <div class="st-main-header-left">
+              <a class="st-site-branding" href="../index.html"><img src="../assets/img/logo.png" alt="Arpit Singh Gautam"></a>
+            </div>
+            <div class="st-main-header-right">
+              <div class="st-nav">
+                <ul class="st-nav-list st-onepage-nav">
+                  <li><a href="../index.html#home">Home</a></li>
+                  <li><a href="../index.html#about">About</a></li>
+                  <li><a href="../index.html#resume">Resume</a></li>
+                  <li><a href="../index.html#projects">Projects</a></li>
+                  <li><a href="../index.html#awards">Awards</a></li>
+                  <li><a href="../index.html#contact">Contact</a></li>
+                </ul>
+                
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- End Header Section -->
+
+ <div class="st-content">
+   <div class="st-page-heading st-dynamic-bg" data-src="../assets/img/portfolio/Sign-Detection/sign-language-detection-1.png">
+      <div class="container">
+        <div class="st-page-heading-in text-center">
+          <h1 class="st-page-heading-title">American Sign Language Recognition System<br></h1>
+          <div class="st-post-label">
+            <span>By <a href="../index.html">Arpit Singh Gautam</a></span>
+            <span>Nov 17, 2022</span>
+          </div>
+        </div>
+      </div>
+    </div><!-- .st-page-heading -->
+    <div class="st-height-b100 st-height-lg-b80"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-10 offset-md-1">
+          <div class="st-post-details st-style1">
+            <p>American Sign Language (ASL) is a complex and nuanced language used by the Deaf and Hard of Hearing community to communicate. Due to the lack of automatic sign language recognition systems, communication barriers still exist between the Deaf community and those who do not know ASL.</p>
+            <p>However, recent advancements in machine learning and computer vision have enabled the development of ASL recognition systems, which can translate sign language into text or spoken language in real-time. In this report, we will discuss how an ASL recognition system works, its potential impact on the Deaf and Hard of Hearing community, and the challenges faced in developing such systems.</p>
+            <img class="st-zoom-in" src="../assets/img/portfolio/Sign-Detection/Sign-Symbols-Chart.jpg" alt="Sign-Symbols-Chart">
+            <h2>Working</h2>
+            <div class="st-post-info">
+              <div class="st-post-text">
+                <p>The ASL recognition system is implemented using OpenCV, a hand tracking module, and a classification module. The system first captures real-time video input from a camera using cv2.VideoCapture(). It then uses HandDetector from the cvzone library to detect any hand(s) present in the video feed.</p>
+                <p>Once a hand is detected, the system crops the video feed around the hand region using the bbox (bounding box) coordinates obtained from the hand detection. The cropped region is then resized to a fixed size of 300x300 pixels and stored in a NumPy array. This step ensures that the input to the classification model is consistent in terms of size and aspect ratio, and reduces the effect of background noise and clutter.</p>
+                <p>The Classifier module from cvzone is used for classification, and is initialized with a pre-trained Keras model (keras_model.h5) and a label file (labels.txt). The model is trained to classify 7 different signs for the project.</p>
+
+                <p></p>
+                <h2>Working Video</h2>
+                <!-- For Youtube -->
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" width="816" height="459" src="https://www.youtube.com/embed/3Ism7WecbFA" allowfullscreen>
+                    </iframe>
+                </div>
+                <p>For each frame, the system passes the resized hand image to the classification model using getPrediction() function of the Classifier module, which returns the predicted sign and the corresponding index. The predicted sign is then displayed on the screen along with a bounding box around the hand region using cv2.putText() and cv2.rectangle() functions.</p>
+                <p>The system also includes a data collection script (data_collection.py) that allows users to capture and save images of their hand signs for later training and testing of the classification model. The script captures images from the camera and stores them in a specified folder with a unique filename based on the timestamp.</p>
+                <blockquote>Language is not just about sounds, it is about meaning and understanding. ASL recognition systems have the power to bridge the gap between the Deaf and hearing worlds, allowing for a more inclusive and accessible society.<small>by: <span>Unknow</span></small></blockquote>
+                <h2>Future Aspects</h2>
+                <p><strong>Integration with Wearable Technology:</strong> Integration of ASL recognition systems with wearable technology such as smart glasses or smartwatches can allow for a more seamless experience and easier communication.</p>
+                <p><strong>Increased Vocabulary:</strong> ASL recognition systems can be expanded to include a larger vocabulary, including specialized signs and regional dialects.</p>
+                <p><strong>Access to Education:</strong> ASL recognition systems can be used in education settings to facilitate learning and communication for deaf and hard-of-hearing students.</p>
+                <p><strong>Mobile Applications:</strong> ASL recognition systems can be integrated into mobile applications, allowing users to learn ASL and communicate with deaf individuals on-the-go.</p>
+                
+                <div class="st-height-b20 st-height-lg-b20"></div>
+                <h2>Summary</h2>
+                <p>Overall, the ASL recognition system implementation using OpenCV, a hand tracking module, and a classification module provides a simple and effective way to recognize hand signs in real-time video feeds. However, further optimizations and improvements can be made to the system, such as using more advanced deep learning models for classification, improving the image pre-processing pipeline, and addressing issues with occlusion or complex sign gestures.</p>
+                <blockquote><a href="https://github.com/arpitsinghgautam/Sign-Language-Detection-System"><i class="fab fa-github"></i>  Project Github Repository</a></blockquote> 
+              </div>
+              <div class="st-height-b35 st-height-lg-b35"></div>
+              <div class="st-post-meta">
+                <div class="st-post-share">
+                  <h4 class="st-post-share-title">Share:</h4>
+                  <div class="st-post-share-btn-list">
+                     <a href="https://www.facebook.com/sharer/sharer.php?u=[INSERT URL]"><i class="fab fa-facebook-f"></i></a> 
+                     <a href="https://twitter.com/intent/tweet?url=[INSERT URL]"><i class="fab fa-twitter"></i></a> 
+                     <a href="https://www.linkedin.com/sharing/share-offsite/?url=[INSERT URL]"><i class="fab fa-linkedin-in"></i></a>
+                     <a href="https://www.instagram.com/[YOUR INSTAGRAM USERNAME]/"><i class="fab fa-instagram"></i></a> 
+                     <a href="https://www.pinterest.com/pin/create/button/?url=[INSERT URL]"><i class="fab fa-pinterest-p"></i></a>
+                  </div>
+                </div>
+              </div>
+              <div class="st-height-b60 st-height-lg-b60"></div>
+            </div>
+            <div class="st-post-btn-gropu">
+              <a href="Recipe-Genie-Pad.html" class="st-btn st-style2 st-color1 st-size-medium">Previous Project</a>
+              <a href="Buddy.html" class="st-btn st-style2 st-color1 st-size-medium">Next Project</a>
+            </div>
+          </div>
+          
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="st-height-b100 st-height-lg-b80"></div>
+  </div>
+
+
+  <!-- Start Footer Seciton -->
+  <footer>
+    <div class="container">
+      <div class="st-copyright-wrap text-center">
+        <div class="st-copyright-text">Arpit Singh Gautam © 2023. All right reserved.</div>
+      </div>
+    </div>
+  </footer>
+  <!-- End Footer Seciton -->
+
+  <!-- Scripts -->
+  <script src="../assets/js/jquery-1.12.4.min.js"></script>
+  <script src="../assets/js/jquery.slick.min.js"></script>
+  <script src="../assets/js/lightgallery.min.js"></script>
+  <script src="../assets/js/wow.min.js"></script>
+  <script src="../assets/js/ripples.min.js"></script>
+  <script src="../assets/js/particles.min.js"></script>
+  <script src="../assets/js/main.js"></script>
+</body>
+
+</html>
