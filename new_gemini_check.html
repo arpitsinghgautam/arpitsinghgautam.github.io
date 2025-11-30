@@ -1,0 +1,439 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arpit Singh Gautam | Data Scientist</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0f172a; /* Dark Slate - Cyber feel */
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent: #38bdf8; /* Light Blue for links/highlights */
+            --card-bg: #1e293b;
+            --border: #334155;
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        /* Container to mimic the academic paper width */
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* HEADER / HERO */
+        header {
+            margin-bottom: 50px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            font-size: 1.2rem;
+        }
+
+        .social-links a {
+            color: var(--text-secondary);
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: var(--accent);
+        }
+
+        /* INTRO TEXT */
+        .intro {
+            font-size: 1.05rem;
+            margin-bottom: 40px;
+            color: #cbd5e1;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* METRICS GRID (Apurv Style) */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .metric-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent);
+            display: block;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* SECTIONS */
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        /* NEWS LIST (Danush Style) */
+        .news-list {
+            list-style: none;
+        }
+
+        .news-list li {
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .news-list li::before {
+            content: "📣";
+            position: absolute;
+            left: 0;
+            top: 2px;
+            font-size: 0.9rem;
+        }
+
+        /* EXPERIENCE & PROJECTS */
+        .item {
+            margin-bottom: 25px;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 5px;
+        }
+
+        .item-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .item-meta {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .item-desc {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+        }
+
+        .tags {
+            margin-top: 8px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent);
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        /* HACKATHON GRID */
+        .hackathon-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .hackathon-item {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 3px solid var(--accent);
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 80px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .item-header { flex-direction: column; }
+            .metrics-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>Arpit Singh Gautam</h1>
+        <div class="subtitle">
+            Data Scientist @ Dell CSG CTO Lab | Hackathon Champion (12x Winner) <br>
+            Undergraduate Researcher @ Manipal University Jaipur
+        </div>
+        
+        <div class="social-links">
+            <a href="mailto:arpitsinghgautam777@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+            <a href="https://linkedin.com/in/arpitsinghgautam" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="https://github.com/arpitsinghgautam" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://arpitsinghgautam.me" target="_blank" title="Portfolio"><i class="fas fa-globe"></i></a>
+            <a href="#" target="_blank" title="Download CV" style="font-size: 0.9rem; margin-left: auto; border: 1px solid var(--text-secondary); padding: 2px 10px; border-radius: 4px;">Download CV</a>
+        </div>
+    </header>
+
+    <div class="intro">
+        <p>
+            I am a Senior at <strong>Manipal University Jaipur</strong> specializing in <strong>Artificial Intelligence & Machine Learning</strong>. 
+            My passion lies in distributed AI systems, efficient inference, and leveraging data to create innovative solutions.
+        </p>
+        <br>
+        <p>
+            Currently, I am a <strong>Data Scientist at Dell CSG CTO Lab</strong>, working on agentic frameworks and distributed inference. 
+            Over the past few years, I have completed <strong>10 internships</strong> across MNCs and research labs (IBM Z, VECC, IIT BHU) and competed in <strong>17 hackathons with 12 wins</strong>.
+        </p>
+        <br>
+        <p>
+            Feel free to reach out if you'd like to chat about <strong>LLM Optimization</strong>, <strong>RLHF</strong>, or <strong>Computer Vision</strong>.
+        </p>
+    </div>
+
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <span class="metric-number">12</span>
+            <span class="metric-label">Hackathon Wins</span>
+        </div>
+        <div class="metric-card">
+            <span class="metric-number">10+</span>
+            <span class="metric-label">Internships</span>
+        </div>
+        <div class="metric-card">
+            <span class="metric-number">20k+</span>
+            <span class="metric-label">Conf. Views</span>
+        </div>
+        <div class="metric-card">
+            <span class="metric-number">5</span>
+            <span class="metric-label">Papers/Talks</span>
+        </div>
+    </div>
+
+    <section id="news">
+        <h2>Updates & Highlights</h2>
+        <ul class="news-list">
+            <li><strong>[Speaker]</strong> Invited to give 2 sessions at the International <strong>IBM Z Day</strong> Conference (20k+ Live views).</li>
+            <li><strong>[Mentor]</strong> Led workshops for 3300+ students at the <strong>IBM Z Datathon</strong> to setup LinuxONE ML instances.</li>
+            <li><strong>[Award]</strong> Received Manipal University Jaipur's <strong>Tea with President</strong> & Student Excellence Award.</li>
+            <li><strong>[Community]</strong> Co-Founder & Former President @ AIML Community MUJ (Grew to 300+ Members).</li>
+        </ul>
+    </section>
+
+    <section id="experience">
+        <h2>Selected Experience</h2>
+
+        <div class="item">
+            <div class="item-header">
+                <span class="item-title">Data Scientist (CSG CTO Lab)</span>
+                <span class="item-meta">Dell Technologies | July 2024 - Present</span>
+            </div>
+            <div class="item-desc">
+                Engineered a distributed inference system utilizing disaggregated serving and KV cache quantization. 
+                Built <strong>CogniSQL-R1-Zero</strong>, a reasoning model for Text-to-SQL using GRPO reinforcement learning.
+            </div>
+            <div class="tags">
+                <span class="tag">LLMs</span> <span class="tag">Distributed Systems</span> <span class="tag">Reinforcement Learning</span>
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="item-header">
+                <span class="item-title">Computer Vision Research Engineer</span>
+                <span class="item-meta">Stealth Startup (US Remote) | Mar 2024 - June 2024</span>
+            </div>
+            <div class="item-desc">
+                Developed a real-time theft detection system using SlowFast networks and 3D CNNs, optimizing for low-latency edge deployment.
+            </div>
+            <div class="tags">
+                <span class="tag">Computer Vision</span> <span class="tag">Edge AI</span> <span class="tag">3D CNNs</span>
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="item-header">
+                <span class="item-title">Subject Matter Expert & Mentor</span>
+                <span class="item-meta">IBM Z | Jan 2024 - June 2024</span>
+            </div>
+            <div class="item-desc">
+                Served as the sole student mentor alongside IBM professionals for flagship events. Guided global hackathon winners on mainframe-based ML integration.
+            </div>
+            <div class="tags">
+                <span class="tag">Mainframe</span> <span class="tag">LinuxONE</span> <span class="tag">Mentorship</span>
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="item-header">
+                <span class="item-title">Winter Research Intern</span>
+                <span class="item-meta">Variable Energy Cyclotron Center (VECC) | Dec 2023 - Feb 2024</span>
+            </div>
+            <div class="item-desc">
+                Developed a Deep Reinforcement Learning (TD3) autonomous navigation system for robots in nuclear radiation leakage scenarios.
+            </div>
+            <div class="tags">
+                <span class="tag">Robotics</span> <span class="tag">DRL</span> <span class="tag">Simulation</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="research">
+        <h2>Research & Publications</h2>
+        
+        <div class="item">
+            <div class="item-header">
+                <span class="item-title">Faithful Theory of Mind Distillation: Why Preference Based Refinement Improves Imitation</span>
+            </div>
+            <div class="item-desc">
+                <em>Arpit Singh Gautam, Saurabh Jha</em> <br>
+                Accepted in the Advancing Artificial Intelligence through Theory of Mind Workshop at <strong>AAAI 2026</strong>.
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="item-header">
+                <span class="item-title">Enhancing Lymphoma Detection Using Multi-Layer Hybrid Neural Networks</span>
+            </div>
+            <div class="item-desc">
+                <em>Arpit Singh Gautam, Satyam Kumar, et al.</em> <br>
+                Presented at <strong>16th ICCCNT, IIT Indore (2025)</strong>. Achieved 95.66% accuracy on histopathological images.
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="item-header">
+                <span class="item-title">Real-Time QUIC Traffic Classification with Explainable AI</span>
+            </div>
+            <div class="item-desc">
+                <em>Swastik Vaish, Arpit Singh Gautam, Rajesh Kumar</em> <br>
+                Presented at <strong>16th ICCCNT, IIT Indore (2025)</strong>. Lightweight approach using LightGBM.
+            </div>
+        </div>
+    </section>
+
+    <section id="hackathons">
+        <h2>Hackathon Highlights (12 Wins / 17 Participations)</h2>
+        <div class="hackathon-list">
+            <div class="hackathon-item">
+                <strong>Dell Technologies Industry Hackathon</strong><br>
+                <span style="color: var(--text-secondary); font-size: 0.9rem;">🏆 1st Place Overall (500+ participants)</span>
+            </div>
+            <div class="hackathon-item">
+                <strong>CalCodeFest (UC Berkeley)</strong><br>
+                <span style="color: var(--text-secondary); font-size: 0.9rem;">🥈 2nd Place Overall</span>
+            </div>
+            <div class="hackathon-item">
+                <strong>SacHacks IV & V (UC Davis)</strong><br>
+                <span style="color: var(--text-secondary); font-size: 0.9rem;">🏆 Best Use of IBM Z Winner</span>
+            </div>
+            <div class="hackathon-item">
+                <strong>Global Open Hackathons</strong><br>
+                <span style="color: var(--text-secondary); font-size: 0.9rem;">🥉 3rd Place (W3B GreenTech, MLH BonHacketit)</span>
+            </div>
+            <div class="hackathon-item">
+                <strong>National Wins</strong><br>
+                <span style="color: var(--text-secondary); font-size: 0.9rem;">The 418, The Latest Cut, MiniHacks 3.0</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2>Featured Projects</h2>
+        <div class="item">
+            <div class="item-header">
+                <a href="#" class="item-title">CodeGenie: Self-Healing Code Generator</a>
+            </div>
+            <div class="item-desc">
+                Leveraged Google's Gemini Pro and e2b SDK to create self-healing loops and automated code verification, increasing efficiency by 30%.
+            </div>
+        </div>
+        <div class="item">
+            <div class="item-header">
+                <a href="#" class="item-title">NoCodeDesk</a>
+            </div>
+            <div class="item-desc">
+                A no-code ML platform with interactive features, supporting preprocessing, EDA, and model selection powered by LinuxONE instances.
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>
+            Other Interests: Anime 📺, FPS Gaming 🎮, Hiking 🗻<br>
+            &copy; 2025 Arpit Singh Gautam.
+        </p>
+    </footer>
+
+</div>
+
+</body>
+</html>
