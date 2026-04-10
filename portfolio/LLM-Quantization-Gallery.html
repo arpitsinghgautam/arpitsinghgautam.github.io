@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6P1E490Z0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X6P1E490Z0');</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="LLM Quantization Gallery — interactive exploration of quantization techniques for large language models. Project by Arpit Singh Gautam.">
+  <title>LLM Quantization Gallery — Arpit Singh Gautam</title>
+  <link rel="icon" href="../assets/img/favicon_7.jpg">
+  <link rel="stylesheet" href="../assets/css/fontawesome.css">
+  <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="header-top">
+    <a class="nav-brand" href="../index.html">Arpit Singh <span class="brand-accent">Gautam</span></a>
+    <div class="header-icons">
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+    </div>
+  </div>
+  <div class="header-nav">
+    <a href="../">About</a>
+    <a href="../publications.html">Publications</a>
+    <a href="../experience.html">Experience</a>
+    <a href="../media-awards.html">Media &amp; Awards</a>
+    <a href="../projects.html" class="active">Projects</a>
+    <a href="../blog.html">Blog</a>
+    <a href="../misc.html">Misc</a>
+  </div>
+</header>
+<main class="page-wrap">
+  <div class="post-hero">
+    <div class="post-hero-label"><a href="../projects.html">← Projects</a></div>
+    <h1>LLM Quantization Gallery</h1>
+    <div class="post-meta">
+      <span>By <a href="../index.html">Arpit Singh Gautam</a></span>
+      <span>2025</span>
+    </div>
+    <div class="tags" style="margin-top:12px">
+      <span class="tag">LLM</span><span class="tag">Quantization</span><span class="tag">Model Compression</span><span class="tag">Inference</span><span class="tag">Interactive</span>
+    </div>
+  </div>
+  <article class="post-body">
+    <p>
+      The LLM Quantization Gallery is an interactive tool for exploring and comparing quantization
+      techniques for large language models. It provides a hands-on way to understand how different
+      quantization methods affect model quality, size, and inference efficiency.
+    </p>
+    <p>
+      Quantization is one of the most impactful techniques for deploying LLMs efficiently —
+      reducing memory footprint and accelerating inference by representing weights at lower bit
+      precisions. This gallery makes those trade-offs concrete and navigable.
+    </p>
+
+    <h2>What It Covers</h2>
+    <ul>
+      <li>Comparison of quantization methods (INT8, INT4, GPTQ, AWQ, GGUF, and more)</li>
+      <li>Quality metrics (perplexity, benchmark scores) across bit widths</li>
+      <li>Model size and memory footprint comparisons</li>
+      <li>Inference speed benchmarks across hardware configurations</li>
+    </ul>
+
+    <h2>Background</h2>
+    <p>
+      This project grew out of my work at Dell Technologies (CSG CTO Lab), where I developed
+      an RL-based quantization framework for Post-Training Quantization in LLMs — achieving
+      2.6× compression over baseline methods with minimal perplexity loss. The gallery
+      is a public-facing complement to that research, making quantization trade-offs
+      accessible to practitioners.
+    </p>
+
+    <a class="btn-external" href="https://arpitsinghgautam.me/llm-quantization-gallery/" target="_blank" rel="noopener">
+      <i class="fas fa-external-link-alt"></i> Open the Gallery
+    </a>
+
+    <div class="share-row">
+      <span>Share:</span>
+      <a href="https://twitter.com/intent/tweet?url=https://arpitsinghgautam.me/llm-quantization-gallery/" target="_blank" rel="noopener"><i class="fab fa-twitter"></i> Twitter</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://arpitsinghgautam.me/llm-quantization-gallery/" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a>
+    </div>
+  </article>
+  <nav class="post-nav">
+    <a href="../projects.html">← All Projects</a>
+  </nav>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span>© 2025 Arpit Singh Gautam</span>
+    <span><a href="../index.html">← Back to About</a></span>
+  </div>
+</footer>
+<script>
+  function toggleTheme(){var cur=document.documentElement.getAttribute('data-theme');var next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);localStorage.setItem('theme',next);document.getElementById('theme-toggle').textContent=next==='dark'?'☀️':'🌙';}
+  (function(){var t=document.documentElement.getAttribute('data-theme');var btn=document.getElementById('theme-toggle');if(btn)btn.textContent=t==='dark'?'☀️':'🌙';})();
+</script>
+</body>
+</html>

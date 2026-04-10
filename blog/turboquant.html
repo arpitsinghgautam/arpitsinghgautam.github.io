@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6P1E490Z0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X6P1E490Z0');</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="TurboQuant explained: how Google achieves 6× KV cache compression at ICLR 2026 — random rotation, per-element quantization, and QJL residual correction for provably unbiased LLM inference.">
+  <title>TurboQuant: KV Cache Compression Explained — Arpit Singh Gautam</title>
+  <link rel="icon" href="../assets/img/favicon_7.jpg">
+  <link rel="stylesheet" href="../assets/css/fontawesome.css">
+  <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+
+<button id="back-to-top" title="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+<header class="site-header">
+  <div class="header-top">
+    <a class="nav-brand" href="/">Arpit Singh <span class="brand-accent">Gautam</span></a>
+    <div class="header-icons">
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+    </div>
+  </div>
+  <div class="header-nav">
+    <a href="/">About</a>
+    <a href="../publications.html">Publications</a>
+    <a href="../experience.html">Experience</a>
+    <a href="../media-awards.html">Media &amp; Awards</a>
+    <a href="../projects.html">Projects</a>
+    <a href="../blog.html" class="active">Blog</a>
+    <a href="../misc.html">Misc</a>
+  </div>
+</header>
+
+<main class="page-wrap">
+
+  <div class="blog-post-hero">
+    <div class="breadcrumb"><a href="../blog.html">← Blog</a></div>
+    <h1>TurboQuant: How Google Compresses the KV Cache by 6× Without Losing Accuracy</h1>
+    <div class="blog-post-meta">
+      <span><i class="fas fa-calendar-alt"></i> 2026</span>
+      <span><i class="fas fa-clock"></i> 10 min read</span>
+      <span><i class="fas fa-tag"></i> Quantization · KV Cache · LLM Inference</span>
+    </div>
+  </div>
+
+  <div class="blog-post-body">
+
+    <p>
+      As LLMs serve longer contexts — documents, codebases, multi-turn conversations — the KV cache becomes one of the dominant memory costs at inference time. A single long-context request can consume more GPU memory for the KV cache than for the model weights themselves. Multiply that by hundreds of concurrent users, and it becomes the primary constraint on batch size and throughput.
+    </p>
+    <p>
+      TurboQuant, from Google Research and presented at <strong>ICLR 2026</strong>, compresses KV cache tensors to 3–4 bits with <strong>provably zero accuracy loss</strong>. That's a 6× memory reduction and up to 8× throughput improvement on H100 GPUs — and it requires no fine-tuning, no calibration data, and no changes to the model.
+    </p>
+    <p>
+      The algorithm has three steps: random rotation, per-element quantization, and QJL residual correction. Each is elegant. Together they make extreme KV cache compression safe.
+    </p>
+
+    <h2>The Core Problem: KV Cache Outliers</h2>
+    <p>
+      KV cache tensors — the stored key and value vectors for each attention head — share a statistical property with most neural network activations: <strong>outliers</strong>. A few coordinates dominate the magnitude range, and naive quantization is ruined by them.
+    </p>
+    <p>
+      Suppose a key vector has 4 coordinates:
+    </p>
+    <pre><code>[ 0.001,  0.002,  0.001,  47.3 ]</code></pre>
+    <p>
+      One coordinate dominates. If you apply 3-bit quantization to this vector, all 8 levels must span the range 0.001 to 47.3. Each bucket is roughly <strong>6 units wide</strong>, and the three small values — which often carry important attention signal — all collapse into the same bin. You've thrown away 75% of the information because one outlier dominated the range.
+    </p>
+    <p>
+      This is why naive INT4 quantization of KV caches degrades model quality. TurboQuant solves it with three steps.
+    </p>
+
+    <h2>Step 1 — Random Rotation: Spread the Energy</h2>
+    <p>
+      The first step is to multiply the KV vector by a random orthogonal matrix <strong>R</strong>:
+    </p>
+    <pre><code>x' = R · x</code></pre>
+    <p>
+      This is a random rotation in high-dimensional space. It mixes all coordinates together, spreading the outlier's energy across the entire vector:
+    </p>
+    <pre><code>Before rotation:  [ 0.001,  0.002,  0.001,  47.3  ]
+After rotation:   [ 23.6,  -23.6,   23.6,  -23.6  ]</code></pre>
+    <p>
+      The L2 norm is preserved (rotations are isometric), but now no single coordinate dominates. All 8 quantization levels are used efficiently — none wasted on covering a sparse tail.
+    </p>
+
+    <blockquote>
+      <strong>Key mathematical fact:</strong> A random rotation of any vector produces coordinates that are approximately i.i.d. Gaussian — regardless of the original distribution. This sets up the next step perfectly.
+    </blockquote>
+
+    <p>
+      A full random matrix multiplication is O(d²) and expensive. TurboQuant uses structured random rotations (Hadamard matrices + random sign flips) that run in O(d log d) — the same trick as Fast Johnson-Lindenstrauss transforms.
+    </p>
+
+    <h2>Step 2 — Per-Element Quantization</h2>
+    <p>
+      After rotation, the coordinates are approximately Gaussian with no outliers. TurboQuant applies high-quality per-element quantization to this well-conditioned distribution.
+    </p>
+    <p>
+      Because the rotation has spread energy uniformly, the quantizer can focus all its levels on the dense central region — no bits wasted on tails. At 3 bits (8 levels), this achieves near-optimal compression of the rotated KV vectors. The rotation and quantizer are designed as a matched pair: rotation makes input approximately Gaussian, quantizer is optimized for Gaussian input.
+    </p>
+
+    <table>
+      <thead>
+        <tr><th>Quantizer type</th><th>Level placement</th><th>Efficiency on Gaussian input</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Uniform (naive)</td><td>Evenly spaced across full range</td><td>Wastes bits on tails</td></tr>
+        <tr><td>Per-element (TurboQuant)</td><td>Concentrated in high-density region</td><td>Near-optimal MSE</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Step 3 — QJL Residual Correction: Make It Unbiased</h2>
+    <p>
+      Even with good quantization, there's a residual — the gap between the true value and the nearest codepoint:
+    </p>
+    <pre><code>True value:    0.31
+Nearest level: 0.28
+Residual:  r = 0.03</code></pre>
+    <p>
+      If these residuals are systematically biased in one direction, attention scores drift from their true values — corrupting model outputs subtly but persistently. The QJL (Quantized Johnson-Lindenstrauss) correction step eliminates this:
+    </p>
+    <ol>
+      <li>Compute the residual vector <strong>r</strong>.</li>
+      <li>Pick a random projection matrix <strong>S</strong> and compute <strong>S·r</strong>.</li>
+      <li>Store only <code>sign(S·r)</code> — one bit per projected coordinate.</li>
+      <li>At reconstruction, use <code>sign(S·r)</code> to recover an unbiased estimate of <strong>r</strong>.</li>
+    </ol>
+    <p>
+      The Johnson-Lindenstrauss lemma guarantees that the sign of a random projection is an unbiased 1-bit sketch of the direction of the original vector. Even though only 1 bit per coordinate of <strong>r</strong> is stored, the reconstruction is unbiased in expectation.
+    </p>
+
+    <blockquote>
+      <strong>Total storage:</strong> (b−1) bits for the main quantization + 1 bit for QJL residual = b bits per coordinate. At b=3: <strong>6× memory reduction vs FP16 KV cache</strong>, with provably zero bias.
+    </blockquote>
+
+    <h2>Why This Matters for LLM Serving</h2>
+    <p>
+      KV cache is the inference-time memory bottleneck for long contexts. With a 128K token context window and a large model, a single request's KV cache can consume tens of gigabytes. At scale — hundreds of concurrent users — this caps batch size and directly limits throughput.
+    </p>
+    <p>
+      TurboQuant's reported results on H100:
+    </p>
+
+    <table>
+      <thead>
+        <tr><th>Metric</th><th>FP16 baseline</th><th>TurboQuant (3-bit)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>KV cache memory</td><td>1×</td><td>~6× reduction</td></tr>
+        <tr><td>Throughput (H100)</td><td>1×</td><td>Up to 8× improvement</td></tr>
+        <tr><td>Accuracy loss</td><td>—</td><td>Zero (provably unbiased)</td></tr>
+        <tr><td>Training / fine-tuning needed</td><td>—</td><td>None</td></tr>
+      </tbody>
+    </table>
+
+    <p>
+      The training-free property is critical for practical adoption. TurboQuant can be applied post-hoc to any existing model — Llama, Gemma, Mistral — without retraining or calibration datasets.
+    </p>
+
+    <h2>Connecting to My Work on RAMP</h2>
+    <p>
+      TurboQuant and my RAMP paper (<a href="https://arxiv.org/abs/2603.17891" target="_blank" rel="noopener">arXiv:2603.17891</a>) operate on different parts of the inference stack. RAMP is about post-training weight quantization — using RL to assign per-layer bit widths that minimize perplexity under a memory budget. TurboQuant is about KV cache quantization at inference time.
+    </p>
+    <p>
+      Both share the core insight that <strong>not all dimensions deserve equal precision</strong>. RAMP uses RL to discover which layers can tolerate fewer bits. TurboQuant uses random rotation to make all KV coordinates equally representable before applying a fixed quantizer. Different targets, same underlying philosophy.
+    </p>
+    <p>
+      The Scale Folding technique in RAMP — which absorbs activation outliers into per-channel weight scaling — is also spiritually related to TurboQuant's rotation step. Both are preconditioning operations designed to eliminate outliers before they destroy the quantization budget.
+    </p>
+
+    <h2>Summary</h2>
+
+    <table>
+      <thead>
+        <tr><th>Step</th><th>What it does</th><th>Why it works</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Random Rotation</td><td>Spreads KV outlier energy across all coordinates</td><td>Rotation preserves L2 norm; output is approximately Gaussian</td></tr>
+        <tr><td>Per-Element Quantization</td><td>Quantizes the uniform rotated representation efficiently</td><td>No wasted bits on sparse tails; near-optimal MSE</td></tr>
+        <tr><td>QJL Residual</td><td>Corrects quantization error with 1 extra bit</td><td>Johnson-Lindenstrauss: random projections give unbiased sign sketches</td></tr>
+      </tbody>
+    </table>
+
+    <p>The result: <strong>3-bit KV cache, ~6× memory reduction, up to 8× throughput on H100, provably zero accuracy loss, no training required.</strong> Presented at ICLR 2026.</p>
+
+    <div class="blog-cta">
+      <p>
+        <strong>Read more:</strong> <a href="https://research.google/blog/turboquant-redefining-ai-efficiency-with-extreme-compression/" target="_blank" rel="noopener">Google Research Blog — TurboQuant</a><br>
+        Related: my paper on <a href="https://arxiv.org/abs/2603.17891" target="_blank" rel="noopener">RAMP (mixed-precision weight quantization via RL)</a>.<br>
+        Questions? <a href="https://twitter.com/Asg_Wolverine" target="_blank" rel="noopener">@Asg_Wolverine</a>
+      </p>
+    </div>
+
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-icons">
+      <a href="mailto:arpitsinghgautam777@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a>
+      <a href="https://topmate.io/arpit_singh_gautam/" title="TopMate" target="_blank" rel="noopener"><i class="fas fa-calendar-check"></i></a>
+    </div>
+    <span>© 2026 Arpit Singh Gautam · Bengaluru, India</span>
+  </div>
+</footer>
+
+<script>
+  function toggleTheme(){var cur=document.documentElement.getAttribute('data-theme');var next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);localStorage.setItem('theme',next);document.getElementById('theme-toggle').textContent=next==='dark'?'☀️':'🌙';}
+  (function(){var t=document.documentElement.getAttribute('data-theme');var btn=document.getElementById('theme-toggle');if(btn)btn.textContent=t==='dark'?'☀️':'🌙';})();
+  var btt=document.getElementById('back-to-top');
+  window.addEventListener('scroll',function(){if(window.scrollY>300){btt.classList.add('visible');}else{btt.classList.remove('visible');}});
+  btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+</body>
+</html>

@@ -1,138 +1,84 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en">
-
+<html lang="en" data-theme="light">
 <head>
-  <!-- Meta Tags -->
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6P1E490Z0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X6P1E490Z0');</script>
   <meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="keywords" content="Arpit Singh Gautam, Arpit, Arpit Singh, Arpit Gautam, ASG , data scientist, machine learning engineer, machine learning portfolio, portfolio website">
-  <meta name="description" content="Arpit Singh Gautam is a passionate AI & ML professional with expertise in data science, data analysis, Python programming, and machine learning techniques. Specializing in neural networks, deep learning, computer vision, and natural language processing, Arpit has a proven track record of delivering successful AI-based solutions.">
-  <!-- Page Title -->
-  <title>OS Scheduling Algorithms : Project by ASG</title>
-  <!-- Favicon Icon -->
-  <link rel="icon" href="../assets/img/favicon.ico" />
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="../assets/css/fontawesome.css" />
-  <link rel="stylesheet" href="../assets/css/slick.css" />
-  <link rel="stylesheet" href="../assets/css/lightgallery.min.css" />
-  <link rel="stylesheet" href="../assets/css/animate.css" />
-  <link rel="stylesheet" href="../assets/css/style.css" />
+  <meta name="description" content="OS Scheduling Algorithms Simulator — interactive FCFS, Priority, and Round Robin simulator. Project by Arpit Singh Gautam.">
+  <title>OS Scheduling Algorithms — Arpit Singh Gautam</title>
+  <link rel="icon" href="../assets/img/favicon_7.jpg">
+  <link rel="stylesheet" href="../assets/css/fontawesome.css">
+  <link rel="stylesheet" href="../assets/css/main.css">
 </head>
-
-<body id="home">
-  <body id="home">
-    <!-- Start Header Section -->
-    <header class="st-site-header st-style1 st-sticky-header">
-      <div class="st-main-header">
-        <div class="container">
-          <div class="st-main-header-in">
-            <div class="st-main-header-left">
-              <a class="st-site-branding" href="../index.html"><img src="../assets/img/logo.png" alt="Arpit Singh Gautam"></a>
-            </div>
-            <div class="st-main-header-right">
-              <div class="st-nav">
-                <ul class="st-nav-list st-onepage-nav">
-                  <li><a href="../index.html#home">Home</a></li>
-                  <li><a href="../index.html#about">About</a></li>
-                  <li><a href="../index.html#resume">Resume</a></li>
-                  <li><a href="../index.html#projects">Projects</a></li>
-                  <li><a href="../index.html#awards">Awards</a></li>
-                  <li><a href="../index.html#contact">Contact</a></li>
-                </ul>
-                
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
-    <!-- End Header Section -->
-
- <div class="st-content">
-   <div class="st-page-heading st-dynamic-bg" data-src="../assets/img/portfolio/Os-Algo/bg1.jpg">
-      <div class="container">
-        <div class="st-page-heading-in text-center">
-          <h1 class="st-page-heading-title">OS Scheduling Algorithms<br></h1>
-          <div class="st-post-label">
-            <span>By <a href="../index.html">Arpit Singh Gautam</a></span>
-            <span>March 25, 2023</span>
-          </div>
-        </div>
-      </div>
-    </div><!-- .st-page-heading -->
-    <div class="st-height-b100 st-height-lg-b80"></div>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-10 offset-md-1">
-          <div class="st-post-details st-style1">
-            <p>The project "Operating System Scheduling Algorithms" is designed to simulate three different scheduling algorithms: First Come First Serve (FCFS), Priority, and Round Robin. The project's purpose is to help computer science students and professionals understand how operating system scheduling algorithms work and how they impact a computer system's performance.</p>
-            <p>The project uses Streamlit, Pandas, and Matplotlib libraries to create a user interface, manipulate data, and visualize results. The project is divided into three classes, one for each algorithm, each returning a data frame that includes the average waiting time and average turn around time for the simulated processes.</p>
-            <img class="st-zoom-in" src="../assets/img/portfolio/Os-Algo/OS-Algo.jpg" alt="screenshot of the working of the project">
-            <h2>Working</h2>
-            <div class="st-post-info">
-              <div class="st-post-text">
-                <p>The project works by first asking the user to input details about the processes that will be simulated. This includes the number of tasks, the arrival time, burst time, and priority for each task. Then the user selects which scheduling algorithm they would like to simulate from the provided options.</p>
-                <p>Based on the algorithm selected, the appropriate class is called to simulate the scheduling process. Once completed, the results are displayed in a data frame that includes the waiting time, turn around time, and other process details. Additionally, a bar chart is generated to visualize the scheduling process.</p>
-                <p>The FCFS algorithm simply schedules tasks in the order in which they arrive. The priority algorithm schedules tasks based on priority level, with higher priority tasks being executed first. The Round Robin algorithm schedules tasks in a cyclic manner, executing each task for a specified amount of time (time quantum) before moving on to the next task.</p>
-                
-                <h2>Future Aspects</h2>
-                <p>The project can be expanded in several ways. Firstly, additional scheduling algorithms can be added, allowing for more diverse comparisons between different algorithms. Secondly, more options can be added to the user interface, allowing for more control over the simulation parameters. </p>
-                <blockquote>An Algorithm must be seen to be believed.<small>by: <span>Donald Knuth</span></small></blockquote>
-                <p> Finally, the project can be extended to include more detailed visualizations of the scheduling process, allowing for a more in-depth analysis of system performance.</p>
-                <h2>Summary</h2>
-                <p>The "Operating System Scheduling Algorithms" project is a simulation tool designed to help computer science students and professionals understand how different scheduling algorithms impact computer system performance. The project uses Streamlit, Pandas, and Matplotlib libraries to create a user interface, manipulate data, and visualize results.</p>
-                <p>Three different scheduling algorithms are included in the project, FCFS, Priority, and Round Robin. The project is divided into three classes, one for each algorithm, each returning a data frame that includes the average waiting time and average turn around time for the simulated processes. The project can be expanded to include more algorithms, options, and visualizations in the future. Overall, the project is a valuable tool for learning about operating system scheduling algorithms and their impact on system performance.</p>
-                <blockquote><a href="https://arpitsinghgautam-os-scheduling-algorithms.streamlit.app/"><i class="fab fa-jedi-order"></i>  Try it out!</a></blockquote>
-              </div>
-              <div class="st-height-b35 st-height-lg-b35"></div>
-              <div class="st-post-meta">
-                <div class="st-post-share">
-                  <h4 class="st-post-share-title">Share:</h4>
-                  <div class="st-post-share-btn-list">
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://arpitsinghgautam.me/portfolio/Operating-System-Scheduling-Algorithms.html"><i class="fab fa-facebook-f"></i></a> 
-                    <a href="https://twitter.com/intent/tweet?url=https://arpitsinghgautam.me/portfolio/Operating-System-Scheduling-Algorithms.html"><i class="fab fa-twitter"></i></a> 
-                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://arpitsinghgautam.me/portfolio/Operating-System-Scheduling-Algorithms.html"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="https://www.pinterest.com/pin/create/button/?url=https://arpitsinghgautam.me/portfolio/Operating-System-Scheduling-Algorithms.html"><i class="fab fa-pinterest-p"></i></a>
-                 </div>
-                </div>
-              </div>
-              <div class="st-height-b60 st-height-lg-b60"></div>
-            </div>
-            <div class="st-post-btn-gropu">
-              <a href="MUJ-Attedance-2.0.html" class="st-btn st-style2 st-color1 st-size-medium">Previous Project</a>
-              <a href="Recipe-Genie-Pad.html" class="st-btn st-style2 st-color1 st-size-medium">Next Project</a>
-            </div>
-          </div>
-          
-          </div>
-        </div>
-      </div>
+<body>
+<header class="site-header">
+  <div class="header-top">
+    <a class="nav-brand" href="../index.html">Arpit Singh <span class="brand-accent">Gautam</span></a>
+    <div class="header-icons">
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
     </div>
-    <div class="st-height-b100 st-height-lg-b80"></div>
   </div>
-
-
-  <!-- Start Footer Seciton -->
-  <footer>
-    <div class="container">
-      <div class="st-copyright-wrap text-center">
-        <div class="st-copyright-text">Arpit Singh Gautam © 2023. All right reserved.</div>
-      </div>
+  <div class="header-nav">
+    <a href="../">About</a>
+    <a href="../publications.html">Publications</a>
+    <a href="../experience.html">Experience</a>
+    <a href="../media-awards.html">Media &amp; Awards</a>
+    <a href="../projects.html" class="active">Projects</a>
+    <a href="../blog.html">Blog</a>
+    <a href="../misc.html">Misc</a>
+  </div>
+</header>
+<main class="page-wrap">
+  <div class="post-hero">
+    <div class="post-hero-label"><a href="../projects.html">← Projects</a></div>
+    <h1>OS Scheduling Algorithms Simulator</h1>
+    <div class="post-meta">
+      <span>By <a href="../index.html">Arpit Singh Gautam</a></span>
+      <span>2023</span>
     </div>
-  </footer>
-  <!-- End Footer Seciton -->
-
-  <!-- Scripts -->
-  <script src="../assets/js/jquery-1.12.4.min.js"></script>
-  <script src="../assets/js/jquery.slick.min.js"></script>
-  <script src="../assets/js/lightgallery.min.js"></script>
-  <script src="../assets/js/wow.min.js"></script>
-  <script src="../assets/js/ripples.min.js"></script>
-  <script src="../assets/js/particles.min.js"></script>
-  <script src="../assets/js/main.js"></script>
+    <div class="tags" style="margin-top:12px">
+      <span class="tag">Streamlit</span><span class="tag">Pandas</span><span class="tag">Matplotlib</span><span class="tag">Python</span><span class="tag">OS Concepts</span>
+    </div>
+  </div>
+  <article class="post-body">
+    <p>This project simulates three OS scheduling algorithms — <strong>First Come First Serve (FCFS)</strong>, <strong>Priority</strong>, and <strong>Round Robin</strong> — to help computer science students and professionals understand how scheduling impacts system performance. Built with Streamlit, Pandas, and Matplotlib.</p>
+    <img src="../assets/img/portfolio/Os-Algo/OS-Algo.jpg" alt="OS Scheduling Algorithms screenshot">
+    <h2>How It Works</h2>
+    <p>Users input process details (number of tasks, arrival time, burst time, priority) then select an algorithm. The appropriate class simulates the scheduling process and returns a DataFrame with waiting time, turnaround time, and other metrics. A bar chart is generated to visualize the schedule.</p>
+    <ul>
+      <li><strong>FCFS:</strong> Schedules tasks in arrival order.</li>
+      <li><strong>Priority:</strong> Executes higher-priority tasks first.</li>
+      <li><strong>Round Robin:</strong> Cycles through tasks in fixed time quanta.</li>
+    </ul>
+    <h2>Future Directions</h2>
+    <p>Planned enhancements include additional scheduling algorithms (SJF, SRTF, MLQS), more granular simulation controls, and richer visualizations such as Gantt charts for in-depth performance analysis.</p>
+    <a class="btn-external" href="https://arpitsinghgautam-os-scheduling-algorithms.streamlit.app/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> Try it Live</a>
+    <div class="share-row">
+      <span>Share:</span>
+      <a href="https://twitter.com/intent/tweet?url=https://arpitsinghgautam.me/portfolio/Operating-System-Scheduling-Algorithms.html" target="_blank" rel="noopener"><i class="fab fa-twitter"></i> Twitter</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://arpitsinghgautam.me/portfolio/Operating-System-Scheduling-Algorithms.html" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a>
+    </div>
+  </article>
+  <nav class="post-nav">
+    <a href="MUJ-Attedance-2.0.html">← MUJ Attendance</a>
+    <a href="Recipe-Genie-Pad.html">Recipe Genie Pad →</a>
+  </nav>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span>© 2025 Arpit Singh Gautam</span>
+    <span><a href="../index.html">← Back to About</a></span>
+  </div>
+</footer>
+<script>
+  function toggleTheme(){var cur=document.documentElement.getAttribute('data-theme');var next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);localStorage.setItem('theme',next);document.getElementById('theme-toggle').textContent=next==='dark'?'☀️':'🌙';}
+  (function(){var t=document.documentElement.getAttribute('data-theme');var btn=document.getElementById('theme-toggle');if(btn)btn.textContent=t==='dark'?'☀️':'🌙';})();
+</script>
 </body>
-
 </html>

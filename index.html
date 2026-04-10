@@ -1,887 +1,251 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en">
-
+<html lang="en" data-theme="light">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6P1E490Z0"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'G-X6P1E490Z0');
-    </script>
-    <!-- Meta Tags -->
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords"
-        content="Arpit Singh Gautam, ASG, Data Scientist, AI Researcher, Dell Technologies, LLM, Large Language Models, Generative AI, RAG, Distributed Systems, Reinforcement Learning, Computer Vision, Machine Learning Engineer, Portfolio">
-    <meta name="description"
-        content="Arpit Singh Gautam is a Data Scientist at Dell Technologies (CSG CTO Lab) specializing in Large Language Models, Distributed Inference, and Reinforcement Learning. With a strong research background from IIT BHU and VECC, and over 12 hackathon wins, he builds scalable, cutting-edge AI systems.">
-
-    <meta property="og:title" content="Arpit Singh Gautam | Data Scientist & AI Researcher">
-    <meta property="og:description"
-        content="Arpit Singh Gautam is a Data Scientist at Dell Technologies (CSG CTO Lab) specializing in Large Language Models, Distributed Inference, and Reinforcement Learning. With a strong research background from IIT BHU and VECC, and over 12 hackathon wins, he builds scalable, cutting-edge AI systems.">
-    <meta property="og:image" content="assets/img/section/about1.jpg">
-
-    <!-- Page Title -->
-    <title>Arpit Singh Gautam</title>
-    <!-- Favicon Icon -->
-    <link rel="icon" href="assets/img/favicon_3.ico" />
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="assets/css/fontawesome.css" />
-    <link rel="stylesheet" href="assets/css/slick.css" />
-    <link rel="stylesheet" href="assets/css/lightgallery.min.css" />
-    <link rel="stylesheet" href="assets/css/animate.css" />
-    <link rel="stylesheet" href="assets/css/style.css" />
-    <style>
-        /* Global Styles - Clean and Academic */
-        body {
-            font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-            font-size: 16px;
-            line-height: 1.6;
-            color: #333;
-            background-color: #fdf6e3;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Layout Container */
-        .container {
-            max-width: 1100px;
-            margin: 50px auto;
-            padding: 0 20px;
-            display: flex;
-            flex-direction: row;
-            gap: 50px;
-        }
-
-        /* Left Column (Photo & Contact) */
-        .sidebar {
-            width: 250px;
-            flex-shrink: 0;
-            text-align: center;
-        }
-
-        .profile-photo {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 1px solid #ddd;
-            margin-bottom: 20px;
-        }
-
-        .contact-info {
-            font-size: 14px;
-            text-align: left;
-        }
-
-        .contact-info p {
-            margin: 5px 0;
-        }
-
-        .contact-info a {
-            color: #0066cc;
-            text-decoration: none;
-        }
-
-        .contact-info a:hover {
-            text-decoration: underline;
-        }
-
-        .social-links {
-            margin-top: 20px;
-            text-align: left;
-        }
-
-        .social-links p {
-            margin: 5px 0;
-        }
-
-        /* Right Column (Main Content) */
-        .main-content {
-            flex-grow: 1;
-            min-width: 0;
-        }
-
-        h1 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-top: 0;
-            margin-bottom: 5px;
-            color: #111;
-        }
-
-        h2 {
-            font-size: 18px;
-            font-weight: 400;
-            margin-top: 0;
-            margin-bottom: 25px;
-            color: #555;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 15px;
-        }
-
-        h3 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-top: 40px;
-            margin-bottom: 15px;
-            color: #222;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        p {
-            margin-bottom: 15px;
-        }
-
-        /* Links */
-        a {
-            color: #0066cc;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        /* Updates / News List */
-        .news-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .news-list li {
-            margin-bottom: 10px;
-            display: flex;
-        }
-
-        .news-date {
-            font-family: monospace;
-            font-weight: bold;
-            color: #555;
-            min-width: 85px;
-            margin-right: 10px;
-            flex-shrink: 0;
-        }
-
-        /* Publication List */
-        .pub-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .pub-item {
-            margin-bottom: 20px;
-        }
-
-        .pub-title {
-            font-weight: 700;
-            font-size: 16px;
-        }
-
-        .pub-authors {
-            color: #444;
-        }
-
-        .pub-venue {
-            font-style: italic;
-            color: #666;
-        }
-
-        /* Metrics Grid */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-            margin-top: 20px;
-        }
-
-        .metric-card {
-            background: #f9fafb;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid #e5e7eb;
-        }
-
-        .metric-number {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #0066cc;
-            display: block;
-        }
-
-        .metric-label {
-            font-size: 0.85rem;
-            color: #666;
-        }
-
-        /* Items (Experience & Projects) */
-        .item {
-            margin-bottom: 30px;
-        }
-
-        .item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            flex-wrap: wrap;
-            margin-bottom: 5px;
-        }
-
-        .item-title {
-            font-weight: 700;
-            font-size: 1.05rem;
-            color: #222;
-        }
-
-        .item-meta {
-            font-size: 0.9rem;
-            color: #666;
-            font-style: italic;
-        }
-
-        .item-desc {
-            font-size: 0.95rem;
-            color: #444;
-        }
-
-        .item-desc ul {
-            list-style-type: disc;
-            margin-left: 20px;
-            margin-top: 5px;
-            margin-bottom: 5px;
-        }
-
-        .tags {
-            margin-top: 8px;
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .tag {
-            font-size: 0.75rem;
-            background: rgba(0, 102, 204, 0.08);
-            color: #0066cc;
-            padding: 2px 8px;
-            border-radius: 4px;
-            border: 1px solid rgba(0, 102, 204, 0.15);
-            font-family: sans-serif;
-        }
-
-        /* Hackathon Grid */
-        .hackathon-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-        }
-
-        .hackathon-item {
-            background: #f9fafb;
-            padding: 15px;
-            border-radius: 6px;
-            border-left: 3px solid #0066cc;
-        }
-
-        /* Testimonials */
-        .testimonial-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .testimonial-card {
-            background: #f9fafb;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
-            font-style: italic;
-        }
-
-        .testimonial-author {
-            margin-top: 15px;
-            font-weight: bold;
-            font-style: normal;
-            font-size: 0.9rem;
-        }
-
-        .testimonial-role {
-            font-size: 0.8rem;
-            color: #666;
-        }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                text-align: center;
-                border-bottom: 1px solid #eee;
-                padding-bottom: 20px;
-            }
-
-            .contact-info,
-            .social-links {
-                text-align: center;
-            }
-
-            .item-header {
-                flex-direction: column;
-            }
-
-            .metrics-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-    </style>
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6P1E490Z0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X6P1E490Z0');</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords" content="Arpit Singh Gautam, ASG, Data Scientist, AI Researcher, Dell Technologies, LLM, Inference, Quantization, Reinforcement Learning">
+  <meta name="description" content="Arpit Singh Gautam is a Data Scientist at Dell Technologies (CSG CTO Lab) specializing in LLM inference optimization, distributed AI systems, and reinforcement learning.">
+  <meta property="og:title" content="Arpit Singh Gautam | Data Scientist & AI Researcher">
+  <meta property="og:description" content="Data Scientist at Dell Technologies (CSG CTO Lab). Research in LLM inference, distributed AI, and reinforcement learning.">
+  <meta property="og:image" content="assets/img/section/about1.jpg">
+  <title>Arpit Singh Gautam</title>
+  <link rel="icon" href="assets/img/favicon_7.jpg">
+  <link rel="stylesheet" href="assets/css/fontawesome.css">
+  <link rel="stylesheet" href="assets/css/main.css">
 </head>
-
 <body>
 
-    <div class="container">
+<button id="back-to-top" title="Back to top"><i class="fas fa-arrow-up"></i></button>
 
-        <!-- SIDEBAR: Photo & Contact -->
-        <div class="sidebar">
-            <img src="assets/img/section/about1.jpg" alt="Arpit Singh Gautam" class="profile-photo"
-                onerror="this.src='https://via.placeholder.com/200'">
+<header class="site-header">
+  <div class="header-top">
+    <a class="nav-brand" href="/">Arpit Singh <span class="brand-accent">Gautam</span></a>
+    <div class="header-icons">
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+    </div>
+  </div>
+  <div class="header-nav">
+    <a href="/" class="active">About</a>
+    <a href="publications.html">Publications</a>
+    <a href="experience.html">Experience</a>
+    <a href="media-awards.html">Media &amp; Awards</a>
+    <a href="projects.html">Projects</a>
+    <a href="blog.html">Blog</a>
+    <a href="misc.html">Misc</a>
+  </div>
+</header>
 
-            <div class="contact-info">
-                <p><strong>Arpit Singh Gautam</strong></p>
-                <p>Data Scientist</p>
-                <p>Dell Technologies (CSG CTO Lab)</p>
-                <br>
-                <p>📍 Bengaluru, India</p>
-                <p>📧 <a href="mailto:arpitsinghgautam777@gmail.com">Email Me</a></p>
-                <!-- <p>📄 <a href="assets/Arpit-Singh-Gautam-Resume.pdf" target="_blank">Curriculum Vitae</a></p> -->
+<main class="page-wrap">
 
-                <div class="social-links">
-                    <p><a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ"><i
-                                class="fas fa-graduation-cap"></i> Google Scholar</a>
-                    </p>
-                    <p><a href="https://github.com/arpitsinghgautam"><i class="fab fa-github"></i> GitHub</a></p>
-                    <p><a href="https://linkedin.com/in/arpitsinghgautam"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                    </p>
-                    <p><a href="https://twitter.com/Asg_Wolverine"><i class="fab fa-twitter"></i> Twitter</a></p>
-                    <!-- <p><a href="https://arpitsinghgautam.me"><i class="fas fa-globe"></i> Portfolio</a></p> -->
-                </div>
-            </div>
-        </div>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1 class="hero-name">Hello, I'm Arpit Singh <span class="brand-accent">Gautam</span></h1>
+      <p>
+        I am a Data Scientist working in the <strong>CSG CTO Lab at Dell Technologies</strong>,
+        where I focus on optimization, efficient inference, and scalable AI systems. My work spans
+        generative AI, reinforcement learning, neural architecture search, and distributed model serving —
+        with an emphasis on building robust, efficient systems that work at scale.
+      </p>
+      <p>
+        I have developed systems for disaggregated serving, speculative decoding, and KV cache
+        optimization. My work has been accepted at <strong>AAAI</strong>,
+        <strong>ICCCNT (IIT Indore)</strong>, and the <strong>FEVER Workshop @ EACL 2026</strong>
+        (now on ACL Anthology).
+      </p>
+      <p style="margin-bottom:0">
+        <strong>Research interests:</strong> Systems for ML &amp; Distributed AI · Efficient and Hardware-Aware Inference · Reasoning-Centric LLMs · Reinforcement Learning for Foundation Models
+      </p>
+      <div class="hero-links">
+        <a href="mailto:arpitsinghgautam777@gmail.com"><i class="fas fa-envelope"></i> Email</a>
+        <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i> Scholar</a>
+        <a href="https://github.com/arpitsinghgautam" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
+        <a href="https://linkedin.com/in/arpitsinghgautam" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a>
+        <a href="https://topmate.io/arpit_singh_gautam/" target="_blank" rel="noopener"><i class="fas fa-calendar-check"></i> TopMate</a>
+      </div>
+    </div>
+    <img class="hero-photo" src="assets/img/section/about1.jpg" alt="Arpit Singh Gautam" onerror="this.style.display='none'">
+  </section>
 
-        <!-- MAIN CONTENT -->
-        <div class="main-content">
+  <!-- Stats banner -->
+  <div class="stats-banner">
+    <div class="stats-row">
+      <div class="stat-item">
+        <span class="stat-num" data-count="6">0</span>
+        <span class="stat-label">Publications</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-count="1" data-suffix="+">0</span>
+        <span class="stat-label">Yr Full-Time Exp</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-count="14" data-suffix="+">0</span>
+        <span class="stat-label">Talks, Panels &amp; Mentoring</span>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-item">
+        <span class="stat-num" data-count="12">0</span>
+        <span class="stat-label">Hackathon Wins</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-count="150" data-suffix="+">0</span>
+        <span class="stat-label">1-on-1 Students Helped</span>
+        <a class="stat-sub" href="https://topmate.io/arpit_singh_gautam/" target="_blank" rel="noopener">5/5 on TopMate ★</a>
+      </div>
+    </div>
+  </div>
 
-            <h1>Arpit Singh Gautam</h1>
-            <h2>Data Scientist | Researcher</h2>
+  <!-- Recent Updates -->
+  <h2 class="section-title">Recent Updates</h2>
+  <p style="font-size:0.86rem;color:var(--text-muted);margin-bottom:16px">Papers · Projects · Talks · Blog posts — all in one place.</p>
 
-            <p>
-                I am a Data Scientist working in the <strong>CSG CTO Lab at Dell Technologies</strong> where I focus on
-                optimization, efficient inference, and scalable AI systems. My work spans generative AI, reinforcement
-                learning, neural architecture search, and distributed model serving with an emphasis on building robust
-                and efficient systems that work at scale.
-            </p>
-            <p>
-                I have developed systems for disaggregated serving, speculative decoding, and KV cache optimizations
-                that achieve significant improvements in throughput and latency over existing inference frameworks. My
-                experience also includes building reinforced reasoning models for Text to SQL, diffusion based fact
-                verification systems, and multi modal models for medical imaging.
-            </p>
-            <p>
-                I am passionate about research work and have published across areas such as diffusion models for fact
-                verification, theory of mind distillation, hybrid neural networks for medical imaging, hyperspectral
-                image classification, and large scale SQL reasoning. My work has been accepted at premier venues
-                including <strong>AAAI</strong> and <strong>ICCCNT</strong> and also submitted to <strong>EACL
-                    FEVER</strong>.
-            </p>
-            <p>
-                I enjoy mentoring students and have taught at <strong>IBM Z Datathon</strong> where I guided over 3300
-                learners. I have also delivered technical sessions, mentored hackathons, and helped develop open source
-                educational content.
-            </p>
-            <p>
-                <strong>Research Interests:</strong> Systems for Machine Learning and Distributed AI; Efficient and Hardware-Aware Inference Optimization; Reasoning-Centric and Aligned Large Language Models; Reinforcement Learning for Foundation Models.
-            </p>
+  <div class="update-list" id="updates-main">
 
-            <!-- METRICS GRID -->
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <span class="metric-number">12</span>
-                    <span class="metric-label">Hackathon Wins</span>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-number">10+</span>
-                    <span class="metric-label">Internships</span>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-number">20k+</span>
-                    <span class="metric-label">Conf. Views</span>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-number">5</span>
-                    <span class="metric-label">Papers/Talks</span>
-                </div>
-            </div>
-
-            <h3>🔥 News & Highlights</h3>
-            <ul class="news-list">
-                <li>
-                    <span class="news-date">2025</span>
-                    <span>Paper <strong>"The Energy of Falsehood"</strong> submitted to <strong>EACL 2026 FEVER
-                            Workshop</strong>.</span>
-                </li>
-                <li>
-                    <span class="news-date">2025</span>
-                    <span>Paper <strong>"Faithful Theory of Mind Distillation"</strong> accepted at <strong>AAAI 2026
-                            ToM Workshop</strong>.</span>
-                </li>
-                <li>
-                    <span class="news-date">2025</span>
-                    <span>Released <strong>CogniSQL-R1-Zero</strong> (Reasoning Model for Text-to-SQL) via arXiv.</span>
-                </li>
-            </ul>
-
-            <div id="more-news" style="display: none;">
-                <ul class="news-list">
-                    <li>
-                        <span class="news-date">2025</span>
-                        <span>Started working full-time as a <strong>Data Scientist at Dell Technologies</strong> (CSG
-                            CTO Lab).</span>
-                    </li>
-                    <li>
-                        <span class="news-date">2025</span>
-                        <span>Invited to <strong>podcast with Harnoor Singh</strong> (Singh in USA).</span>
-                    </li>
-                    <li>
-                        <span class="news-date">2024</span>
-                        <span>Invited to give 2 sessions at the International <strong>IBM Z Day</strong> Conference
-                            (20k+ Live views).</span>
-                    </li>
-                    <li>
-                        <span class="news-date">2024</span>
-                        <span>Mentored and led workshops in <strong>IBM Z Datathon</strong>, helping 3300+ students
-                            setup LinuxONE ML instances.</span>
-                    </li>
-                    <li>
-                        <span class="news-date">2024</span>
-                        <span>Awarded Manipal University Jaipur's <strong>Tea with President & Student Excellence
-                                Award</strong>.</span>
-                    </li>
-                    <li>
-                        <span class="news-date">2023</span>
-                        <span>Co-Founder & Former President @ <strong>AIML Community MUJ</strong> (Grew to 300+ Members
-                            in 1st year).</span>
-                    </li>
-                </ul>
-            </div>
-            <a href="javascript:void(0)" onclick="toggleNews()" id="news-toggle"
-                style="font-size: 0.9rem; font-weight: bold;">Show More ▼</a>
-
-            <script>
-                function toggleNews() {
-                    var moreNews = document.getElementById("more-news");
-                    var btn = document.getElementById("news-toggle");
-                    if (moreNews.style.display === "none") {
-                        moreNews.style.display = "block";
-                        btn.innerHTML = "Show Less ▲";
-                    } else {
-                        moreNews.style.display = "none";
-                        btn.innerHTML = "Show More ▼";
-                    }
-                }
-            </script>
-
-            <h3>💼 Professional Experience</h3>
-
-            <div class="item">
-                <div class="item-header">
-                    <span class="item-title">Data Scientist, CSG CTO Lab</span>
-                    <span class="item-meta">Dell Technologies, Bengaluru | Jul 2025 - Present</span>
-                </div>
-                <div class="item-desc">
-                    <ul>
-                        <li>Engineered a distributed inference system utilizing disaggregated serving, speculative
-                            decoding, and KV cache quantization, achieving 4x throughput and reducing latency from 2.5s
-                            to <1s compared to vLLM baselines (5+ Patents waiting to be filed).</li>
-                        <li>Developed a reinforcement learning based quantization framework for Post Training
-                            Quantization in LLMs that integrates neural architecture search using RL, outperforming
-                            baseline methods by 2.6x in compression with minimal perplexity loss (Paper Ongoing).</li>
-                        <li>Conducted a study on automating fact verification using generative stability signals and
-                            designed a diffusion based generative stability method for automated fact verification,
-                            improving robustness over discriminative baselines and detecting confidently incorrect
-                            claims (Paper Submitted in EACL FEVER Workshop 2026).</li>
-                        <li>Studied reasoning transfer from larger to smaller models using sequential SFT and preference
-                            based refinement, showing clear gains in reasoning fidelity and alignment (Paper accepted at
-                            the AAAI ToM Workshop 2026).</li>
-                        <li>Currently designing a State Space Model (Mamba) based reranker to mitigate adversarial
-                            attacks and enhance robustness in Retrieval-Augmented Generation (RAG) Systems.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="item-header">
-                    <span class="item-title">Data Science Intern</span>
-                    <span class="item-meta">Dell Technologies, Bengaluru | Jul 2024 - Jun 2025</span>
-                </div>
-                <div class="item-desc">
-                    <ul>
-                        <li>Created CogniSQL-R1-Zero, a reasoning model for Text-to-SQL using GRPO reinforcement
-                            learning and Deep-speed distributed training on a 7B backbone across 4 A100 GPUs (Paper
-                            released on arXiv).</li>
-                        <li>Achieved state-of-the-art execution accuracy on the BIRD benchmark, outperforming 236B+
-                            parameter models by avoiding intermediate supervision and complex reward shaping.</li>
-                        <li>Built an agentic framework incorporating self-healing, test-time scaling, and CoT reasoning,
-                            increasing execution accuracy by 30% on proprietary datasets (Copilot now in production).
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="item-header">
-                    <span class="item-title">Computer Vision Research Engineer</span>
-                    <span class="item-meta">Stealth Startup (Remote, US) | Mar 2024 - Jun 2024</span>
-                </div>
-                <div class="item-desc">
-                    <ul>
-                        <li>Developed a real-time theft detection system using SlowFast networks and 3D CNNs,
-                            specifically optimizing the architecture for low-latency edge device deployment.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="item-header">
-                    <span class="item-title">AI Research Intern</span>
-                    <span class="item-meta">Renix Informatics | Aug 2023 - Oct 2023</span>
-                </div>
-                <div class="item-desc">
-                    <ul>
-                        <li>Researched and Implemented two new features for the DocX (Document AI) product.</li>
-                        <li>Used SonarQube to analyse and address issues in the old DocX code.</li>
-                    </ul>
-
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="item-header">
-                    <span class="item-title">AI/ML Developer + Mentoring Intern</span>
-                    <span class="item-meta">WictroniX | Jun 2023 - Aug 2023</span>
-                </div>
-                <div class="item-desc">
-                    <ul>
-                        <li>Contributed to AI/ML Advance Team, worked with drone footage taken 120m above ground.</li>
-                        <li>Led a group of mentors in guiding and mentoring more than 30 interns in AI/ML.</li>
-                    </ul>
-
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="item-header">
-                    <span class="item-title">AI/ML Apprentice</span>
-                    <span class="item-meta">IBM Z Systems | Jan 2023 - Jun 2023</span>
-                </div>
-                <div class="item-desc">
-                    <ul>
-                        <li>Developed and executed end‑to‑end two machine learning projects (Omnizenon & KnowCrimez).
-                        </li>
-                        <li>Applied ML techniques to enhance data analysis and deployed web user interface.</li>
-                    </ul>
-
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="item-header">
-                    <span class="item-title">Machine Learning Intern</span>
-                    <span class="item-meta">Suvidha Foundation | Mar 2023 - Apr 2023</span>
-                </div>
-                <div class="item-desc">
-                    <ul>
-                        <li>Researched on Abstractive Text Summarization using Hugging Face Transformers.</li>
-                        <li>Researched on accuracy between different LLMs.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="item-header">
-                    <span class="item-title">Backend Developer Trainee</span>
-                    <span class="item-meta">Safcurl | Jul 2022 - Jan 2023</span>
-                </div>
-                <div class="item-desc">
-                    <ul>
-                        <li>Completed Sprint Tickets, built models, implemented APIs & maintained DB.</li>
-                    </ul>
-
-                </div>
-            </div>
-
-            <h3>🔬 Academic Research Experience</h3>
-
-            <div class="item">
-                <div class="item-header">
-                    <span class="item-title">Undergraduate Researcher</span>
-                    <span class="item-meta">Manipal University Jaipur | Feb 2024 – Jun 2025</span>
-                </div>
-                <div class="item-desc">
-                    <ul>
-                        <li>Conducted research under Dr. Vivek Bhardwaj, Associate Professor, to develop hybrid CNN plus
-                            GRU plus LSTM models for lymphoma detection from histopathology images, achieving strong
-                            accuracy gains (Paper accepted at the 16th ICCCNT at IIT Indore, 2025).</li>
-                        <li>Conducted research under Dr. Jayesh Gangrade, Associate Professor, to create a hybrid
-                            sentiment classifier blending transformer embeddings, attention driven recurrence, and
-                            numerical feature fusion (Paper submitted to the Discover Computing journal).</li>
-                        <li>Conducted research under Mr. Rajesh Kumar, Assistant Professor Selection Grade, to build a
-                            real time QUIC traffic classifier using three raw features with LightGBM and SHAP plus LIME
-                            based explainability (Paper accepted at the 16th ICCCNT at IIT Indore, 2025).</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="item-header">
-                    <span class="item-title">Winter Research Intern</span>
-                    <span class="item-meta">VECC (Dept. of Atomic Energy), Kolkata | Dec 2023 - Feb 2024</span>
-                </div>
-                <div class="item-desc">
-                    <ul>
-                        <li>Conducted research under Ushnish Sarkar (Scientific Officer F) to develop a Reinforcement
-                            Learning (TD3 Network) based autonomous navigation system for robots in nuclear radiation
-                            leaks.</li>
-                    </ul>
-
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="item-header">
-                    <span class="item-title">Summer Research Intern</span>
-                    <span class="item-meta">IIT BHU, Varanasi | Jun 2023 - Jul 2023</span>
-                </div>
-                <div class="item-desc">
-                    <ul>
-                        <li>Conducted research under Prof. Rajeev Srivastava (Ex-Dean, HoD@CSE) on hyperspectral image
-                            classification using a QUH dataset of over 10^6 samples, developing a hybrid deep learning
-                            model that achieved 91.90% accuracy and surpassed standard benchmarks.</li>
-                    </ul>
-
-                </div>
-            </div>
-
-            <h3>📝 Publications</h3>
-            <ul class="pub-list">
-                <li class="pub-item">
-                    <div class="pub-title">The Energy of Falsehood: Generative Calibration of Fact Verification via
-                        Diffusion Models</div>
-                    <div class="pub-authors"><strong>Arpit Singh Gautam</strong>, Kailash Talreja, Saurabh Jha</div>
-                    <div class="pub-venue">Submitted in the FEVER: Ninth Workshop on Fact Extraction and VERification at
-                        EACL 2026</div>
-                </li>
-
-                <li class="pub-item">
-                    <div class="pub-title">Faithful Theory of Mind Distillation: Why Preference Based Refinement
-                        Improves Imitation</div>
-                    <div class="pub-authors"><strong>Arpit Singh Gautam</strong>, Saurabh Jha</div>
-                    <div class="pub-venue">Accepted in the Advancing Artificial Intelligence through Theory of Mind
-                        Workshop at AAAI 2026</div>
-                </li>
-
-                <li class="pub-item">
-                    <div class="pub-title">CogniSQL-R1-Zero: Lightweight Reinforced Reasoning for Efficient SQL
-                        Generation</div>
-                    <div class="pub-authors">Kushal Gajjar, Harshit Sikchi, <strong>Arpit Singh Gautam</strong>, Marc
-                        Hammons, Saurabh Jha</div>
-                    <div class="pub-venue">Due to model confidentiality, released via arXiv (Paper, 2 Datasets made
-                        public)</div>
-                </li>
-
-                <li class="pub-item">
-                    <div class="pub-title">Enhancing Lymphoma Detection Using Multi-Layer Hybrid Neural Networks</div>
-                    <div class="pub-authors"><strong>Arpit Singh Gautam</strong>, Satyam Kumar, Nishad Khade, Vivek
-                        Bhardwaj</div>
-                    <div class="pub-venue">Presented at the 16th ICCCNT, IIT Indore (2025) (oral presentation)</div>
-                </li>
-            </ul>
-
-            <h3>🎓 Education</h3>
-            <div class="item">
-                <div class="item-header">
-                    <span class="item-title">Manipal University, Jaipur, India</span>
-                    <span class="item-meta">Oct 2021 - Jun 2025</span>
-                </div>
-                <div class="item-desc">
-                    <strong>B.Tech. (Hons) Computer Science & Engineering</strong>, GPA: 8.56/10.0<br>
-                    Specialization: Artificial Intelligence and Machine Learning
-                    <ul>
-                        <li>7x Academic award(s): Dean's List Award (Academics), 4x Student Excellence Award</li>
-                        <li>Honored by President and given the title of MUJ's Wizard Programmer (Gold Medal)</li>
-                    </ul>
-                </div>
-            </div>
-
-            <h3>👨‍🏫 Teaching Experience</h3>
-
-            <div class="item">
-                <div class="item-header">
-                    <span class="item-title">Teaching Assistant</span>
-                    <span class="item-meta">Manipal University Jaipur | Jan 2024 – May 2024</span>
-                </div>
-                <div class="item-desc">
-                    <ul>
-                        <li>Assisted professor with designing tutorials and holding lab sessions for the following
-                            courses: AI3241 Reinforcement Learning (Dr. Animesh Kumar, Spring 2024), AI3231 Computer
-                            Vision and Pattern Lab (Prof. Harish Sharma, Spring 2024).</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="item-header">
-                    <span class="item-title">Subject Matter Expert</span>
-                    <span class="item-meta">IBM, Global | Oct 2023 – Jun 2024</span>
-                </div>
-                <div class="item-desc">
-                    <ul>
-                        <li>Instructor at IBM Z Datathon guiding 3300 plus students in setting up LinuxONE for AI
-                            development (Oct 2023) and later served as a Subject Matter Expert mentoring winning teams
-                            on mainframe-based machine learning integration (Jan 2024 to Jun 2024).</li>
-                    </ul>
-                </div>
-            </div>
-
-            <h3>🤝 Volunteering and Service</h3>
-            <div class="item">
-                <div class="item-header">
-                    <span class="item-title">President & Co‑Founder</span>
-                    <span class="item-meta">AIML Community MUJ | Sep 2023 - Ongoing</span>
-                </div>
-                <div class="item-desc">
-                    Attracted 300+ members in first year. Organized events/hackathons on ML/CV/NLP.
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="item-header">
-                    <span class="item-title">IBM Z Student Ambassador</span>
-                    <span class="item-meta">IBM Z Systems | Aug 2023 - Ongoing</span>
-                </div>
-                <div class="item-desc">
-                    Speaker at IBM Z Day. Promote mainframe tech globally. Acquire technical certifications.
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="item-header">
-                    <span class="item-title">Student Ambassador Leader</span>
-                    <span class="item-meta">Streamlit | Aug 2023 - Ongoing</span>
-                </div>
-                <div class="item-desc">
-                    One of 10 leaders among 216 ambassadors. Work closely with Streamlit team to improve platform.
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="item-header">
-                    <span class="item-title">Deputy Head of Design</span>
-                    <span class="item-meta">Phi Phenomenon MUJ | Jun 2022 - Jul 2023</span>
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="item-header">
-                    <span class="item-title">Working Member</span>
-                    <span class="item-meta">CodeChef MUJ Student Chapter | Jun 2022 - Jan 2023</span>
-                </div>
-            </div>
-
-            <h3>🏆 Honors and Awards</h3>
-            <p style="margin-bottom: 20px;">
-                I actively take part in hackathons, having completed <strong>17 of them with 12 wins 🏆</strong>.
-            </p>
-            <div class="hackathon-list">
-                <div class="hackathon-item">
-                    <strong>Dell Technologies Industry Hackathon</strong><br>
-                    <span style="color: #666; font-size: 0.9rem;">🏆 1st Place Overall (500+ participants) | 2024</span>
-                </div>
-                <div class="hackathon-item">
-                    <strong>International Hackathons (6 Wins)</strong><br>
-                    <span style="color: #666; font-size: 0.9rem;">W3B GreenTech, CalCodeFest, Friday Night Firefight,
-                        SacHacks V, MLH's Bon Hacketit, SacHacks IV</span>
-                </div>
-                <div class="hackathon-item">
-                    <strong>National Hackathons (2 Wins)</strong><br>
-                    <span style="color: #666; font-size: 0.9rem;">The 418 Hackathon, The Latest Cut</span>
-                </div>
-                <div class="hackathon-item">
-                    <strong>College-Level Hackathons (3 Wins)</strong><br>
-                    <span style="color: #666; font-size: 0.9rem;">ACM MiniHacks 3.0, T-Hunt Hackathon, Panacea Clone
-                        Wars</span>
-                </div>
-                <div class="hackathon-item">
-                    <strong>SacHacks IV & V (UC Davis)</strong><br>
-                    <span style="color: #666; font-size: 0.9rem;">🏆 Best Use of IBM Z Winner (2 times in a row) |
-                        2022-23</span>
-                </div>
-            </div>
-
-            <h3>💬 Testimonials</h3>
-            <div class="testimonial-grid">
-                <div class="testimonial-card">
-                    "I highly recommend Arpit as an exceptional talent in the AI and Data Science space... He swiftly
-                    grasped the project’s complex, high-impact vision and approached challenges with an innovative,
-                    research-driven mindset."
-                    <div class="testimonial-author">Filippos Paraskevas Zygouris</div>
-                    <div class="testimonial-role">Cloud Solution Architect | AI & Data Architect</div>
-                </div>
-                <div class="testimonial-card">
-                    "Arpit is very energetic, hardworking student with motivation to build some of the cool applications
-                    using Data Science and Artificial Intelligence (AI)... I wish him all the very best in his future
-                    endeavours."
-                    <div class="testimonial-author">Chandra Shekhar Reddy Potula</div>
-                    <div class="testimonial-role">Head Of AI IaaS</div>
-                </div>
-                <div class="testimonial-card">
-                    "I mentored Arpit as part of IBM Z Mentorship program. He is self motivated, hardworking, highly
-                    skilled colleague. I also appreciate the relevancy of problems that he picks to pursue..."
-                    <div class="testimonial-author">Jidhu Mohan Mattummal Valappil</div>
-                    <div class="testimonial-role">CEO @ DigiDxDoc | Ex-BOSCH, IBM</div>
-                </div>
-                <div class="testimonial-card">
-                    "Worked with Arpit, he is really determined and always keen to contribute in every aspect possible
-                    and has deep knowledge in field of Machine Learning."
-                    <div class="testimonial-author">Raghav Kapoor</div>
-                    <div class="testimonial-role">Software Engineering at VickyBytes</div>
-                </div>
-            </div>
-
-            <h3>🛠 Skills and Interests</h3>
-            <div class="item-desc">
-                <p><strong>TECHNICAL:</strong> Python (Tensorflow, PyTorch, TRL, LangChain, OpenCV, Scikit-learn), Java,
-                    SQL, C++</p>
-                <p><strong>CORE COMPETENCIES:</strong> LLMs, Reasoning, RAG, Distributed Training & Scaling,
-                    Quantization, RL, CV</p>
-                <p><strong>INTERESTS:</strong> Hiking, FPS Gaming, Chess, Boxing, Fiction Reading</p>
-            </div>
-
-            <br><br>
-            <p style="font-size: 12px; color: #999;">&copy; 2025 Arpit Singh Gautam.</p>
-        </div>
+    <div class="update-entry">
+      <div class="update-thumb"><img src="assets/img/updates/llm-quant-gallery.png" alt="LLM Quantization Gallery"></div>
+      <div class="update-content">
+        <div class="update-tag">Project Launch</div>
+        <div class="update-title"><a href="blog/llm-quantization-gallery.html">LLM Quantization Gallery — Interactive explorer for quantization techniques</a></div>
+        <div class="update-date">Apr 7, 2026</div>
+        <div class="update-excerpt">An interactive gallery comparing INT4, INT8, GPTQ, AWQ, QLoRA and GGUF methods — with perplexity scores, memory footprints, and throughput benchmarks side by side. <a href="blog/llm-quantization-gallery.html">Read the blog post →</a></div>
+      </div>
+    </div>
+    
+    <div class="update-entry">
+      <div class="update-thumb"><img src="assets/img/updates/ramp-paper.png" alt="RAMP Paper"></div>
+      <div class="update-content">
+        <div class="update-tag">Paper · arXiv</div>
+        <div class="update-title"><a href="https://arxiv.org/abs/2603.17891" target="_blank" rel="noopener">RAMP: Reinforcement Adaptive Mixed Precision Quantization for Efficient On-Device LLM Inference</a></div>
+        <div class="update-date">Mar 18, 2026</div>
+        <div class="update-excerpt">Off-policy SAC framework that learns per-layer bit-width assignments to minimize perplexity under a global bit budget. Achieves 5.54 perplexity at 3.68 GB on Llama 2 7B — outperforming uniform 4-bit AWQ. Zero-shot transfer to Llama 2 13B and Mistral 7B.</div>
+      </div>
     </div>
 
-</body>
 
+    <div class="update-entry">
+      <div class="update-thumb"><img src="assets/img/updates/eacl-2026.png" alt="EACL 2026"></div>
+      <div class="update-content">
+        <div class="update-tag">Paper Accepted · EACL 2026</div>
+        <div class="update-title"><a href="https://aclanthology.org/2026.fever-1.4/" target="_blank" rel="noopener">The Energy of Falsehood: Generative Calibration of Fact Verification via Diffusion Models</a></div>
+        <div class="update-date">Apr 2026</div>
+        <div class="update-excerpt">Accepted at the FEVER Workshop @ EACL 2026 — now on ACL Anthology. Proposes a diffusion-based generative stability method for automated fact verification with Kailash Talreja and Saurabh Jha.</div>
+      </div>
+    </div>
+
+    <div class="update-entry">
+      <div class="update-thumb"><img src="assets/img/updates/arc-agi.png" alt="ARC-AGI-3"></div>
+      <div class="update-content">
+        <div class="update-tag">Competition · Ongoing</div>
+        <div class="update-title"><a href="https://www.kaggle.com/code/arpitsinghgautam/arc-agi-3-random-agent-v0" target="_blank" rel="noopener">Competing in ARC-AGI-3 — Abstract Reasoning Challenge</a></div>
+        <div class="update-date">2026 · Ongoing</div>
+        <div class="update-excerpt">Participating in François Chollet's ARC-AGI-3 challenge — one of AI's hardest benchmarks for fluid intelligence. Submitted a random agent baseline and exploring learning-based approaches. <a href="blog/arc-agi-challenge.html">Read the blog post →</a></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="updates-more" style="display:none">
+    <div class="update-list">
+
+      <div class="update-entry">
+        <div class="update-thumb"><img src="assets/img/updates/aaai-2026.png" alt="AAAI 2026"></div>
+        <div class="update-content">
+          <div class="update-tag">Paper Accepted · AAAI 2026</div>
+          <div class="update-title">Faithful Theory of Mind Distillation: Why Preference Based Refinement Improves Imitation</div>
+          <div class="update-date">2025</div>
+          <div class="update-excerpt">Accepted at the Advancing AI through Theory of Mind Workshop @ AAAI 2026. Sequential SFT + preference-based refinement for theory of mind reasoning in LLMs.</div>
+        </div>
+      </div>
+
+      <div class="update-entry">
+        <div class="update-thumb"><img src="assets/img/updates/cognisql.png" alt="CogniSQL"></div>
+        <div class="update-content">
+          <div class="update-tag">Paper · arXiv</div>
+          <div class="update-title"><a href="https://arxiv.org/search/?searchtype=all&query=CogniSQL-R1-Zero" target="_blank" rel="noopener">CogniSQL-R1-Zero: Lightweight Reinforced Reasoning for Efficient SQL Generation</a></div>
+          <div class="update-date">2025</div>
+          <div class="update-excerpt">GRPO RL + DeepSpeed across 4× A100 GPUs. SOTA execution accuracy on BIRD benchmark, outperforming 236B+ parameter models.</div>
+        </div>
+      </div>
+
+      <div class="update-entry">
+        <div class="update-thumb"><img src="assets/img/updates/dell-career.png" alt="Dell Technologies" onerror="this.parentElement.textContent='🏢'"></div>
+        <div class="update-content">
+          <div class="update-tag">Career</div>
+          <div class="update-title">Started full-time as Data Scientist at Dell Technologies (CSG CTO Lab)</div>
+          <div class="update-date">Jul 2025</div>
+          <div class="update-excerpt">Joined Dell's CSG CTO Lab in Bengaluru full-time, focusing on LLM inference optimization, distributed AI systems, and on-device deployment research.</div>
+        </div>
+      </div>
+
+      <div class="update-entry">
+        <div class="update-thumb"><img src="assets/img/updates/ibm-zday.png" alt="IBM Z Day"></div>
+        <div class="update-content">
+          <div class="update-tag">Talk · International Conference</div>
+          <div class="update-title">2 Invited Sessions at IBM Z Day International Conference</div>
+          <div class="update-date">2024</div>
+          <div class="update-excerpt">Spoke to 20,000+ live attendees on AI/ML on mainframe systems. One of the highest-attended technical sessions at the conference.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <button class="show-more-btn" id="news-toggle" onclick="toggleUpdates()">Show more ▼</button>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-icons">
+      <a href="mailto:arpitsinghgautam777@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a>
+      <a href="https://topmate.io/arpit_singh_gautam/" title="TopMate" target="_blank" rel="noopener"><i class="fas fa-calendar-check"></i></a>
+    </div>
+    <span>© 2026 Arpit Singh Gautam · Bengaluru, India</span>
+  </div>
+</footer>
+
+<script>
+  function toggleTheme(){var cur=document.documentElement.getAttribute('data-theme');var next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);localStorage.setItem('theme',next);document.getElementById('theme-toggle').textContent=next==='dark'?'☀️':'🌙';}
+  (function(){var t=document.documentElement.getAttribute('data-theme');var btn=document.getElementById('theme-toggle');if(btn)btn.textContent=t==='dark'?'☀️':'🌙';})();
+  function toggleUpdates(){var m=document.getElementById('updates-more');var b=document.getElementById('news-toggle');if(m.style.display==='none'){m.style.display='block';b.textContent='Show less ▲';}else{m.style.display='none';b.textContent='Show more ▼';}}
+  (function(){
+    var els=document.querySelectorAll('.stat-num[data-count]');
+    var started=false;
+    function runCounters(){
+      if(started)return;started=true;
+      els.forEach(function(el){
+        var target=parseInt(el.getAttribute('data-count'),10);
+        var suffix=el.getAttribute('data-suffix')||'';
+        var duration=3500;
+        var start=performance.now();
+        function step(now){
+          var p=Math.min((now-start)/duration,1);
+          var ease=1-Math.pow(1-p,3);
+          el.textContent=Math.round(ease*target)+suffix;
+          if(p<1)requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      });
+    }
+    var banner=document.querySelector('.stats-banner');
+    if(banner&&'IntersectionObserver' in window){
+      new IntersectionObserver(function(entries,obs){if(entries[0].isIntersecting){runCounters();obs.disconnect();}},{threshold:0.3}).observe(banner);
+    } else {runCounters();}
+  })();
+  var btt=document.getElementById('back-to-top');
+  window.addEventListener('scroll',function(){if(window.scrollY>300){btt.classList.add('visible');}else{btt.classList.remove('visible');}});
+  btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+</body>
 </html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6P1E490Z0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X6P1E490Z0');</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="LLM Quantization Gallery — an interactive explorer for understanding how quantization shrinks large language models without destroying their quality.">
+  <meta property="og:title" content="LLM Quantization Gallery — Arpit Singh Gautam">
+  <meta property="og:description" content="An interactive gallery to explore INT4, INT8, GPTQ, AWQ and other quantization methods for large language models.">
+  <title>LLM Quantization Gallery — Arpit Singh Gautam</title>
+  <link rel="icon" href="../assets/img/favicon_7.jpg">
+  <link rel="stylesheet" href="../assets/css/fontawesome.css">
+  <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+
+<button id="back-to-top" title="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+<header class="site-header">
+  <div class="header-top">
+    <a class="nav-brand" href="/">Arpit Singh <span class="brand-accent">Gautam</span></a>
+    <div class="header-icons">
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+    </div>
+  </div>
+  <div class="header-nav">
+    <a href="/">About</a>
+    <a href="../publications.html">Publications</a>
+    <a href="../experience.html">Experience</a>
+    <a href="../media-awards.html">Media &amp; Awards</a>
+    <a href="../projects.html">Projects</a>
+    <a href="../blog.html" class="active">Blog</a>
+    <a href="../misc.html">Misc</a>
+  </div>
+</header>
+
+<main class="page-wrap">
+
+  <div class="blog-post-hero">
+    <div class="breadcrumb"><a href="../blog.html">← Blog</a></div>
+    <h1>LLM Quantization Gallery: Making Sense of How We Shrink Large Language Models</h1>
+    <div class="blog-post-meta">
+      <span><i class="fas fa-calendar-alt"></i> April 2026</span>
+      <span><i class="fas fa-clock"></i> 8 min read</span>
+      <span><i class="fas fa-tag"></i> LLMs · Quantization · Systems</span>
+    </div>
+  </div>
+
+  <div class="blog-post-body">
+
+    <p>
+      Large language models are powerful, but they come with a problem that's easy to understate: they're <em>enormous</em>. A 70B-parameter model in full float32 precision takes roughly 280 GB of memory — more than most GPU clusters at a typical research lab. Even in bfloat16, that's still 140 GB. Running these models at any kind of scale requires us to get creative.
+    </p>
+    <p>
+      Quantization is one of the most practical solutions we have. The idea is simple: instead of storing each weight as a 32-bit float, we compress it down to 8, 4, or even fewer bits. Done carefully, you can compress a model by 2–8× with only a small hit to output quality.
+    </p>
+    <p>
+      I built the <a href="https://arpitsinghgautam.me/llm-quantization-gallery/" target="_blank" rel="noopener"><strong>LLM Quantization Gallery</strong></a> as an interactive way to explore these techniques — comparing methods, quality metrics, and tradeoffs side by side. Here's the thinking behind it.
+    </p>
+
+    <h2>Why Quantization Matters</h2>
+    <p>
+      At Dell's CSG CTO Lab, a significant chunk of my work involves making LLM inference faster and cheaper. We deal with questions like: can we run a 70B model on a single node? Can we cut latency by 2× without retraining? Quantization is almost always part of the answer.
+    </p>
+    <p>
+      But quantization isn't a single thing — it's a family of techniques with very different characteristics. The difference between INT8 and INT4 isn't just a number; it involves different accuracy tradeoffs, different hardware support, and sometimes entirely different calibration pipelines. I found myself constantly wanting a single place to compare them visually. So I made one.
+    </p>
+
+    <h2>The Main Methods, Explained</h2>
+
+    <h3>INT8 — The Safe Default</h3>
+    <p>
+      Integer 8-bit quantization is the most widely supported and least risky option. Most modern GPUs handle INT8 natively with dedicated Tensor Core support. You typically get a ~2× memory reduction with minimal perplexity loss (&lt;0.5 points on most benchmarks). It's the right choice when you want a quick win without touching training.
+    </p>
+
+    <h3>INT4 — High Compression, More Risk</h3>
+    <p>
+      Going to 4 bits gives you ~4× compression but the quality gap widens. The key insight from papers like GPTQ and AWQ is that naive rounding doesn't work at 4 bits — you need smarter calibration to preserve the weights that matter most.
+    </p>
+
+    <h3>GPTQ — Post-Training, Layer by Layer</h3>
+    <p>
+      GPTQ (Generalized Post-Training Quantization) quantizes weights one layer at a time, using a small calibration dataset to minimize reconstruction error. It's offline and one-shot — no retraining required. The resulting model runs at INT4 weights but often achieves near-INT8 quality. This is what powers many of the quantized Llama and Mistral variants you see in the wild.
+    </p>
+
+    <h3>AWQ — Activation-Aware Weighting</h3>
+    <p>
+      AWQ (Activation-Aware Weight Quantization) takes a different approach: instead of treating all weights equally, it identifies the weights that have the most impact on activations and protects them. It scales those salient weights before quantization, which preserves quality better than GPTQ in some regimes — especially at very low bit widths. AWQ has become popular because it also enables efficient W4A16 kernels (4-bit weights, 16-bit activations).
+    </p>
+
+    <h3>GGUF / llama.cpp — CPU-Friendly Formats</h3>
+    <p>
+      GGUF is the format used by llama.cpp and is designed for efficient inference on CPUs and Apple Silicon. It supports a range of quantization levels (Q2_K through Q8_0) and mixes different bit widths per layer. Not technically a quantization algorithm itself, but the ecosystem around it has made quantized LLM inference accessible to anyone with a laptop.
+    </p>
+
+    <h3>QLoRA — Quantize for Fine-Tuning</h3>
+    <p>
+      QLoRA changed how people think about fine-tuning large models. The idea: quantize the base model to NF4 (a 4-bit normal float format), load it frozen, and train only small LoRA adapters in 16-bit. You get the memory footprint of a 4-bit model with the learning capacity of 16-bit adapters. Fine-tuning a 65B model on a single 48GB GPU became possible.
+    </p>
+
+    <h2>Quality vs. Compression: The Core Tradeoff</h2>
+
+    <p>The table below summarizes how these methods compare on the key dimensions:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Bits</th>
+          <th>Compression</th>
+          <th>Quality Loss</th>
+          <th>Calibration</th>
+          <th>Use Case</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>FP16 / BF16</td>
+          <td>16</td>
+          <td>2× vs FP32</td>
+          <td>None</td>
+          <td>None</td>
+          <td>Baseline</td>
+        </tr>
+        <tr>
+          <td>INT8</td>
+          <td>8</td>
+          <td>4× vs FP32</td>
+          <td>Minimal</td>
+          <td>Simple</td>
+          <td>Production serving</td>
+        </tr>
+        <tr>
+          <td>GPTQ</td>
+          <td>4</td>
+          <td>8× vs FP32</td>
+          <td>Low–moderate</td>
+          <td>Layerwise</td>
+          <td>Offline inference</td>
+        </tr>
+        <tr>
+          <td>AWQ</td>
+          <td>4</td>
+          <td>8× vs FP32</td>
+          <td>Low</td>
+          <td>Activation stats</td>
+          <td>Efficient serving</td>
+        </tr>
+        <tr>
+          <td>QLoRA (NF4)</td>
+          <td>4</td>
+          <td>8× vs FP32</td>
+          <td>Low (for fine-tuning)</td>
+          <td>None</td>
+          <td>Fine-tuning</td>
+        </tr>
+        <tr>
+          <td>GGUF Q4_K_M</td>
+          <td>~4</td>
+          <td>~8×</td>
+          <td>Low–moderate</td>
+          <td>Mixed</td>
+          <td>CPU / edge inference</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>What the Gallery Shows</h2>
+    <p>
+      The <a href="https://arpitsinghgautam.me/llm-quantization-gallery/" target="_blank" rel="noopener">LLM Quantization Gallery</a> lets you explore these tradeoffs interactively. You can compare:
+    </p>
+    <ul>
+      <li>Perplexity scores across quantization levels for different model families</li>
+      <li>Memory footprint estimates for a given model size and bit width</li>
+      <li>Throughput benchmarks (tokens/second) at different precisions</li>
+      <li>Visual quality comparisons on common benchmarks (MMLU, HellaSwag, ARC)</li>
+    </ul>
+    <p>
+      The goal isn't to declare a winner — it's to make the tradeoffs legible so you can make an informed decision for your use case.
+    </p>
+
+    <h2>Lessons from Building It</h2>
+    <p>
+      A few things I learned while putting this together:
+    </p>
+    <ul>
+      <li><strong>Perplexity is necessary but not sufficient.</strong> A model can have low perplexity on WikiText-103 and still noticeably degrade on instruction-following or multi-step reasoning. Always evaluate on your actual task.</li>
+      <li><strong>Hardware matters enormously.</strong> INT8 on an A100 is very different from INT8 on a consumer GPU. Some methods (especially W4A16 kernels for AWQ) require specific GPU architectures to see real speedups.</li>
+      <li><strong>Outlier weights are the enemy.</strong> Both GPTQ and AWQ spend a lot of effort managing the small fraction of weights with very large magnitudes. These outliers disproportionately affect quantization error.</li>
+      <li><strong>Mixed precision often wins.</strong> Quantizing every layer the same way is rarely optimal. Keeping the first and last few layers at higher precision, and quantizing the middle layers more aggressively, tends to preserve quality better.</li>
+    </ul>
+
+    <h2>What's Next</h2>
+    <p>
+      I'm actively working on RL-based approaches to quantization at Dell — using reinforcement learning to decide <em>which</em> layers to quantize and <em>how aggressively</em>, rather than applying the same scheme everywhere. Early results show 2.6× compression with significantly lower perplexity degradation than fixed-precision approaches. More on that when the paper is ready.
+    </p>
+
+    <div class="blog-cta">
+      <p>
+        <strong>Try the gallery:</strong> <a href="https://arpitsinghgautam.me/llm-quantization-gallery/" target="_blank" rel="noopener">arpitsinghgautam.me/llm-quantization-gallery</a><br>
+        Questions or feedback? <a href="https://twitter.com/Asg_Wolverine" target="_blank" rel="noopener">@Asg_Wolverine</a> on Twitter or <a href="mailto:arpitsinghgautam777@gmail.com">email me</a>.
+      </p>
+    </div>
+
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-icons">
+      <a href="mailto:arpitsinghgautam777@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a>
+      <a href="https://topmate.io/arpit_singh_gautam/" title="TopMate" target="_blank" rel="noopener"><i class="fas fa-calendar-check"></i></a>
+    </div>
+    <span>© 2026 Arpit Singh Gautam · Bengaluru, India</span>
+  </div>
+</footer>
+
+<script>
+  function toggleTheme(){var cur=document.documentElement.getAttribute('data-theme');var next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);localStorage.setItem('theme',next);document.getElementById('theme-toggle').textContent=next==='dark'?'☀️':'🌙';}
+  (function(){var t=document.documentElement.getAttribute('data-theme');var btn=document.getElementById('theme-toggle');if(btn)btn.textContent=t==='dark'?'☀️':'🌙';})();
+  var btt=document.getElementById('back-to-top');
+  window.addEventListener('scroll',function(){if(window.scrollY>300){btt.classList.add('visible');}else{btt.classList.remove('visible');}});
+  btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+</body>
+</html>

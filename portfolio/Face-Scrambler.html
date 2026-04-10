@@ -1,142 +1,85 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en">
-
+<html lang="en" data-theme="light">
 <head>
-  <!-- Meta Tags -->
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6P1E490Z0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X6P1E490Z0');</script>
   <meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="keywords" content="Arpit Singh Gautam, Arpit, Arpit Singh, Arpit Gautam, ASG , data scientist, machine learning engineer, machine learning portfolio, portfolio website">
-  <meta name="description" content="Arpit Singh Gautam is a passionate AI & ML professional with expertise in data science, data analysis, Python programming, and machine learning techniques. Specializing in neural networks, deep learning, computer vision, and natural language processing, Arpit has a proven track record of delivering successful AI-based solutions.">
-  <!-- Page Title -->
-  <title>Face Scrambler : Project by ASG</title>
-  <!-- Favicon Icon -->
-  <link rel="icon" href="../assets/img/favicon.ico" />
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="../assets/css/fontawesome.css" />
-  <link rel="stylesheet" href="../assets/css/slick.css" />
-  <link rel="stylesheet" href="../assets/css/lightgallery.min.css" />
-  <link rel="stylesheet" href="../assets/css/animate.css" />
-  <link rel="stylesheet" href="../assets/css/style.css" />
+  <meta name="description" content="Face Scrambler — real-time face blurring for privacy using OpenCV. Project by Arpit Singh Gautam.">
+  <title>Face Scrambler — Arpit Singh Gautam</title>
+  <link rel="icon" href="../assets/img/favicon_7.jpg">
+  <link rel="stylesheet" href="../assets/css/fontawesome.css">
+  <link rel="stylesheet" href="../assets/css/main.css">
 </head>
-
-<body id="home">
-  <body id="home">
-    <!-- Start Header Section -->
-    <header class="st-site-header st-style1 st-sticky-header">
-      <div class="st-main-header">
-        <div class="container">
-          <div class="st-main-header-in">
-            <div class="st-main-header-left">
-              <a class="st-site-branding" href="../index.html"><img src="../assets/img/logo.png" alt="Arpit Singh Gautam"></a>
-            </div>
-            <div class="st-main-header-right">
-              <div class="st-nav">
-                <ul class="st-nav-list st-onepage-nav">
-                  <li><a href="../index.html#home">Home</a></li>
-                  <li><a href="../index.html#about">About</a></li>
-                  <li><a href="../index.html#resume">Resume</a></li>
-                  <li><a href="../index.html#projects">Projects</a></li>
-                  <li><a href="../index.html#awards">Awards</a></li>
-                  <li><a href="../index.html#contact">Contact</a></li>
-                </ul>
-                
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
-    <!-- End Header Section -->
-
- <div class="st-content">
-   <div class="st-page-heading st-dynamic-bg" data-src="../assets/img/portfolio/Face-Scrambler/Face-Scrambler-1.jpg">
-      <div class="container">
-        <div class="st-page-heading-in text-center">
-          <h1 class="st-page-heading-title">Face Scrambler<br><h4>Protecting Your Identity</h4></h1>
-          <div class="st-post-label">
-            <span>By <a href="../index.html">Arpit Singh Gautam</a></span>
-            <span>March 7, 2023</span>
-          </div>
-        </div>
-      </div>
-    </div><!-- .st-page-heading -->
-    <div class="st-height-b100 st-height-lg-b80"></div>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-10 offset-md-1">
-          <div class="st-post-details st-style1">
-            <p>Face Scrambler is a computer vision project that utilizes facial recognition and image processing techniques to blur faces in real-time video streams. The project aims to protect the privacy of individuals captured in a video stream by blurring their faces while still maintaining the integrity of the video. The project uses the OpenCV library for image processing and face_recognition library for facial recognition.</p>
-            <img class="st-zoom-in" src="../assets/img/portfolio/Face-Scrambler/Face-Scrambler-6.jpg" alt="Face Wrapped in Foil (Face Scrambler)">
-            <h2>Working</h2>
-            <div class="st-post-info">
-              <div class="st-post-text">
-                <p>The project uses a webcam to capture a live video stream. The captured video is processed frame by frame to detect faces using the face_recognition library. The faces are then compared to a pre-defined dataset of known faces to recognize the individuals.</p>
-                <p>If a recognized face is detected, the program checks if the individual's name is in the list of names specified in the script. If the name is found, the program blurs the face using OpenCV's blur function. If the name is not found, the program draws a rectangle around the face and displays the name of the individual. The program also marks the attendance of the recognized individual in a CSV file.</p>
-                <h2>Working Image</h2>
-                <!-- For Youtube -->
-                <!-- <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" width="816" height="459" src="https://www.youtube.com/embed/vGOL7ZvuGMc" allowfullscreen>
-                    </iframe>
-                </div> -->
-                <img class="st-zoom-in" src="../assets/img/portfolio/Face-Scrambler/Face-Scrambler-7.png" alt="Face Wrapped in Foil (Face Scrambler)">
-                <h2>Future Aspects</h2>
-                <p>The Face Scrambler project can be further enhanced to incorporate object recognition and tracking to protect the privacy of objects in the video stream.</p>
-                <blockquote>Without Privacy there was no point being an Individual.<small>by: <span>Jonathan Franzen</span></small></blockquote>
-                <p>TThe project can also be extended to support multiple cameras, enabling its usage in a wider range of applications. Additionally, the project can be integrated into existing security systems to enhance their privacy protection capabilities.</p>
-                <h2>Summary</h2>
-                <p>The Face Scrambler project is a computer vision-based solution that uses facial recognition and image processing techniques to protect the privacy of individuals captured in a video stream. The project is implemented using the OpenCV and face_recognition libraries and can be used in various applications such as surveillance systems, public cameras, and social media.</p>
-                <p>The project can be further enhanced to support object recognition and tracking, multiple camera support, and integration with existing security systems.</p>
-                <blockquote><a href="https://github.com/arpitsinghgautam/FaceScrambler"><i class="fab fa-github"></i>  Project Github Repository</a></blockquote> 
-              </div>
-              <div class="st-height-b35 st-height-lg-b35"></div>
-              <div class="st-post-meta">
-                <div class="st-post-share">
-                  <h4 class="st-post-share-title">Share:</h4>
-                  <div class="st-post-share-btn-list">
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://arpitsinghgautam.me/portfolio/Face-Scrambler.html"><i class="fab fa-facebook-f"></i></a> 
-                    <a href="https://twitter.com/intent/tweet?url=https://arpitsinghgautam.me/portfolio/Face-Scrambler.html"><i class="fab fa-twitter"></i></a> 
-                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://arpitsinghgautam.me/portfolio/Face-Scrambler.html"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="https://www.pinterest.com/pin/create/button/?url=https://arpitsinghgautam.me/portfolio/Face-Scrambler.html"><i class="fab fa-pinterest-p"></i></a>
-                 </div>
-                </div>
-              </div>
-              <div class="st-height-b60 st-height-lg-b60"></div>
-            </div>
-            <div class="st-post-btn-gropu">
-              <a href="Demand-Forecasting.html" class="st-btn st-style2 st-color1 st-size-medium">Previous Project</a>
-              <a href="MUJ-Attedance-2.0.html" class="st-btn st-style2 st-color1 st-size-medium">Next Project</a>
-            </div>
-          </div>
-          
-          </div>
-        </div>
-      </div>
+<body>
+<header class="site-header">
+  <div class="header-top">
+    <a class="nav-brand" href="../index.html">Arpit Singh <span class="brand-accent">Gautam</span></a>
+    <div class="header-icons">
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
     </div>
-    <div class="st-height-b100 st-height-lg-b80"></div>
   </div>
-
-
-  <!-- Start Footer Seciton -->
-  <footer>
-    <div class="container">
-      <div class="st-copyright-wrap text-center">
-        <div class="st-copyright-text">Arpit Singh Gautam © 2023. All right reserved.</div>
-      </div>
+  <div class="header-nav">
+    <a href="../">About</a>
+    <a href="../publications.html">Publications</a>
+    <a href="../experience.html">Experience</a>
+    <a href="../media-awards.html">Media &amp; Awards</a>
+    <a href="../projects.html" class="active">Projects</a>
+    <a href="../blog.html">Blog</a>
+    <a href="../misc.html">Misc</a>
+  </div>
+</header>
+<main class="page-wrap">
+  <div class="post-hero">
+    <div class="post-hero-label"><a href="../projects.html">← Projects</a></div>
+    <h1>Face Scrambler</h1>
+    <div class="post-meta">
+      <span>By <a href="../index.html">Arpit Singh Gautam</a></span>
+      <span>2023</span>
     </div>
-  </footer>
-  <!-- End Footer Seciton -->
-
-  <!-- Scripts -->
-  <script src="../assets/js/jquery-1.12.4.min.js"></script>
-  <script src="../assets/js/jquery.slick.min.js"></script>
-  <script src="../assets/js/lightgallery.min.js"></script>
-  <script src="../assets/js/wow.min.js"></script>
-  <script src="../assets/js/ripples.min.js"></script>
-  <script src="../assets/js/particles.min.js"></script>
-  <script src="../assets/js/main.js"></script>
+    <div class="tags" style="margin-top:12px">
+      <span class="tag">Computer Vision</span><span class="tag">OpenCV</span><span class="tag">Privacy</span><span class="tag">Python</span>
+    </div>
+  </div>
+  <article class="post-body">
+    <p>Face Scrambler uses facial recognition and image processing to blur faces in real-time video streams, protecting the privacy of individuals captured on camera while maintaining the integrity of the video. Built with <strong>OpenCV</strong> and the <strong>face_recognition</strong> library.</p>
+    <img src="../assets/img/portfolio/Face-Scrambler/Face-Scrambler-6.jpg" alt="Face Scrambler concept">
+    <h2>How It Works</h2>
+    <p>The system captures live video from a webcam and processes each frame to detect faces. Detected faces are compared against a pre-defined dataset of known individuals.</p>
+    <p>If a recognized face matches a name in the protected list, OpenCV's blur function is applied to that region. Otherwise, a rectangle is drawn with the person's name. The system also logs attendance for recognized individuals in a CSV file.</p>
+    <img src="../assets/img/portfolio/Face-Scrambler/Face-Scrambler-7.png" alt="Face Scrambler in action">
+    <h2>Future Directions</h2>
+    <ul>
+      <li><strong>Object recognition</strong> — extend privacy protection beyond faces to objects.</li>
+      <li><strong>Multi-camera support</strong> — deploy across multiple camera feeds simultaneously.</li>
+      <li><strong>Security system integration</strong> — plug into existing surveillance infrastructure.</li>
+    </ul>
+    <a class="btn-github" href="https://github.com/arpitsinghgautam/FaceScrambler" target="_blank" rel="noopener"><i class="fab fa-github"></i> View on GitHub</a>
+    <div class="share-row">
+      <span>Share:</span>
+      <a href="https://twitter.com/intent/tweet?url=https://arpitsinghgautam.me/portfolio/Face-Scrambler.html" target="_blank" rel="noopener"><i class="fab fa-twitter"></i> Twitter</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://arpitsinghgautam.me/portfolio/Face-Scrambler.html" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a>
+    </div>
+  </article>
+  <nav class="post-nav">
+    <a href="Demand-Forecasting.html">← Demand Forecasting</a>
+    <a href="MUJ-Attedance-2.0.html">MUJ Attendance →</a>
+  </nav>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span>© 2025 Arpit Singh Gautam</span>
+    <span><a href="../index.html">← Back to About</a></span>
+  </div>
+</footer>
+<script>
+  function toggleTheme(){var cur=document.documentElement.getAttribute('data-theme');var next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);localStorage.setItem('theme',next);document.getElementById('theme-toggle').textContent=next==='dark'?'☀️':'🌙';}
+  (function(){var t=document.documentElement.getAttribute('data-theme');var btn=document.getElementById('theme-toggle');if(btn)btn.textContent=t==='dark'?'☀️':'🌙';})();
+</script>
 </body>
-
 </html>
