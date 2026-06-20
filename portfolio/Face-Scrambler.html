@@ -7,21 +7,38 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Face Scrambler — real-time face blurring for privacy using OpenCV. Project by Arpit Singh Gautam.">
+  <link rel="canonical" href="https://arpitsinghgautam.me/portfolio/Face-Scrambler.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Arpit Singh Gautam">
+  <meta property="og:title" content="Face Scrambler — Arpit Singh Gautam">
+  <meta property="og:description" content="Face Scrambler — real-time face blurring for privacy using OpenCV. Project by Arpit Singh Gautam.">
+  <meta property="og:url" content="https://arpitsinghgautam.me/portfolio/Face-Scrambler.html">
+  <meta property="og:image" content="https://arpitsinghgautam.me/assets/img/portfolio/Face-Scrambler/Face-Scrambler-1.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@Asg_Wolverine">
+  <meta name="twitter:creator" content="@Asg_Wolverine">
+  <meta name="twitter:title" content="Face Scrambler — Arpit Singh Gautam">
+  <meta name="twitter:description" content="Face Scrambler — real-time face blurring for privacy using OpenCV. Project by Arpit Singh Gautam.">
+  <meta name="twitter:image" content="https://arpitsinghgautam.me/assets/img/portfolio/Face-Scrambler/Face-Scrambler-1.jpg">
   <title>Face Scrambler — Arpit Singh Gautam</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="stylesheet" href="../assets/css/fontawesome.css">
   <link rel="stylesheet" href="../assets/css/main.css">
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arpitsinghgautam.me/"}, {"@type": "ListItem", "position": 2, "name": "Projects", "item": "https://arpitsinghgautam.me/projects.html"}, {"@type": "ListItem", "position": 3, "name": "Face Scrambler", "item": "https://arpitsinghgautam.me/portfolio/Face-Scrambler.html"}]}
+  </script>
 </head>
 <body>
+<a href="#main" class="skip-link">Skip to content</a>
 <header class="site-header">
   <div class="header-top">
     <a class="nav-brand" href="../index.html">Arpit Singh <span class="brand-accent">Gautam</span></a>
     <div class="header-icons">
-      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i></a>
-      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>
-      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i></a>
-      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a>
-      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap" aria-hidden="true"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle dark mode">🌙</button>
     </div>
   </div>
   <div class="header-nav">
@@ -34,7 +51,7 @@
     <a href="../misc.html">Misc</a>
   </div>
 </header>
-<main class="page-wrap">
+<main class="page-wrap" id="main" tabindex="-1">
   <div class="post-hero">
     <div class="post-hero-label"><a href="../projects.html">← Projects</a></div>
     <h1>Face Scrambler</h1>
@@ -48,22 +65,22 @@
   </div>
   <article class="post-body">
     <p>Face Scrambler uses facial recognition and image processing to blur faces in real-time video streams, protecting the privacy of individuals captured on camera while maintaining the integrity of the video. Built with <strong>OpenCV</strong> and the <strong>face_recognition</strong> library.</p>
-    <img src="../assets/img/portfolio/Face-Scrambler/Face-Scrambler-6.jpg" alt="Face Scrambler concept">
+    <img src="../assets/img/portfolio/Face-Scrambler/Face-Scrambler-6.jpg" alt="Face Scrambler concept" decoding="async" loading="lazy">
     <h2>How It Works</h2>
     <p>The system captures live video from a webcam and processes each frame to detect faces. Detected faces are compared against a pre-defined dataset of known individuals.</p>
     <p>If a recognized face matches a name in the protected list, OpenCV's blur function is applied to that region. Otherwise, a rectangle is drawn with the person's name. The system also logs attendance for recognized individuals in a CSV file.</p>
-    <img src="../assets/img/portfolio/Face-Scrambler/Face-Scrambler-7.png" alt="Face Scrambler in action">
+    <img src="../assets/img/portfolio/Face-Scrambler/Face-Scrambler-7.jpg" alt="Face Scrambler in action" decoding="async" loading="lazy">
     <h2>Future Directions</h2>
     <ul>
       <li><strong>Object recognition</strong> — extend privacy protection beyond faces to objects.</li>
       <li><strong>Multi-camera support</strong> — deploy across multiple camera feeds simultaneously.</li>
       <li><strong>Security system integration</strong> — plug into existing surveillance infrastructure.</li>
     </ul>
-    <a class="btn-github" href="https://github.com/arpitsinghgautam/FaceScrambler" target="_blank" rel="noopener"><i class="fab fa-github"></i> View on GitHub</a>
+    <a class="btn-github" href="https://github.com/arpitsinghgautam/FaceScrambler" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> View on GitHub</a>
     <div class="share-row">
       <span>Share:</span>
-      <a href="https://twitter.com/intent/tweet?url=https://arpitsinghgautam.me/portfolio/Face-Scrambler.html" target="_blank" rel="noopener"><i class="fab fa-twitter"></i> Twitter</a>
-      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://arpitsinghgautam.me/portfolio/Face-Scrambler.html" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a>
+      <a href="https://twitter.com/intent/tweet?url=https://arpitsinghgautam.me/portfolio/Face-Scrambler.html" target="_blank" rel="noopener"><i class="fab fa-twitter" aria-hidden="true"></i> Twitter</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://arpitsinghgautam.me/portfolio/Face-Scrambler.html" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i> LinkedIn</a>
     </div>
   </article>
   <nav class="post-nav">
@@ -73,7 +90,7 @@
 </main>
 <footer class="site-footer">
   <div class="footer-inner">
-    <span>© 2025 Arpit Singh Gautam</span>
+    <span>© 2026 Arpit Singh Gautam</span>
     <span><a href="../index.html">← Back to About</a></span>
   </div>
 </footer>
