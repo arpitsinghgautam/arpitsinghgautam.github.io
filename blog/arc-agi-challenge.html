@@ -6,21 +6,21 @@
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X6P1E490Z0');</script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="ARC-AGI-3: The new frontier in AGI benchmarking — interactive agentic reasoning, dynamic goals, and why this is fundamentally different from grid puzzles.">
+  <meta name="description" content="ARC-AGI-3: The new frontier in AGI benchmarking - interactive agentic reasoning, dynamic goals, and why this is fundamentally different from grid puzzles.">
   <link rel="canonical" href="https://arpitsinghgautam.me/blog/arc-agi-challenge.html">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Arpit Singh Gautam">
-  <meta property="og:title" content="ARC-AGI-3 Challenge — Arpit Singh Gautam">
-  <meta property="og:description" content="ARC-AGI-3: The new frontier in AGI benchmarking — interactive agentic reasoning, dynamic goals, and why this is fundamentally different from grid puzzles.">
+  <meta property="og:title" content="ARC-AGI-3 Challenge - Arpit Singh Gautam">
+  <meta property="og:description" content="ARC-AGI-3: The new frontier in AGI benchmarking - interactive agentic reasoning, dynamic goals, and why this is fundamentally different from grid puzzles.">
   <meta property="og:url" content="https://arpitsinghgautam.me/blog/arc-agi-challenge.html">
   <meta property="og:image" content="https://arpitsinghgautam.me/assets/img/blog/arc-agi-thumb.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@Asg_Wolverine">
   <meta name="twitter:creator" content="@Asg_Wolverine">
-  <meta name="twitter:title" content="ARC-AGI-3 Challenge — Arpit Singh Gautam">
-  <meta name="twitter:description" content="ARC-AGI-3: The new frontier in AGI benchmarking — interactive agentic reasoning, dynamic goals, and why this is fundamentally different from grid puzzles.">
+  <meta name="twitter:title" content="ARC-AGI-3 Challenge - Arpit Singh Gautam">
+  <meta name="twitter:description" content="ARC-AGI-3: The new frontier in AGI benchmarking - interactive agentic reasoning, dynamic goals, and why this is fundamentally different from grid puzzles.">
   <meta name="twitter:image" content="https://arpitsinghgautam.me/assets/img/blog/arc-agi-thumb.jpg">
-  <title>ARC-AGI-3 Challenge — Arpit Singh Gautam</title>
+  <title>ARC-AGI-3 Challenge - Arpit Singh Gautam</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="stylesheet" href="../assets/css/fontawesome.css">
   <link rel="stylesheet" href="../assets/css/main.css">
@@ -73,7 +73,7 @@
   <div class="blog-post-body">
 
     <p>
-      Most AI benchmarks measure what a model has memorized. The ARC Prize series measures something different: whether an AI can <em>reason about problems it has never seen before</em>. And with ARC-AGI-3, that question gets substantially harder — the benchmark has evolved from grid puzzles to interactive agentic tasks in novel environments.
+      Most AI benchmarks measure what a model has memorized. The ARC Prize series measures something different: whether an AI can <em>reason about problems it has never seen before</em>. And with ARC-AGI-3, that question gets substantially harder - the benchmark has evolved from grid puzzles to interactive agentic tasks in novel environments.
     </p>
     <p>
       I've been participating in ARC Prize 2026 on Kaggle. Here's what I've learned about why ARC-AGI-3 is a meaningful step change, what makes it so hard, and where the frontier is.
@@ -81,7 +81,7 @@
 
     <h2>A Quick History: ARC-AGI-1 and ARC-AGI-2</h2>
     <p>
-      The original ARC (Abstract Reasoning Corpus), designed by François Chollet in 2019, presented models with grid transformation puzzles: given 2–5 input/output grid pairs as examples, figure out the transformation rule and apply it to a new input. The grids were small (up to 30×30), colors limited (10 values), and rules consistent — but the rules themselves could be anything (symmetry, counting, object manipulation, spatial reasoning).
+      The original ARC (Abstract Reasoning Corpus), designed by François Chollet in 2019, presented models with grid transformation puzzles: given 2–5 input/output grid pairs as examples, figure out the transformation rule and apply it to a new input. The grids were small (up to 30×30), colors limited (10 values), and rules consistent - but the rules themselves could be anything (symmetry, counting, object manipulation, spatial reasoning).
     </p>
     <p>
       ARC-AGI-2 refined this further, making tasks harder and evaluation stricter. Even GPT-4, trained on essentially the entire internet, struggled to score above 30% on the original ARC. ARC-AGI-2 was harder still.
@@ -96,12 +96,12 @@
     </p>
     <ul>
       <li><strong>Explore novel environments</strong> it has never encountered before, with no pre-given examples of the rules.</li>
-      <li><strong>Acquire goals dynamically</strong> — the task objective isn't stated upfront; the agent has to infer it through interaction.</li>
+      <li><strong>Acquire goals dynamically</strong> - the task objective isn't stated upfront; the agent has to infer it through interaction.</li>
       <li><strong>Build world models</strong> on the fly from the consequences of its own actions.</li>
       <li><strong>Learn and adapt continuously</strong> within a single episode, not just between training and test.</li>
     </ul>
     <p>
-      This is much closer to what we mean when we talk about general intelligence: not "apply the learned rule" but "figure out what the rules even are, then use them." The evaluation is correspondingly stricter — partial credit is rare, and approximate reasoning scores zero.
+      This is much closer to what we mean when we talk about general intelligence: not "apply the learned rule" but "figure out what the rules even are, then use them." The evaluation is correspondingly stricter - partial credit is rare, and approximate reasoning scores zero.
     </p>
 
     <h2>Why This Is Hard for Current AI Systems</h2>
@@ -122,7 +122,7 @@
       The leading approaches in the ARC Prize 2026 preview competition (held July–August 2025) used agents that explicitly build and maintain internal world models. Rather than mapping observations directly to actions, these agents maintain hypotheses about the environment's dynamics and update them as they explore.
     </p>
     <p>
-      The winner of the preview competition was StochasticGoose (Tufa Labs) with 12.58% accuracy across both public and private hidden environments — a strong showing given how hard the tasks are, but leaving enormous room for improvement.
+      The winner of the preview competition was StochasticGoose (Tufa Labs) with 12.58% accuracy across both public and private hidden environments - a strong showing given how hard the tasks are, but leaving enormous room for improvement.
     </p>
 
     <h3>Test-Time Adaptation</h3>
@@ -132,12 +132,12 @@
 
     <h3>Program Synthesis (Inherited from ARC-AGI-1/2)</h3>
     <p>
-      Program synthesis approaches — which worked well on ARC-AGI-1/2 by searching for a program in a DSL that maps inputs to outputs — are less directly applicable to ARC-AGI-3's interactive setting, but the idea of maintaining a symbolic hypothesis about environment rules is still relevant.
+      Program synthesis approaches - which worked well on ARC-AGI-1/2 by searching for a program in a DSL that maps inputs to outputs - are less directly applicable to ARC-AGI-3's interactive setting, but the idea of maintaining a symbolic hypothesis about environment rules is still relevant.
     </p>
 
     <h2>My Submission: Starting From Zero</h2>
     <p>
-      My current submission is a random agent baseline — proof that the submission pipeline works. It scores near zero, as expected. Getting the data format, API, and submission infrastructure right is step one.
+      My current submission is a random agent baseline - proof that the submission pipeline works. It scores near zero, as expected. Getting the data format, API, and submission infrastructure right is step one.
     </p>
     <p>
       My plan for improving:
@@ -151,18 +151,18 @@
 
     <h2>Why ARC-AGI-3 Matters Beyond the Competition</h2>
     <p>
-      The ARC Prize series has always been Chollet's counterpoint to benchmark saturation. Modern LLMs score near-human on MMLU, HellaSwag, ARC-Easy — but primarily by memorizing patterns from training data, not by reasoning about genuinely novel problems.
+      The ARC Prize series has always been Chollet's counterpoint to benchmark saturation. Modern LLMs score near-human on MMLU, HellaSwag, ARC-Easy - but primarily by memorizing patterns from training data, not by reasoning about genuinely novel problems.
     </p>
     <p>
       ARC-AGI-3 is specifically constructed to resist this. The interactive environments are novel by design. Success requires something closer to actual fluid intelligence: the ability to build accurate world models from sparse data, infer goals from context, and act effectively under uncertainty.
     </p>
     <p>
-      The $2M prize pool reflects the difficulty. For those of us working on inference-time reasoning, planning, and agentic AI, ARC-AGI-3 is the right stress test — it forces honest answers to the question of what "understanding" actually means in a computable sense.
+      The $2M prize pool reflects the difficulty. For those of us working on inference-time reasoning, planning, and agentic AI, ARC-AGI-3 is the right stress test - it forces honest answers to the question of what "understanding" actually means in a computable sense.
     </p>
 
     <div class="blog-cta">
       <p>
-        <strong>My submission:</strong> <a href="https://www.kaggle.com/code/arpitsinghgautam/arc-agi-3-random-agent-v0" target="_blank" rel="noopener">Kaggle — ARC-AGI-3 Random Agent v0</a><br>
+        <strong>My submission:</strong> <a href="https://www.kaggle.com/code/arpitsinghgautam/arc-agi-3-random-agent-v0" target="_blank" rel="noopener">Kaggle - ARC-AGI-3 Random Agent v0</a><br>
         <strong>Competition:</strong> <a href="https://www.kaggle.com/competitions/arc-prize-2026-arc-agi-3" target="_blank" rel="noopener">ARC Prize 2026 on Kaggle</a><br>
         Updates as I improve the approach. Follow <a href="https://twitter.com/Asg_Wolverine" target="_blank" rel="noopener">@Asg_Wolverine</a> for progress.
       </p>
