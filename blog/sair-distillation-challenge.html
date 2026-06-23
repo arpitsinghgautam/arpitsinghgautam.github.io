@@ -154,6 +154,34 @@ If FALSE: COUNTEREXAMPLE: &lt;magma + failing assignment&gt;, or BASIS: &lt;fall
       That combination is what produced the result: <strong>29th of 1000+</strong>, with an artifact that beat the first-place entry on both axes I care about most: it was smaller (7.44 KB vs 9.83 KB) and cheaper ($0.00037 vs $0.00060 per problem).
     </p>
 
+    <h2>The Numbers</h2>
+    <p>
+      On the Stage 1 leaderboard, my submission (<code>EQT01-T00201</code>) scored an overall <strong>60.2% accuracy</strong> and <strong>68.3% F1</strong>, at <strong>99.7% mean parse success</strong> and <strong>$0.00037 per problem</strong>, all from one 7.44 KB cheatsheet. The per-model, per-difficulty breakdown across the three evaluation models:
+    </p>
+    <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:0.92rem;margin:6px 0 14px">
+      <thead>
+        <tr style="text-align:left;border-bottom:2px solid #c0392b">
+          <th style="padding:6px 10px">Model</th><th style="padding:6px 10px">Set</th><th style="padding:6px 10px">Accuracy</th><th style="padding:6px 10px">F1</th><th style="padding:6px 10px">Parse</th><th style="padding:6px 10px">Cost</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #e2e6ea"><td style="padding:5px 10px">GPT-OSS 120B</td><td style="padding:5px 10px">normal</td><td style="padding:5px 10px">85.2%</td><td style="padding:5px 10px">87.0%</td><td style="padding:5px 10px">99.5%</td><td style="padding:5px 10px">$0.00023</td></tr>
+        <tr style="border-bottom:1px solid #e2e6ea"><td style="padding:5px 10px">GPT-OSS 120B</td><td style="padding:5px 10px">hard</td><td style="padding:5px 10px">62.7%</td><td style="padding:5px 10px">71.1%</td><td style="padding:5px 10px">99.8%</td><td style="padding:5px 10px">$0.00023</td></tr>
+        <tr style="border-bottom:1px solid #e2e6ea"><td style="padding:5px 10px">GPT-OSS 120B</td><td style="padding:5px 10px">extra_hard</td><td style="padding:5px 10px">36.3%</td><td style="padding:5px 10px">52.7%</td><td style="padding:5px 10px">99.8%</td><td style="padding:5px 10px">$0.00025</td></tr>
+        <tr style="border-bottom:1px solid #e2e6ea"><td style="padding:5px 10px">Gemma 4 31B IT</td><td style="padding:5px 10px">normal</td><td style="padding:5px 10px">78.3%</td><td style="padding:5px 10px">81.8%</td><td style="padding:5px 10px">100.0%</td><td style="padding:5px 10px">$0.00047</td></tr>
+        <tr style="border-bottom:1px solid #e2e6ea"><td style="padding:5px 10px">Gemma 4 31B IT</td><td style="padding:5px 10px">hard</td><td style="padding:5px 10px">61.8%</td><td style="padding:5px 10px">71.6%</td><td style="padding:5px 10px">100.0%</td><td style="padding:5px 10px">$0.00046</td></tr>
+        <tr style="border-bottom:1px solid #e2e6ea"><td style="padding:5px 10px">Gemma 4 31B IT</td><td style="padding:5px 10px">extra_hard</td><td style="padding:5px 10px">44.0%</td><td style="padding:5px 10px">61.1%</td><td style="padding:5px 10px">100.0%</td><td style="padding:5px 10px">$0.00047</td></tr>
+        <tr style="border-bottom:1px solid #e2e6ea"><td style="padding:5px 10px">Llama 3.3 70B</td><td style="padding:5px 10px">normal</td><td style="padding:5px 10px">74.3%</td><td style="padding:5px 10px">72.2%</td><td style="padding:5px 10px">99.8%</td><td style="padding:5px 10px">$0.00042</td></tr>
+        <tr style="border-bottom:1px solid #e2e6ea"><td style="padding:5px 10px">Llama 3.3 70B</td><td style="padding:5px 10px">hard</td><td style="padding:5px 10px">56.2%</td><td style="padding:5px 10px">62.4%</td><td style="padding:5px 10px">99.5%</td><td style="padding:5px 10px">$0.00042</td></tr>
+        <tr><td style="padding:5px 10px">Llama 3.3 70B</td><td style="padding:5px 10px">extra_hard</td><td style="padding:5px 10px">43.2%</td><td style="padding:5px 10px">55.1%</td><td style="padding:5px 10px">99.0%</td><td style="padding:5px 10px">$0.00040</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>
+      The shape is what I wanted. Strong on the normal set (GPT-OSS-120B at 85.2%), holding on hard, and degrading gracefully on extra_hard, while parse success stays near-perfect (99 to 100%) so the verdicts are almost always machine-readable, at roughly two to five hundredths of a cent per problem. The cheatsheet is model-agnostic: the same 7.44 KB drives all three open models.
+    </p>
+
     <h2>Why I Cared</h2>
     <p>
       My research is about efficiency times reliability for foundation models, with a deep focus on the reliability of quantized models. This challenge is the same question in a different medium: not "how few bits can hold the weights," but "how few kilobytes of instruction can hold the reasoning." Distilling a decision procedure into a cheatsheet that a small open model can execute, cheaply and correctly, is cost-efficient reasoning made concrete. It is the kind of frontier I keep coming back to.

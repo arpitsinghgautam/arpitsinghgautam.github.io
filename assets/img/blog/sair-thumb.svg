@@ -1,0 +1,28 @@
+<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SAIR Equational Theories Distillation Challenge">
+  <defs>
+    <linearGradient id="sairbg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fcfcfe"/>
+      <stop offset="1" stop-color="#eceff4"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="400" fill="url(#sairbg)"/>
+  <rect width="640" height="6" fill="#c0392b"/>
+  <text x="40" y="70" font-family="Georgia, 'Times New Roman', serif" font-size="17" letter-spacing="3" fill="#7a8190">SAIR  ·  EQUATIONAL THEORIES</text>
+  <text x="40" y="98" font-family="-apple-system, 'Segoe UI', sans-serif" font-size="14" fill="#aab0bb">Mathematics Distillation Challenge, Stage 1</text>
+
+  <text x="132" y="216" text-anchor="middle" font-family="Georgia, serif" font-size="62" fill="#222831">Eq<tspan dy="16" font-size="30">1</tspan></text>
+  <line x1="214" y1="198" x2="392" y2="198" stroke="#c0392b" stroke-width="5"/>
+  <polygon points="412,198 388,186 388,210" fill="#c0392b"/>
+  <text x="508" y="216" text-anchor="middle" font-family="Georgia, serif" font-size="62" fill="#222831">Eq<tspan dy="16" font-size="30">2</tspan></text>
+  <text x="320" y="262" text-anchor="middle" font-family="-apple-system, 'Segoe UI', sans-serif" font-size="19" fill="#6b7280">does it hold over every magma (S, *) ?</text>
+
+  <g font-family="-apple-system, 'Segoe UI', sans-serif" font-size="17" font-weight="700">
+    <rect x="40" y="322" width="142" height="46" rx="9" fill="#222831"/>
+    <text x="111" y="351" text-anchor="middle" fill="#ffffff">29th / 1000+</text>
+    <rect x="196" y="322" width="122" height="46" rx="9" fill="#c0392b"/>
+    <text x="257" y="351" text-anchor="middle" fill="#ffffff">60.2% acc</text>
+    <rect x="332" y="322" width="108" height="46" rx="9" fill="#2563eb"/>
+    <text x="386" y="351" text-anchor="middle" fill="#ffffff">7.44 KB</text>
+  </g>
+  <text x="600" y="351" text-anchor="end" font-family="-apple-system, sans-serif" font-size="14" fill="#9aa0ab">$0.00037 / problem</text>
+</svg>

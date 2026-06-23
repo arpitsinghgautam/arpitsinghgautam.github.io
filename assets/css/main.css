@@ -1,5 +1,5 @@
 /* ================================================================
-   Arpit Singh Gautam — Personal Website
+   Arpit Singh Gautam - Personal Website
    ================================================================ */
 
 /* --- CSS Variables --- */
@@ -685,7 +685,7 @@ p { margin-top: 0; margin-bottom: 1rem; }
 .footer-inner a:hover { color: var(--link); }
 
 /* ================================================================
-   RECENT UPDATES — image+title+date+excerpt (like blog index)
+   RECENT UPDATES - image+title+date+excerpt (like blog index)
    ================================================================ */
 .update-list { list-style: none; padding: 0; margin: 0; }
 .update-entry {
@@ -764,7 +764,7 @@ p { margin-top: 0; margin-bottom: 1rem; }
 .honor-desc { font-size: 0.83rem; color: var(--text-muted); }
 
 /* ================================================================
-   EXPERIENCE PAGE — timeline-style
+   EXPERIENCE PAGE - timeline-style
    ================================================================ */
 .exp-section { margin-bottom: 10px; }
 .exp-group-label {
