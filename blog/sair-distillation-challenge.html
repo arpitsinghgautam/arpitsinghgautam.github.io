@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6P1E490Z0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X6P1E490Z0');</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="How I placed 29th of 1000+ in the SAIR Foundation Mathematics Distillation Challenge (Terence Tao, Damek Davis): distilling equational-implication reasoning over magmas into a 7.44 KB two-phase decision-procedure cheatsheet.">
+  <link rel="canonical" href="https://arpitsinghgautam.me/blog/sair-distillation-challenge.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Arpit Singh Gautam">
+  <meta property="og:title" content="Distilling Math Reasoning into a 7.44 KB Cheatsheet - Arpit Singh Gautam">
+  <meta property="og:description" content="My SAIR Mathematics Distillation Challenge run: a two-phase decision procedure for equational implication over magmas, tuned on the accuracy-cost-size frontier.">
+  <meta property="og:url" content="https://arpitsinghgautam.me/blog/sair-distillation-challenge.html">
+  <meta property="og:image" content="https://arpitsinghgautam.me/assets/img/section/about1.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@Asg_Wolverine">
+  <meta name="twitter:creator" content="@Asg_Wolverine">
+  <meta name="twitter:title" content="Distilling Math Reasoning into a 7.44 KB Cheatsheet - Arpit Singh Gautam">
+  <meta name="twitter:description" content="My SAIR Mathematics Distillation Challenge run: a two-phase decision procedure for equational implication over magmas, tuned on the accuracy-cost-size frontier.">
+  <meta name="twitter:image" content="https://arpitsinghgautam.me/assets/img/section/about1.jpg">
+  <title>Distilling Math Reasoning into a 7.44 KB Cheatsheet - Arpit Singh Gautam</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="../assets/css/fontawesome.css">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Distilling Math Reasoning into a 7.44 KB Cheatsheet: My SAIR Equational-Theories Run", "image": "https://arpitsinghgautam.me/assets/img/section/about1.jpg", "author": {"@type": "Person", "name": "Arpit Singh Gautam", "url": "https://arpitsinghgautam.me/"}, "publisher": {"@type": "Person", "name": "Arpit Singh Gautam"}, "mainEntityOfPage": "https://arpitsinghgautam.me/blog/sair-distillation-challenge.html"}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arpitsinghgautam.me/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://arpitsinghgautam.me/blog.html"}, {"@type": "ListItem", "position": 3, "name": "Distilling Math Reasoning into a 7.44 KB Cheatsheet", "item": "https://arpitsinghgautam.me/blog/sair-distillation-challenge.html"}]}
+  </script>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<button id="back-to-top" title="Back to top" aria-label="Back to top"><i class="fas fa-arrow-up" aria-hidden="true"></i></button>
+
+<header class="site-header">
+  <div class="header-top">
+    <a class="nav-brand" href="../index.html">Arpit Singh <span class="brand-accent">Gautam</span></a>
+    <div class="header-icons">
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap" aria-hidden="true"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle dark mode">🌙</button>
+    </div>
+  </div>
+  <div class="header-nav">
+    <a href="../index.html">About</a>
+    <a href="../publications.html">Publications</a>
+    <a href="../experience.html">Experience</a>
+    <a href="../media-awards.html">Media &amp; Awards</a>
+    <a href="../projects.html">Projects</a>
+    <a href="../blog.html" class="active">Blog</a>
+    <a href="../misc.html">Misc</a>
+  </div>
+</header>
+
+<main class="page-wrap" id="main" tabindex="-1">
+
+  <div class="blog-post-hero">
+    <div class="breadcrumb"><a href="../blog.html">&larr; Blog</a></div>
+    <h1>Distilling Math Reasoning into a 7.44 KB Cheatsheet</h1>
+    <div class="blog-post-meta">
+      <span><i class="fas fa-calendar-alt" aria-hidden="true"></i> 2026</span>
+      <span><i class="fas fa-clock" aria-hidden="true"></i> 9 min read</span>
+      <span><i class="fas fa-tag" aria-hidden="true"></i> Distillation · LLM Reasoning · Math</span>
+    </div>
+  </div>
+
+  <div class="blog-post-body">
+
+    <p>
+      Can mathematical reasoning be compressed into a short, human-readable cheatsheet that makes a small open model reason like a much larger one? That is the bet behind the <strong>SAIR Foundation Mathematics Distillation Challenge</strong>. I entered Stage 1 and finished <strong>29th of 1000+ entrants</strong> (1,061 participants), with a cheatsheet that was both smaller and cheaper than the first-place entry: <strong>7.44 KB at about $0.00037 per problem</strong>, versus 9.83 KB at $0.00060.
+    </p>
+    <p>
+      This is my research thesis in miniature: efficiency times reliability, and how cheaply you can preserve real reasoning. Here is what the challenge was, and how I built the cheatsheet.
+    </p>
+
+    <h2>The Challenge</h2>
+    <p>
+      The competition is organized by the SAIR Foundation, with <strong>Damek Davis</strong> (Associate Professor of Statistics and Data Science, University of Pennsylvania) and <strong>Terence Tao</strong> (Fields Medalist, UCLA, co-founder of SAIR). It is inspired by Honda, Murakami, and Zhang (2025), <em>Distilling Many-Shot In-Context Learning into a Cheat Sheet</em>. The twist: instead of a single model query producing the cheatsheet, the cheatsheets are discovered through an open competition.
+    </p>
+    <p>
+      The core question is simple to state: <strong>can strong mathematical reasoning be distilled into a compact, human-readable cheatsheet that improves LLM performance on formal tasks?</strong>
+    </p>
+
+    <h2>The Task: Equational Implication Over Magmas</h2>
+    <p>
+      A <strong>magma</strong> is a set with an arbitrary binary operation <code>*</code>. Nothing else is assumed: no associativity, no commutativity, no identity, no cancellation. The pilot task, drawn from Terence Tao's <strong>Equational Theories Project</strong> (a list of 4,694 laws and their implication graph), is:
+    </p>
+    <p>
+      Given two equational laws, does Equation 1 <strong>imply</strong> Equation 2 over <em>all</em> magmas?
+    </p>
+    <pre><code>Example: E_4 (x = x * y)  implies  E_3 (x = x * x).</code></pre>
+    <p>
+      This is deceptively hard. The answer is a universally quantified statement over every possible magma, so a single counterexample magma settles a FALSE, but proving TRUE means the implication holds in structures you never explicitly checked.
+    </p>
+
+    <h2>What Makes It a Distillation Problem</h2>
+    <p>
+      The constraints are where the research lives:
+    </p>
+    <ul>
+      <li><strong>Cheatsheet cap: 10 KB.</strong> The whole strategy has to fit in a few thousand tokens.</li>
+      <li><strong>Small, general models.</strong> Stage 1 evaluates on GPT-OSS-120B, Llama-3.3-70B-Instruct, and Gemma, weighted equally. These are not reasoning-specialized.</li>
+      <li><strong>No tools.</strong> Offline evaluation gives the model no browser, no web search, no Lean, no code execution.</li>
+      <li><strong>Balanced and held out.</strong> The evaluation set is 50% TRUE and 50% FALSE, and is different from the 1,669 public problems, so you cannot memorize.</li>
+      <li><strong>Cost and latency are scored.</strong> The recommendation is under $0.01 and under 10 minutes per problem; exceeding either hurts your rank.</li>
+    </ul>
+    <p>
+      So the cheatsheet must make a general open model decide a genuinely hard logic question, cheaply, with no external help, on problems it has never seen. Dumping in-context examples does not survive that. The model needs a <em>procedure</em>.
+    </p>
+
+    <h2>My Approach: A Two-Phase Decision Procedure</h2>
+    <p>
+      I wrote the cheatsheet as an explicit algorithm the model executes, not a pile of examples. It has two phases: a strict rule layer that commits only when a rule fires cleanly, and a structural classifier used as a fallback when the rules are silent.
+    </p>
+
+    <h3>Phase 1: Strict rules (commit only on a clean firing)</h3>
+    <ul>
+      <li><strong>Immediate TRUE (syntactic).</strong> Eq1 and Eq2 are the same law up to consistent renaming or side-swapping; or Eq2 is just <code>t = t</code>.</li>
+      <li><strong>Trivialization.</strong> If Eq1 forces the magma to have a single element (for example <code>x = y * z</code>, where the leftmost and rightmost leaves of the right-hand side are both different from <code>x</code>), then everything follows and the answer is TRUE.</li>
+      <li><strong>Canonical projection shortcuts.</strong> The literal forms <code>x * y = z * w</code> (constant), <code>x = x * y</code> (left-projection), and <code>x = y * x</code> (right-projection) have closed-form implication tests that read off the leaf structure of Eq2. A crucial discipline: these apply only to the exact literal form. A look-alike like <code>x = y * (y * x)</code> is strictly stronger and must fall through.</li>
+      <li><strong>Witness-magma counterexample search.</strong> A curated library of size-2 and size-3 magmas (left and right projection, AND-to-zero, negate-left, negate-right, XOR, and the Z/3 add, subtract, and idempotent tables), each with an O(1) shortcut for "does this law hold here." If a witness satisfies Eq1 but breaks Eq2, the answer is FALSE with an explicit counterexample.</li>
+    </ul>
+
+    <h3>Phase 2: Structural fallback (when Phase 1 is silent)</h3>
+    <p>
+      When no rule fires and no witness refutes, I compute a few variable-occurrence features of Eq1, for example: does some variable appear exactly once; is the left-hand side a bare variable, a single product, or a nested product. These feed a five-rule heuristic prior:
+    </p>
+    <pre><code>Q1. bare LHS  + a once-occurring variable        -&gt; TRUE
+Q2. simple LHS + a once-occurring variable        -&gt; TRUE
+Q3. nested (complex) LHS                           -&gt; FALSE
+Q4. every variable occurs twice or more           -&gt; FALSE
+Q5. otherwise                                      -&gt; FALSE</code></pre>
+    <p>
+      The Q-rules are an honest prior, not a proof. They are applied only after Phase 1 produces no verdict, and the cheatsheet says so explicitly so the model does not over-trust them.
+    </p>
+    <p>
+      The output contract keeps the model disciplined and cheap: reasoning under 200 words, name the rule that fired, then end with a parseable verdict.
+    </p>
+    <pre><code>VERDICT: TRUE or VERDICT: FALSE
+If TRUE: BASIS: &lt;rule&gt; brief reason.
+If FALSE: COUNTEREXAMPLE: &lt;magma + failing assignment&gt;, or BASIS: &lt;fallback&gt;.</code></pre>
+
+    <h2>The Accuracy, Cost, Size Frontier</h2>
+    <p>
+      The design philosophy was to sit on the accuracy-cost-size frontier. Deterministic rules go first because they are cheap and exact when they fire. The witness library is the only "search," and it is tiny and constant-time. The heuristic prior mops up the residual cases without an expensive chain of thought. Everything fits in 7.44 KB.
+    </p>
+    <p>
+      That combination is what produced the result: <strong>29th of 1000+</strong>, with an artifact that beat the first-place entry on both axes I care about most: it was smaller (7.44 KB vs 9.83 KB) and cheaper ($0.00037 vs $0.00060 per problem).
+    </p>
+
+    <h2>Why I Cared</h2>
+    <p>
+      My research is about efficiency times reliability for foundation models, with a deep focus on the reliability of quantized models. This challenge is the same question in a different medium: not "how few bits can hold the weights," but "how few kilobytes of instruction can hold the reasoning." Distilling a decision procedure into a cheatsheet that a small open model can execute, cheaply and correctly, is cost-efficient reasoning made concrete. It is the kind of frontier I keep coming back to.
+    </p>
+    <p>
+      Stage 1 prompts may be published for community learning, and Stage 2 (harder benchmark, larger cheatsheets) is where this goes next. I am looking forward to it.
+    </p>
+
+    <p style="margin-top:28px;color:var(--text-muted);font-size:0.9rem">
+      Competition: SAIR Foundation Mathematics Distillation Challenge, Equational Theories, Stage 1.
+      Based on Terence Tao's Equational Theories Project.
+    </p>
+
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-icons">
+      <a href="mailto:arpitsinghgautam777@gmail.com" title="Email"><i class="fas fa-envelope" aria-hidden="true"></i></a>
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap" aria-hidden="true"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+      <a href="https://topmate.io/arpit_singh_gautam/" title="TopMate" target="_blank" rel="noopener"><i class="fas fa-calendar-check" aria-hidden="true"></i></a>
+    </div>
+    <span>&copy; 2026 Arpit Singh Gautam &middot; Bengaluru, India</span>
+  </div>
+</footer>
+
+<script>
+  function toggleTheme(){var cur=document.documentElement.getAttribute('data-theme');var next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);localStorage.setItem('theme',next);document.getElementById('theme-toggle').textContent=next==='dark'?'☀️':'🌙';}
+  (function(){var t=document.documentElement.getAttribute('data-theme');var btn=document.getElementById('theme-toggle');if(btn)btn.textContent=t==='dark'?'☀️':'🌙';})();
+  var btt=document.getElementById('back-to-top');
+  window.addEventListener('scroll',function(){if(window.scrollY>300){btt.classList.add('visible');}else{btt.classList.remove('visible');}});
+  btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+</body>
+</html>
