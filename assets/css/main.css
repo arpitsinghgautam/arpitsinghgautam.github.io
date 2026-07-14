@@ -917,6 +917,14 @@ p { margin-top: 0; margin-bottom: 1rem; }
 .blog-post-body th { background: var(--bg-subtle); padding: 9px 12px; border: 1px solid var(--border); text-align: left; font-weight: 600; }
 .blog-post-body td { padding: 8px 12px; border: 1px solid var(--border); }
 .blog-post-body tr:nth-child(even) td { background: var(--bg-subtle); }
+
+/* --- Blog figures: inline SVG, inherits the light/dark toggle via CSS vars --- */
+.blog-fig { margin: 28px 0; }
+.blog-fig svg { display: block; width: 100%; height: auto; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 8px; }
+.blog-fig figcaption { margin-top: 9px; font-size: 0.84rem; color: var(--text-muted); line-height: 1.55; text-align: center; }
+.blog-fig figcaption b { color: var(--text); font-weight: 600; }
+.fig-mono { font-family: var(--font-mono); }
+.fig-sans { font-family: var(--font); }
 .blog-cta { background: var(--bg-subtle); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 28px 0; }
 .blog-cta p { margin: 0; font-size: 0.93rem; }
 

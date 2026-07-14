@@ -99,6 +99,30 @@
       This is deceptively hard. The answer is a universally quantified statement over every possible magma, so a single counterexample magma settles a FALSE, but proving TRUE means the implication holds in structures you never explicitly checked.
     </p>
 
+    <figure class="blog-fig">
+      <svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="figTaskT">
+        <title id="figTaskT">Does Equation 1 imply Equation 2 over every magma?</title>
+        <rect x="40" y="36" width="230" height="78" rx="8" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="155" y="60" text-anchor="middle" font-size="11" letter-spacing="1" fill="var(--text-muted)">EQUATION 1 (premise)</text>
+        <text class="fig-mono" x="155" y="93" text-anchor="middle" font-size="21" font-weight="700" fill="var(--text)">x = x * y</text>
+        <line x1="286" y1="75" x2="402" y2="75" stroke="var(--accent)" stroke-width="3"/>
+        <polygon points="424,75 400,64 400,86" fill="var(--accent)"/>
+        <text class="fig-sans" x="352" y="58" text-anchor="middle" font-size="15" font-weight="700" fill="var(--accent)">implies?</text>
+        <rect x="430" y="36" width="230" height="78" rx="8" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="545" y="60" text-anchor="middle" font-size="11" letter-spacing="1" fill="var(--text-muted)">EQUATION 2 (conclusion)</text>
+        <text class="fig-mono" x="545" y="93" text-anchor="middle" font-size="21" font-weight="700" fill="var(--text)">x = x * x</text>
+        <text class="fig-sans" x="350" y="146" text-anchor="middle" font-size="16" fill="var(--text)">... in <tspan font-weight="700">every</tspan> magma (S, *): a set with one arbitrary binary operation</text>
+        <text class="fig-sans" x="350" y="168" text-anchor="middle" font-size="12.5" fill="var(--text-muted)">no associativity · no commutativity · no identity · no cancellation</text>
+        <rect x="40" y="192" width="300" height="64" rx="8" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="56" y="216" font-size="13.5" font-weight="700" fill="var(--text)">FALSE is cheap</text>
+        <text class="fig-sans" x="56" y="238" font-size="12.5" fill="var(--text-muted)">one counterexample magma settles it</text>
+        <rect x="360" y="192" width="300" height="64" rx="8" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="376" y="216" font-size="13.5" font-weight="700" fill="var(--text)">TRUE is expensive</text>
+        <text class="fig-sans" x="376" y="238" font-size="12.5" fill="var(--text-muted)">must hold in structures you never checked</text>
+      </svg>
+      <figcaption>The task in one picture. The verdict is a <b>universally quantified</b> claim over every possible magma, which is exactly why a single counterexample decides FALSE, while TRUE has to hold in structures you can never enumerate.</figcaption>
+    </figure>
+
     <h2>What Makes It a Distillation Problem</h2>
     <p>
       The constraints are where the research lives:
@@ -118,6 +142,51 @@
     <p>
       I wrote the cheatsheet as an explicit algorithm the model executes, not a pile of examples. It has two phases: a strict rule layer that commits only when a rule fires cleanly, and a structural classifier used as a fallback when the rules are silent.
     </p>
+
+    <figure class="blog-fig">
+      <svg viewBox="0 0 700 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="figProcT">
+        <title id="figProcT">The two-phase decision procedure encoded in the cheatsheet</title>
+        <text class="fig-sans" x="40" y="26" font-size="12" letter-spacing="1.5" font-weight="700" fill="var(--accent)">PHASE 1 - STRICT RULES (exact)</text>
+
+        <rect x="40" y="38" width="420" height="40" rx="7" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="56" y="63" font-size="13.5" fill="var(--text)"><tspan font-weight="700">1.</tspan> Immediate TRUE - same law up to renaming, or Eq2 is t = t</text>
+
+        <rect x="40" y="88" width="420" height="40" rx="7" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="56" y="113" font-size="13.5" fill="var(--text)"><tspan font-weight="700">2.</tspan> Trivialization - Eq1 forces a one-element magma</text>
+
+        <rect x="40" y="138" width="420" height="40" rx="7" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="56" y="163" font-size="13.5" fill="var(--text)"><tspan font-weight="700">3.</tspan> Projection shortcuts - exact literal forms only</text>
+
+        <rect x="40" y="188" width="420" height="40" rx="7" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="56" y="213" font-size="13.5" fill="var(--text)"><tspan font-weight="700">4.</tspan> Witness magmas - size-2/3 library, O(1) check each</text>
+
+        <rect x="500" y="38" width="160" height="190" rx="7" fill="var(--bg)" stroke="var(--accent)" stroke-width="2"/>
+        <text class="fig-sans" x="580" y="120" text-anchor="middle" font-size="14" font-weight="700" fill="var(--accent)">VERDICT</text>
+        <text class="fig-sans" x="580" y="142" text-anchor="middle" font-size="12" fill="var(--text-muted)">exact + cited rule</text>
+        <g stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 3">
+          <line x1="462" y1="58" x2="498" y2="58"/><line x1="462" y1="108" x2="498" y2="108"/>
+          <line x1="462" y1="158" x2="498" y2="158"/><line x1="462" y1="208" x2="498" y2="208"/>
+        </g>
+        <text class="fig-sans" x="480" y="250" text-anchor="middle" font-size="11" fill="var(--text-muted)">if it fires</text>
+
+        <line x1="250" y1="230" x2="250" y2="286" stroke="var(--text-muted)" stroke-width="2"/>
+        <polygon points="250,300 243,282 257,282" fill="var(--text-muted)"/>
+        <text class="fig-sans" x="264" y="264" font-size="12" fill="var(--text-muted)">no rule fires, no witness refutes</text>
+
+        <text class="fig-sans" x="40" y="326" font-size="12" letter-spacing="1.5" font-weight="700" fill="var(--text-muted)">PHASE 2 - STRUCTURAL FALLBACK (prior, not proof)</text>
+        <rect x="40" y="336" width="420" height="76" rx="7" fill="var(--bg)" stroke="var(--border)" stroke-dasharray="5 3"/>
+        <text class="fig-mono" x="56" y="360" font-size="12" fill="var(--text)">Q1/Q2  bare or simple LHS + a once-only variable -&gt; TRUE</text>
+        <text class="fig-mono" x="56" y="380" font-size="12" fill="var(--text)">Q3     nested (complex) LHS                      -&gt; FALSE</text>
+        <text class="fig-mono" x="56" y="400" font-size="12" fill="var(--text)">Q4/Q5  every variable occurs twice or more       -&gt; FALSE</text>
+        <rect x="500" y="336" width="160" height="76" rx="7" fill="var(--bg)" stroke="var(--border)" stroke-dasharray="5 3"/>
+        <text class="fig-sans" x="580" y="368" text-anchor="middle" font-size="14" font-weight="700" fill="var(--text)">VERDICT</text>
+        <text class="fig-sans" x="580" y="390" text-anchor="middle" font-size="12" fill="var(--text-muted)">honest prior</text>
+        <line x1="462" y1="374" x2="498" y2="374" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+        <text class="fig-sans" x="350" y="446" text-anchor="middle" font-size="12.5" fill="var(--text-muted)">Output contract: under 200 words · name the rule that fired · end with a parseable VERDICT</text>
+      </svg>
+      <figcaption>The cheatsheet is an <b>algorithm the model executes</b>, not a pile of examples. Exact rules run first because they are cheap and decisive; the heuristic prior only runs when everything above it stays silent, and the sheet says so explicitly so the model does not over-trust it.</figcaption>
+    </figure>
 
     <h3>Phase 1: Strict rules (commit only on a clean firing)</h3>
     <ul>
@@ -154,6 +223,53 @@ If FALSE: COUNTEREXAMPLE: &lt;magma + failing assignment&gt;, or BASIS: &lt;fall
       That combination is what produced the result: <strong>29th of 1000+</strong>, with an artifact that beat the first-place entry on both axes I care about most: it was smaller (7.44 KB vs 9.83 KB) and cheaper ($0.00037 vs $0.00060 per problem).
     </p>
 
+    <figure class="blog-fig">
+      <svg viewBox="0 0 700 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="figFrontT">
+        <title id="figFrontT">Cheatsheet size versus cost per problem: my entry against the first-place entry</title>
+        <g stroke="var(--border)" stroke-width="1">
+          <line x1="80" y1="270" x2="640" y2="270"/>
+          <line x1="80" y1="50" x2="80" y2="270"/>
+        </g>
+        <g stroke="var(--border)" stroke-width="0.6" opacity="0.55">
+          <line x1="80" y1="207" x2="640" y2="207"/>
+          <line x1="80" y1="144" x2="640" y2="144"/>
+          <line x1="80" y1="81" x2="640" y2="81"/>
+        </g>
+        <g class="fig-sans" font-size="11" fill="var(--text-muted)">
+          <text x="70" y="274" text-anchor="end">0</text>
+          <text x="70" y="211" text-anchor="end">$0.0002</text>
+          <text x="70" y="148" text-anchor="end">$0.0004</text>
+          <text x="70" y="85" text-anchor="end">$0.0006</text>
+          <text x="80" y="288" text-anchor="middle">0</text>
+          <text x="182" y="288" text-anchor="middle">2</text>
+          <text x="284" y="288" text-anchor="middle">4</text>
+          <text x="385" y="288" text-anchor="middle">6</text>
+          <text x="487" y="288" text-anchor="middle">8</text>
+          <text x="589" y="288" text-anchor="middle">10</text>
+        </g>
+        <text class="fig-sans" x="360" y="312" text-anchor="middle" font-size="12.5" fill="var(--text)">cheatsheet size (KB)</text>
+        <text class="fig-sans" x="22" y="160" text-anchor="middle" font-size="12.5" fill="var(--text)" transform="rotate(-90 22 160)">cost per problem</text>
+
+        <line x1="589" y1="50" x2="589" y2="270" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <text class="fig-sans" x="596" y="64" font-size="11" fill="var(--text-muted)">10 KB cap</text>
+
+        <line x1="459" y1="154" x2="580" y2="81" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="3 3" opacity="0.8"/>
+
+        <circle cx="580" cy="81" r="7" fill="var(--bg)" stroke="var(--text-muted)" stroke-width="2.5"/>
+        <text class="fig-sans" x="566" y="72" text-anchor="end" font-size="12.5" font-weight="700" fill="var(--text)">1st place</text>
+        <text class="fig-sans" x="566" y="90" text-anchor="end" font-size="11.5" fill="var(--text-muted)">9.83 KB · $0.00060</text>
+
+        <circle cx="459" cy="154" r="8" fill="var(--accent)"/>
+        <text class="fig-sans" x="444" y="149" text-anchor="end" font-size="12.5" font-weight="700" fill="var(--accent)">Mine (29th of 1000+)</text>
+        <text class="fig-sans" x="444" y="167" text-anchor="end" font-size="11.5" fill="var(--text-muted)">7.44 KB · $0.00037 · 60.2%</text>
+
+        <line x1="205" y1="232" x2="132" y2="259" stroke="var(--text-muted)" stroke-width="1.5"/>
+        <polygon points="120,263 136,250 140,262" fill="var(--text-muted)"/>
+        <text class="fig-sans" x="212" y="228" font-size="11.5" fill="var(--text-muted)">better = smaller and cheaper</text>
+      </svg>
+      <figcaption>Both axes are "less is better", so down-and-left wins. My entry sits <b>strictly inside</b> the first-place entry on both: 24% smaller and 38% cheaper per problem. Accuracy is where they beat me, which is the honest trade I made.</figcaption>
+    </figure>
+
     <h2>The Numbers</h2>
     <p>
       On the Stage 1 leaderboard, my submission (<code>EQT01-T00201</code>) scored an overall <strong>60.2% accuracy</strong> and <strong>68.3% F1</strong>, at <strong>99.7% mean parse success</strong> and <strong>$0.00037 per problem</strong>, all from one 7.44 KB cheatsheet. The per-model, per-difficulty breakdown across the three evaluation models:
@@ -178,6 +294,67 @@ If FALSE: COUNTEREXAMPLE: &lt;magma + failing assignment&gt;, or BASIS: &lt;fall
       </tbody>
     </table>
     </div>
+    <figure class="blog-fig">
+      <svg viewBox="0 0 700 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="figResT">
+        <title id="figResT">Accuracy by evaluation model and difficulty tier</title>
+        <g class="fig-sans" font-size="11.5">
+          <rect x="240" y="14" width="12" height="12" rx="2" fill="var(--accent)"/>
+          <text x="258" y="24" fill="var(--text-muted)">normal</text>
+          <rect x="322" y="14" width="12" height="12" rx="2" fill="var(--link)"/>
+          <text x="340" y="24" fill="var(--text-muted)">hard</text>
+          <rect x="392" y="14" width="12" height="12" rx="2" fill="var(--text-muted)"/>
+          <text x="410" y="24" fill="var(--text-muted)">extra_hard</text>
+        </g>
+        <g stroke="var(--border)" stroke-width="0.6" opacity="0.55">
+          <line x1="70" y1="220" x2="660" y2="220"/>
+          <line x1="70" y1="160" x2="660" y2="160"/>
+          <line x1="70" y1="100" x2="660" y2="100"/>
+          <line x1="70" y1="40" x2="660" y2="40"/>
+        </g>
+        <line x1="70" y1="280" x2="660" y2="280" stroke="var(--border)"/>
+        <g class="fig-sans" font-size="11" fill="var(--text-muted)">
+          <text x="62" y="284" text-anchor="end">0</text>
+          <text x="62" y="224" text-anchor="end">25</text>
+          <text x="62" y="164" text-anchor="end">50</text>
+          <text x="62" y="104" text-anchor="end">75</text>
+          <text x="62" y="44" text-anchor="end">100</text>
+        </g>
+        <text class="fig-sans" x="22" y="160" text-anchor="middle" font-size="12.5" fill="var(--text)" transform="rotate(-90 22 160)">accuracy (%)</text>
+
+        <g fill="var(--accent)">
+          <rect x="100" y="75" width="40" height="205" rx="3"/>
+          <rect x="296" y="92" width="40" height="188" rx="3"/>
+          <rect x="492" y="102" width="40" height="178" rx="3"/>
+        </g>
+        <g fill="var(--link)">
+          <rect x="148" y="129" width="40" height="151" rx="3"/>
+          <rect x="344" y="132" width="40" height="148" rx="3"/>
+          <rect x="540" y="145" width="40" height="135" rx="3"/>
+        </g>
+        <g fill="var(--text-muted)">
+          <rect x="196" y="193" width="40" height="87" rx="3"/>
+          <rect x="392" y="174" width="40" height="106" rx="3"/>
+          <rect x="588" y="176" width="40" height="104" rx="3"/>
+        </g>
+        <g class="fig-sans" font-size="10.5" font-weight="700" fill="var(--text)" text-anchor="middle">
+          <text x="120" y="69">85.2</text><text x="168" y="123">62.7</text><text x="216" y="187">36.3</text>
+          <text x="316" y="86">78.3</text><text x="364" y="126">61.8</text><text x="412" y="168">44.0</text>
+          <text x="512" y="96">74.3</text><text x="560" y="139">56.2</text><text x="608" y="170">43.2</text>
+        </g>
+
+        <line x1="70" y1="135" x2="660" y2="135" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.85"/>
+        <text class="fig-sans" x="656" y="130" text-anchor="end" font-size="11" font-weight="700" fill="var(--accent)">overall 60.2%</text>
+
+        <g class="fig-sans" font-size="12.5" font-weight="600" fill="var(--text)" text-anchor="middle">
+          <text x="168" y="300">GPT-OSS 120B</text>
+          <text x="364" y="300">Gemma 4 31B</text>
+          <text x="560" y="300">Llama 3.3 70B</text>
+        </g>
+        <text class="fig-sans" x="360" y="330" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">parse success stayed at 99-100% across all nine cells</text>
+      </svg>
+      <figcaption>The same 7.44 KB cheatsheet drives all three open models. Accuracy <b>degrades gracefully</b> rather than falling off a cliff: strong on the normal set, holding on hard, and still well above chance on extra_hard.</figcaption>
+    </figure>
+
     <p>
       The shape is what I wanted. Strong on the normal set (GPT-OSS-120B at 85.2%), holding on hard, and degrading gracefully on extra_hard, while parse success stays near-perfect (99 to 100%) so the verdicts are almost always machine-readable, at roughly two to five hundredths of a cent per problem. The cheatsheet is model-agnostic: the same 7.44 KB drives all three open models.
     </p>
