@@ -69,6 +69,13 @@
       <span class="item-meta">Bengaluru · Jul 2025 – Present</span>
     </div>
     <div class="item-desc">
+      <p style="margin:0 0 8px"><strong>What I work on right now:</strong></p>
+      <ul>
+        <li><strong>Efficient on-device AI</strong> - getting large models to run well on memory-constrained consumer hardware, rather than offloading everything to the cloud.</li>
+        <li><strong>Hardware-aware optimization</strong> - learning-based scheduling of AI workloads across heterogeneous silicon, trading off latency, energy, and quality.</li>
+        <li><strong>Reliability under compression</strong> - keeping models calibrated, factually grounded, and secure as they get aggressively quantized.</li>
+      </ul>
+      <p style="margin:14px 0 8px"><strong>Published work from this role:</strong></p>
       <ul>
         <li>Engineered <strong>StreamServe</strong> (<a href="https://arxiv.org/abs/2604.09562" target="_blank" rel="noopener">arXiv:2604.09562</a>), a prefill-decode disaggregated LLM serving system co-optimizing multi-signal routing (FlowGuard) and dynamic speculative execution (SpecuStream): <strong>11-18× latency reduction</strong> and up to <strong>4.4× average throughput</strong> over TP-vLLM baselines on 4× A800 GPUs.</li>
         <li>Developed <strong>RAMP</strong> (<a href="https://arxiv.org/abs/2603.17891" target="_blank" rel="noopener">arXiv:2603.17891</a>), the first zero-shot transferable mixed-precision quantization policy for LLMs: bit allocation as a constrained MDP solved via Soft Actor-Critic, with Scale Folding to absorb activation outliers. SOTA Pareto frontier at <strong>3.65 effective bits (3.68 GB) at 5.54 perplexity</strong>, outperforming AWQ/GPTQ, with zero-shot transfer to Mistral-7B and Llama-2-13B.</li>

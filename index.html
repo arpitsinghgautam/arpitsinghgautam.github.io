@@ -85,7 +85,7 @@
   <div class="stats-banner">
     <div class="stats-row">
       <div class="stat-item">
-        <span class="stat-num" data-count="6">0</span>
+        <span class="stat-num" data-count="7">0</span>
         <span class="stat-label">Publications</span>
       </div>
       <div class="stat-item">
@@ -117,6 +117,46 @@
   <div class="update-list" id="updates-main">
 
     <div class="update-entry">
+      <div class="update-thumb"><img src="assets/img/updates/patent.png" alt="Patent filed" onerror="this.parentElement.textContent='📄'" decoding="async" loading="lazy"></div>
+      <div class="update-content">
+        <div class="update-tag">Patent · Filed</div>
+        <div class="update-title">U.S. patent application filed - Federated and Self-Learning Techniques for Root Cause Detection in Edge-Cloud Environments</div>
+        <div class="update-date">May 2026</div>
+        <div class="update-excerpt">Co-inventor on U.S. Patent Application No. 19/670,270 (pending). A further 6 Edge-AI inventions have been approved for USPTO filing by Dell's internal patent committee.</div>
+      </div>
+    </div>
+
+    <div class="update-entry">
+      <div class="update-thumb"><img src="assets/img/blog/sair-thumb.svg" alt="SAIR Mathematics Distillation Challenge" decoding="async" loading="lazy"></div>
+      <div class="update-content">
+        <div class="update-tag">Competition · 29th of 1000+</div>
+        <div class="update-title"><a href="blog/sair-distillation-challenge.html">29th of 1000+ in the SAIR Foundation Mathematics Distillation Challenge</a></div>
+        <div class="update-date">2026</div>
+        <div class="update-excerpt">Distilled equational-implication reasoning over magmas into a 7.44 KB decision-procedure cheatsheet: 60.2% accuracy at $0.00037 per problem, smaller and cheaper than the first-place entry. <a href="blog/sair-distillation-challenge.html">Read the writeup →</a></div>
+      </div>
+    </div>
+
+    <div class="update-entry">
+      <div class="update-thumb"><img src="assets/img/updates/streamserve.jpg" alt="StreamServe" onerror="this.parentElement.textContent='⚡'" decoding="async" loading="lazy"></div>
+      <div class="update-content">
+        <div class="update-tag">Paper · arXiv</div>
+        <div class="update-title"><a href="https://arxiv.org/abs/2604.09562" target="_blank" rel="noopener">StreamServe: Adaptive Speculative Flows for Low-Latency Disaggregated LLM Serving</a></div>
+        <div class="update-date">Apr 2026</div>
+        <div class="update-excerpt">A prefill-decode disaggregated serving system co-optimizing multi-signal routing and dynamic speculative execution: 11-18× latency reduction and up to 4.4× average throughput over TP-vLLM baselines on 4× A800 GPUs.</div>
+      </div>
+    </div>
+
+    <div class="update-entry">
+      <div class="update-thumb"><img src="assets/img/portfolio/newt-thumb.svg" alt="newt and deuteron" decoding="async" loading="lazy"></div>
+      <div class="update-content">
+        <div class="update-tag">Project · Open Source</div>
+        <div class="update-title"><a href="https://github.com/arpitsinghgautam/newt" target="_blank" rel="noopener">newt &amp; deuteron - a mini-Triton JIT compiler for LLM GPU kernels</a></div>
+        <div class="update-date">2026</div>
+        <div class="update-excerpt">Maps Python block-level semantics onto GPU thread layouts via NVRTC. Reaches bandwidth parity with OpenAI Triton on memory-bound kernels, and 110 TFLOP/s on FP16 tensor-core matmuls using custom PTX intrinsics and swizzled shared memory.</div>
+      </div>
+    </div>
+
+    <div class="update-entry">
       <div class="update-thumb"><img src="assets/img/updates/llm-quant-gallery.png" alt="LLM Quantization Gallery" decoding="async" loading="lazy"></div>
       <div class="update-content">
         <div class="update-tag">Project Launch</div>
@@ -126,41 +166,50 @@
       </div>
     </div>
     
-    <div class="update-entry">
-      <div class="update-thumb"><img src="assets/img/updates/ramp-paper.jpg" alt="RAMP Paper" decoding="async" loading="lazy"></div>
-      <div class="update-content">
-        <div class="update-tag">Paper · arXiv</div>
-        <div class="update-title"><a href="https://arxiv.org/abs/2603.17891" target="_blank" rel="noopener">RAMP: Reinforcement Adaptive Mixed Precision Quantization for Efficient On-Device LLM Inference</a></div>
-        <div class="update-date">Mar 18, 2026</div>
-        <div class="update-excerpt">Off-policy SAC framework that learns per-layer bit-width assignments to minimize perplexity under a global bit budget. Achieves 5.54 perplexity at 3.68 GB on Llama 2 7B - outperforming uniform 4-bit AWQ. Zero-shot transfer to Llama 2 13B and Mistral 7B.</div>
-      </div>
-    </div>
-
-
-    <div class="update-entry">
-      <div class="update-thumb"><img src="assets/img/updates/eacl-2026.jpg" alt="EACL 2026" decoding="async" loading="lazy"></div>
-      <div class="update-content">
-        <div class="update-tag">Paper Accepted · EACL 2026</div>
-        <div class="update-title"><a href="https://aclanthology.org/2026.fever-1.4/" target="_blank" rel="noopener">The Energy of Falsehood: Detecting Hallucinations via Diffusion Model Likelihoods</a></div>
-        <div class="update-date">Apr 2026</div>
-        <div class="update-excerpt">Accepted at the FEVER Workshop @ EACL 2026 - now on ACL Anthology. Proposes a diffusion-based generative stability method for automated fact verification with Kailash Talreja and Saurabh Jha.</div>
-      </div>
-    </div>
-
-    <div class="update-entry">
-      <div class="update-thumb"><img src="assets/img/updates/arc-agi.jpg" alt="ARC-AGI-3" decoding="async" loading="lazy"></div>
-      <div class="update-content">
-        <div class="update-tag">Competition · Ongoing</div>
-        <div class="update-title"><a href="https://www.kaggle.com/code/arpitsinghgautam/arc-agi-3-random-agent-v0" target="_blank" rel="noopener">Competing in ARC-AGI-3 - Abstract Reasoning Challenge</a></div>
-        <div class="update-date">2026 · Ongoing</div>
-        <div class="update-excerpt">Participating in François Chollet's ARC-AGI-3 challenge - one of AI's hardest benchmarks for fluid intelligence. Submitted a random agent baseline and exploring learning-based approaches. <a href="blog/arc-agi-challenge.html">Read the blog post →</a></div>
-      </div>
-    </div>
-
   </div>
 
   <div id="updates-more" style="display:none">
     <div class="update-list">
+
+      <div class="update-entry">
+        <div class="update-thumb"><img src="assets/img/portfolio/automl-nas-thumb.svg" alt="AutoML 2026 NAS Challenge" decoding="async" loading="lazy"></div>
+        <div class="update-content">
+          <div class="update-tag">Competition</div>
+          <div class="update-title"><a href="https://www.nascompetition.com/" target="_blank" rel="noopener">AutoML 2026 NAS Unseen-Data Challenge</a></div>
+          <div class="update-date">2026</div>
+          <div class="update-excerpt">Budget-aware neural architecture search under a strict 10-minute compute limit: dynamic capacity scaling gave zero OOM crashes and outperformed every baseline in Phase 2.</div>
+        </div>
+      </div>
+
+      <div class="update-entry">
+        <div class="update-thumb"><img src="assets/img/updates/ramp-paper.jpg" alt="RAMP Paper" decoding="async" loading="lazy"></div>
+        <div class="update-content">
+          <div class="update-tag">Paper · arXiv</div>
+          <div class="update-title"><a href="https://arxiv.org/abs/2603.17891" target="_blank" rel="noopener">RAMP: Reinforcement Adaptive Mixed Precision Quantization for Efficient On-Device LLM Inference</a></div>
+          <div class="update-date">Mar 18, 2026</div>
+          <div class="update-excerpt">Off-policy SAC framework that learns per-layer bit-width assignments to minimize perplexity under a global bit budget. Achieves 5.54 perplexity at 3.68 GB on Llama 2 7B - outperforming uniform 4-bit AWQ. Zero-shot transfer to Llama 2 13B and Mistral 7B.</div>
+        </div>
+      </div>
+
+      <div class="update-entry">
+        <div class="update-thumb"><img src="assets/img/updates/eacl-2026.jpg" alt="EACL 2026" decoding="async" loading="lazy"></div>
+        <div class="update-content">
+          <div class="update-tag">Paper Accepted · EACL 2026</div>
+          <div class="update-title"><a href="https://aclanthology.org/2026.fever-1.4/" target="_blank" rel="noopener">The Energy of Falsehood: Detecting Hallucinations via Diffusion Model Likelihoods</a></div>
+          <div class="update-date">Apr 2026</div>
+          <div class="update-excerpt">Accepted at the FEVER Workshop @ EACL 2026 - now on ACL Anthology. Proposes a diffusion-based generative stability method for automated fact verification with Kailash Talreja and Saurabh Jha.</div>
+        </div>
+      </div>
+
+      <div class="update-entry">
+        <div class="update-thumb"><img src="assets/img/updates/arc-agi.jpg" alt="ARC-AGI-3" decoding="async" loading="lazy"></div>
+        <div class="update-content">
+          <div class="update-tag">Competition · Ongoing</div>
+          <div class="update-title"><a href="https://www.kaggle.com/code/arpitsinghgautam/arc-agi-3-random-agent-v0" target="_blank" rel="noopener">Competing in ARC-AGI-3 - Abstract Reasoning Challenge</a></div>
+          <div class="update-date">2026 · Ongoing</div>
+          <div class="update-excerpt">Participating in François Chollet's ARC-AGI-3 challenge - one of AI's hardest benchmarks for fluid intelligence. Submitted a random agent baseline and exploring learning-based approaches. <a href="blog/arc-agi-challenge.html">Read the blog post →</a></div>
+        </div>
+      </div>
 
       <div class="update-entry">
         <div class="update-thumb"><img src="assets/img/updates/aaai-2026.jpg" alt="AAAI 2026" decoding="async" loading="lazy"></div>
