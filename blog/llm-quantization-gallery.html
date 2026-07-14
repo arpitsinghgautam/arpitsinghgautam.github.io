@@ -82,6 +82,42 @@
       I built the <a href="https://arpitsinghgautam.me/llm-quantization-gallery/" target="_blank" rel="noopener"><strong>LLM Quantization Gallery</strong></a> as an interactive way to explore these techniques - comparing methods, quality metrics, and tradeoffs side by side. Here's the thinking behind it.
     </p>
 
+    <figure class="blog-fig">
+      <svg viewBox="0 0 700 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="qgMemT">
+        <title id="qgMemT">Memory needed to hold a 70B-parameter model at different precisions</title>
+        <text class="fig-sans" x="350" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="var(--text)">holding a 70B model in memory</text>
+        <line x1="70" y1="250" x2="660" y2="250" stroke="var(--border)"/>
+
+        <rect x="95" y="50" width="90" height="200" rx="3" fill="var(--text-muted)"/>
+        <rect x="235" y="150" width="90" height="100" rx="3" fill="var(--text-muted)"/>
+        <rect x="375" y="200" width="90" height="50" rx="3" fill="var(--link)"/>
+        <rect x="515" y="225" width="90" height="25" rx="3" fill="var(--accent)"/>
+
+        <g class="fig-sans" font-size="14" font-weight="700" fill="var(--text)" text-anchor="middle">
+          <text x="140" y="42">280 GB</text>
+          <text x="280" y="142">140 GB</text>
+          <text x="420" y="192">70 GB</text>
+          <text x="560" y="217">35 GB</text>
+        </g>
+        <g class="fig-sans" font-size="13" font-weight="600" fill="var(--text)" text-anchor="middle">
+          <text x="140" y="272">FP32</text>
+          <text x="280" y="272">BF16</text>
+          <text x="420" y="272">INT8</text>
+          <text x="560" y="272">INT4</text>
+        </g>
+        <g class="fig-sans" font-size="11" fill="var(--text-muted)" text-anchor="middle">
+          <text x="140" y="290">baseline</text>
+          <text x="280" y="290">2× smaller</text>
+          <text x="420" y="290">4× smaller</text>
+          <text x="560" y="290">8× smaller</text>
+        </g>
+
+        <line x1="70" y1="193" x2="660" y2="193" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="6 4"/>
+        <text class="fig-sans" x="656" y="187" text-anchor="end" font-size="11.5" font-weight="700" fill="var(--accent)">one 80 GB H100</text>
+      </svg>
+      <figcaption>The whole reason quantization exists. At FP32 a 70B model needs <b>280 GB</b> just to sit in memory, so it cannot fit on a single accelerator at any price. INT4 brings it to 35 GB and the model suddenly fits on one card, with room left for the KV cache.</figcaption>
+    </figure>
+
     <h2>Why Quantization Matters</h2>
     <p>
       At Dell's CSG CTO Lab, a significant chunk of my work involves making LLM inference faster and cheaper. We deal with questions like: can we run a 70B model on a single node? Can we cut latency by 2× without retraining? Quantization is almost always part of the answer.
@@ -121,6 +157,42 @@
     <p>
       QLoRA changed how people think about fine-tuning large models. The idea: quantize the base model to NF4 (a 4-bit normal float format), load it frozen, and train only small LoRA adapters in 16-bit. You get the memory footprint of a 4-bit model with the learning capacity of 16-bit adapters. Fine-tuning a 65B model on a single 48GB GPU became possible.
     </p>
+
+    <figure class="blog-fig">
+      <svg viewBox="0 0 700 265" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="qgMechT">
+        <title id="qgMechT">GPTQ minimizes layerwise reconstruction error; AWQ protects activation-salient weights</title>
+        <rect x="30" y="34" width="310" height="200" rx="9" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="50" y="60" font-size="13.5" font-weight="700" fill="var(--accent)">GPTQ - fix the error, layer by layer</text>
+        <g fill="var(--bg-subtle)" stroke="var(--border)">
+          <rect x="50" y="78" width="60" height="26" rx="4"/>
+          <rect x="50" y="112" width="60" height="26" rx="4"/>
+          <rect x="50" y="146" width="60" height="26" rx="4"/>
+          <rect x="50" y="180" width="60" height="26" rx="4"/>
+        </g>
+        <rect x="50" y="112" width="60" height="26" rx="4" fill="var(--accent)" opacity="0.25" stroke="var(--accent)"/>
+        <text class="fig-sans" x="126" y="129" font-size="12" font-weight="700" fill="var(--text)">quantize this layer,</text>
+        <text class="fig-sans" x="126" y="147" font-size="12" fill="var(--text-muted)">minimize reconstruction</text>
+        <text class="fig-sans" x="126" y="164" font-size="12" fill="var(--text-muted)">error vs the FP original</text>
+        <text class="fig-sans" x="50" y="224" font-size="11.5" fill="var(--text-muted)">one-shot, offline, small calibration set</text>
+
+        <rect x="360" y="34" width="310" height="200" rx="9" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="380" y="60" font-size="13.5" font-weight="700" fill="var(--accent)">AWQ - protect what matters</text>
+        <g fill="var(--bg-subtle)" stroke="var(--border)">
+          <rect x="380" y="86" width="26" height="26" rx="3"/><rect x="412" y="86" width="26" height="26" rx="3"/>
+          <rect x="444" y="86" width="26" height="26" rx="3"/><rect x="476" y="86" width="26" height="26" rx="3"/>
+          <rect x="508" y="86" width="26" height="26" rx="3"/><rect x="540" y="86" width="26" height="26" rx="3"/>
+          <rect x="572" y="86" width="26" height="26" rx="3"/><rect x="604" y="86" width="26" height="26" rx="3"/>
+        </g>
+        <rect x="444" y="86" width="26" height="26" rx="3" fill="var(--accent)"/>
+        <rect x="572" y="86" width="26" height="26" rx="3" fill="var(--accent)"/>
+        <text class="fig-sans" x="380" y="140" font-size="12" fill="var(--text)">a small fraction of weights drive</text>
+        <text class="fig-sans" x="380" y="158" font-size="12" fill="var(--text)">most of the <tspan font-weight="700">activation</tspan> impact</text>
+        <text class="fig-sans" x="380" y="182" font-size="12" fill="var(--text-muted)">scale those up before quantizing,</text>
+        <text class="fig-sans" x="380" y="199" font-size="12" fill="var(--text-muted)">so rounding cannot destroy them</text>
+        <text class="fig-sans" x="380" y="224" font-size="11.5" fill="var(--text-muted)">enables W4A16 kernels (4-bit W, 16-bit A)</text>
+      </svg>
+      <figcaption>Both land at 4 bits, but they disagree about <b>what to optimize</b>. GPTQ asks "which quantized weights best reconstruct this layer's output?"; AWQ asks "which weights would hurt the activations most if I rounded them badly?" and then refuses to round those badly.</figcaption>
+    </figure>
 
     <h2>Quality vs. Compression: The Core Tradeoff</h2>
 
@@ -189,6 +261,40 @@
       </tbody>
     </table>
 
+    <figure class="blog-fig">
+      <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="qgCmpT">
+        <title id="qgCmpT">Compression and quality loss for each quantization method</title>
+        <text class="fig-sans" x="40" y="34" font-size="11.5" letter-spacing="1" fill="var(--text-muted)">METHOD</text>
+        <text class="fig-sans" x="210" y="34" text-anchor="middle" font-size="11.5" letter-spacing="1" fill="var(--text-muted)">VS FP32</text>
+        <text class="fig-sans" x="280" y="34" font-size="11.5" letter-spacing="1" fill="var(--text-muted)">QUALITY LOSS →</text>
+        <line x1="40" y1="44" x2="660" y2="44" stroke="var(--border)"/>
+
+        <g class="fig-sans" font-size="13" font-weight="600" fill="var(--text)">
+          <text x="40" y="76">FP16 / BF16</text><text x="40" y="114">INT8</text><text x="40" y="152">AWQ</text>
+          <text x="40" y="190">QLoRA (NF4)</text><text x="40" y="228">GPTQ</text><text x="40" y="266">GGUF Q4_K_M</text>
+        </g>
+        <g class="fig-sans" font-size="12" font-weight="700" fill="var(--text-muted)" text-anchor="middle">
+          <text x="210" y="76">2×</text><text x="210" y="114">4×</text><text x="210" y="152">8×</text>
+          <text x="210" y="190">8×</text><text x="210" y="228">8×</text><text x="210" y="266">~8×</text>
+        </g>
+
+        <text class="fig-sans" x="284" y="76" font-size="12" fill="var(--text-muted)">none (baseline)</text>
+        <rect x="280" y="102" width="55" height="16" rx="3" fill="var(--link)"/>
+        <text class="fig-sans" x="345" y="115" font-size="12" fill="var(--text-muted)">minimal</text>
+        <rect x="280" y="140" width="110" height="16" rx="3" fill="var(--accent)" opacity="0.55"/>
+        <text class="fig-sans" x="400" y="153" font-size="12" fill="var(--text-muted)">low</text>
+        <rect x="280" y="178" width="110" height="16" rx="3" fill="var(--accent)" opacity="0.55"/>
+        <text class="fig-sans" x="400" y="191" font-size="12" fill="var(--text-muted)">low (for fine-tuning)</text>
+        <rect x="280" y="216" width="165" height="16" rx="3" fill="var(--accent)"/>
+        <text class="fig-sans" x="455" y="229" font-size="12" fill="var(--text-muted)">low to moderate</text>
+        <rect x="280" y="254" width="165" height="16" rx="3" fill="var(--accent)"/>
+        <text class="fig-sans" x="455" y="267" font-size="12" fill="var(--text-muted)">low to moderate</text>
+
+        <text class="fig-sans" x="350" y="292" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">four methods land at the same ~8× compression - what separates them is the quality they give back</text>
+      </svg>
+      <figcaption>The reason "just use 4-bit" is not an answer. AWQ, QLoRA, GPTQ and GGUF all land at roughly <b>8× compression</b>, so the bit count tells you almost nothing; the calibration strategy is what decides how much quality you keep.</figcaption>
+    </figure>
+
     <h2>What the Gallery Shows</h2>
     <p>
       The <a href="https://arpitsinghgautam.me/llm-quantization-gallery/" target="_blank" rel="noopener">LLM Quantization Gallery</a> lets you explore these tradeoffs interactively. You can compare:
@@ -213,6 +319,38 @@
       <li><strong>Outlier weights are the enemy.</strong> Both GPTQ and AWQ spend a lot of effort managing the small fraction of weights with very large magnitudes. These outliers disproportionately affect quantization error.</li>
       <li><strong>Mixed precision often wins.</strong> Quantizing every layer the same way is rarely optimal. Keeping the first and last few layers at higher precision, and quantizing the middle layers more aggressively, tends to preserve quality better.</li>
     </ul>
+
+    <figure class="blog-fig">
+      <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="qgMixT">
+        <title id="qgMixT">Mixed precision: keep the first and last layers higher precision, compress the middle harder</title>
+        <g class="fig-sans" font-size="11.5">
+          <rect x="232" y="26" width="12" height="12" rx="2" fill="var(--link)"/>
+          <text x="250" y="36" fill="var(--text-muted)">8-bit (protected)</text>
+          <rect x="382" y="26" width="12" height="12" rx="2" fill="var(--accent)"/>
+          <text x="400" y="36" fill="var(--text-muted)">4-bit (aggressive)</text>
+        </g>
+        <text class="fig-sans" x="40" y="80" font-size="12" fill="var(--text-muted)">in</text>
+        <text class="fig-sans" x="660" y="80" text-anchor="end" font-size="12" fill="var(--text-muted)">out</text>
+        <g>
+          <rect x="40" y="92" width="42" height="62" rx="4" fill="var(--link)"/>
+          <rect x="90" y="92" width="42" height="62" rx="4" fill="var(--link)"/>
+          <rect x="140" y="92" width="42" height="62" rx="4" fill="var(--accent)"/>
+          <rect x="190" y="92" width="42" height="62" rx="4" fill="var(--accent)"/>
+          <rect x="240" y="92" width="42" height="62" rx="4" fill="var(--accent)"/>
+          <rect x="290" y="92" width="42" height="62" rx="4" fill="var(--accent)"/>
+          <rect x="340" y="92" width="42" height="62" rx="4" fill="var(--accent)"/>
+          <rect x="390" y="92" width="42" height="62" rx="4" fill="var(--accent)"/>
+          <rect x="440" y="92" width="42" height="62" rx="4" fill="var(--accent)"/>
+          <rect x="490" y="92" width="42" height="62" rx="4" fill="var(--accent)"/>
+          <rect x="540" y="92" width="42" height="62" rx="4" fill="var(--link)"/>
+          <rect x="590" y="92" width="42" height="62" rx="4" fill="var(--link)"/>
+        </g>
+        <text class="fig-sans" x="350" y="180" text-anchor="middle" font-size="12.5" fill="var(--text)">quantizing every layer identically is <tspan font-weight="700">rarely optimal</tspan></text>
+        <text class="fig-sans" x="350" y="202" text-anchor="middle" font-size="12" fill="var(--text-muted)">the first and last layers are the most sensitive; the middle tolerates far more compression</text>
+        <text class="fig-sans" x="350" y="232" text-anchor="middle" font-size="11.5" fill="var(--accent)">this hand-tuned pattern is exactly what RAMP learns automatically, with RL over per-layer bit-widths</text>
+      </svg>
+      <figcaption>The lesson that turned into a paper. Hand-picking which layers to protect works, but it is guesswork that does not transfer between models, which is what motivated learning the bit allocation instead.</figcaption>
+    </figure>
 
     <h2>What's Next</h2>
     <p>

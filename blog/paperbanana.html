@@ -97,6 +97,49 @@
       On PaperBananaBench - a human-evaluated benchmark - PaperBanana scores <strong>60.2</strong>, above the 50.0 human baseline. The <a href="https://github.com/google-research/papervizagent" target="_blank" rel="noopener">PaperVizAgent codebase</a> is open source.
     </p>
 
+    <figure class="blog-fig">
+      <svg viewBox="0 0 700 235" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="pbPipeT">
+        <title id="pbPipeT">PaperBanana's five sub-agents: retriever, planner, stylist, visualizer, critic</title>
+        <text class="fig-sans" x="36" y="30" font-size="12" fill="var(--text-muted)">manuscript in</text>
+        <g>
+          <rect x="36" y="44" width="115" height="76" rx="7" fill="var(--bg)" stroke="var(--border)"/>
+          <text class="fig-sans" x="93" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--accent)">Retriever</text>
+          <text class="fig-sans" x="93" y="90" text-anchor="middle" font-size="11" fill="var(--text-muted)">pull claims,</text>
+          <text class="fig-sans" x="93" y="105" text-anchor="middle" font-size="11" fill="var(--text-muted)">methods, results</text>
+
+          <rect x="164" y="44" width="115" height="76" rx="7" fill="var(--bg)" stroke="var(--border)"/>
+          <text class="fig-sans" x="221" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--accent)">Planner</text>
+          <text class="fig-sans" x="221" y="90" text-anchor="middle" font-size="11" fill="var(--text-muted)">which figures,</text>
+          <text class="fig-sans" x="221" y="105" text-anchor="middle" font-size="11" fill="var(--text-muted)">what they encode</text>
+
+          <rect x="292" y="44" width="115" height="76" rx="7" fill="var(--bg)" stroke="var(--border)"/>
+          <text class="fig-sans" x="349" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--accent)">Stylist</text>
+          <text class="fig-sans" x="349" y="90" text-anchor="middle" font-size="11" fill="var(--text-muted)">consistent color,</text>
+          <text class="fig-sans" x="349" y="105" text-anchor="middle" font-size="11" fill="var(--text-muted)">labels, format</text>
+
+          <rect x="420" y="44" width="115" height="76" rx="7" fill="var(--bg)" stroke="var(--border)"/>
+          <text class="fig-sans" x="477" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--accent)">Visualizer</text>
+          <text class="fig-sans" x="477" y="90" text-anchor="middle" font-size="11" fill="var(--text-muted)">emit the actual</text>
+          <text class="fig-sans" x="477" y="105" text-anchor="middle" font-size="11" fill="var(--text-muted)">figure code</text>
+
+          <rect x="548" y="44" width="115" height="76" rx="7" fill="var(--bg)" stroke="var(--accent)" stroke-width="2"/>
+          <text class="fig-sans" x="605" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--accent)">Critic</text>
+          <text class="fig-sans" x="605" y="90" text-anchor="middle" font-size="11" fill="var(--text-muted)">does it match</text>
+          <text class="fig-sans" x="605" y="105" text-anchor="middle" font-size="11" fill="var(--text-muted)">the paper's claim?</text>
+        </g>
+        <g fill="var(--text-muted)">
+          <polygon points="161,82 149,75 149,89"/><polygon points="289,82 277,75 277,89"/>
+          <polygon points="417,82 405,75 405,89"/><polygon points="545,82 533,75 533,89"/>
+        </g>
+        <path d="M605 124 L605 152 L477 152 L477 126" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="5 3"/>
+        <polygon points="477,122 471,138 483,138" fill="var(--accent)"/>
+        <text class="fig-sans" x="541" y="170" text-anchor="middle" font-size="11.5" fill="var(--accent)">send it back for another pass</text>
+        <text class="fig-sans" x="350" y="205" text-anchor="middle" font-size="12.5" fill="var(--text)">The <tspan font-weight="700">Critic loop</tspan> is the part that actually matters: it is what buys consistency across a whole figure set.</text>
+        <text class="fig-sans" x="350" y="227" text-anchor="middle" font-size="11" fill="var(--text-muted)">my diagram of the pipeline described in PaperBanana (arXiv:2601.23265)</text>
+      </svg>
+      <figcaption>Five specialists in sequence, not one big prompt. The <b>Critic</b> is the interesting design choice: without a step that checks each figure back against the paper's claims, generating ten figures gives you ten different visual conventions.</figcaption>
+    </figure>
+
     <h3>What It Gets Right</h3>
     <p>
       For standard figure types - bar charts, line plots, confusion matrices, comparison tables - PaperBanana produces reasonable results quickly. The five-agent pipeline's Critic step meaningfully improves consistency: generating 10 comparison figures that all maintain the same formatting and color conventions is tedious for humans, and the agent handles it well.
@@ -110,6 +153,21 @@
       PaperBanana struggles with figures that require genuine conceptual clarity rather than data visualization. It can generate something, but it's often technically correct but communicatively mediocre. In papers, a mediocre figure that fails to convey the idea is worse than no figure.
     </p>
 
+    <figure class="blog-fig">
+      <svg viewBox="0 0 700 215" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="pbBenchT">
+        <title id="pbBenchT">PaperBanana scores 60.2 on PaperBananaBench, above the 50.0 human baseline</title>
+        <line x1="80" y1="175" x2="620" y2="175" stroke="var(--border)"/>
+        <rect x="215" y="30" width="100" height="145" rx="4" fill="var(--accent)"/>
+        <rect x="385" y="55" width="100" height="120" rx="4" fill="var(--text-muted)"/>
+        <text class="fig-sans" x="265" y="22" text-anchor="middle" font-size="17" font-weight="700" fill="var(--accent)">60.2</text>
+        <text class="fig-sans" x="435" y="47" text-anchor="middle" font-size="17" font-weight="700" fill="var(--text-muted)">50.0</text>
+        <text class="fig-sans" x="265" y="196" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--text)">PaperBanana</text>
+        <text class="fig-sans" x="435" y="196" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--text)">human baseline</text>
+        <text class="fig-sans" x="350" y="212" text-anchor="middle" font-size="11" fill="var(--text-muted)">PaperBananaBench (human-evaluated); my chart, score as reported</text>
+      </svg>
+      <figcaption>Above the human baseline on the benchmark. Worth holding lightly, though: a <b>benchmark authored alongside the system</b> is the friendliest possible test of it, and "beats humans at making standard figures" is not the same as "makes the figure your paper needed".</figcaption>
+    </figure>
+
     <h2>ScholarPeer: AI-Assisted Peer Review</h2>
     <p>
       The second tool is more provocative. ScholarPeer (<a href="https://arxiv.org/abs/2601.22638" target="_blank" rel="noopener">arXiv:2601.22638</a>) is an AI agent that reads an academic paper and generates a structured review - evaluating novelty, experimental rigor, clarity, and significance; identifying weaknesses; suggesting improvements.
@@ -120,6 +178,42 @@
     <p>
       Peer review is under enormous strain. Submission volumes at top venues (NeurIPS, ICML, ICLR) have grown 5–10× in the last decade, but the pool of qualified reviewers hasn't grown proportionally. So the problem ScholarPeer targets is real. The question is whether AI reviews are useful or just plausible-sounding noise.
     </p>
+
+    <figure class="blog-fig">
+      <svg viewBox="0 0 700 285" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="spArchT">
+        <title id="spArchT">ScholarPeer's dual-stream context acquisition feeding a structured review</title>
+        <rect x="26" y="112" width="92" height="60" rx="7" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="72" y="139" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--text)">the paper</text>
+        <text class="fig-sans" x="72" y="158" text-anchor="middle" font-size="11" fill="var(--text-muted)">under review</text>
+        <polygon points="146,142 130,134 130,150" fill="var(--text-muted)"/>
+
+        <rect x="152" y="34" width="322" height="196" rx="9" fill="none" stroke="var(--accent)" stroke-dasharray="5 4"/>
+        <text class="fig-sans" x="313" y="55" text-anchor="middle" font-size="12" font-weight="700" letter-spacing="0.5" fill="var(--accent)">DUAL-STREAM CONTEXT ACQUISITION</text>
+
+        <rect x="172" y="66" width="282" height="44" rx="6" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="186" y="86" font-size="12.5" font-weight="700" fill="var(--text)">Historian agent</text>
+        <text class="fig-sans" x="186" y="103" font-size="11" fill="var(--text-muted)">what the background literature already says</text>
+
+        <rect x="172" y="120" width="282" height="44" rx="6" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="186" y="140" font-size="12.5" font-weight="700" fill="var(--text)">Baseline scout</text>
+        <text class="fig-sans" x="186" y="157" font-size="11" fill="var(--text-muted)">which comparisons the authors left out</text>
+
+        <rect x="172" y="174" width="282" height="44" rx="6" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="186" y="194" font-size="12.5" font-weight="700" fill="var(--text)">Multi-aspect Q&amp;A engine</text>
+        <text class="fig-sans" x="186" y="211" font-size="11" fill="var(--text-muted)">interrogates the claims one aspect at a time</text>
+
+        <polygon points="502,132 486,124 486,140" fill="var(--text-muted)"/>
+        <rect x="508" y="82" width="164" height="100" rx="7" fill="var(--bg)" stroke="var(--accent)"/>
+        <text class="fig-sans" x="590" y="104" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--accent)">structured review</text>
+        <g class="fig-sans" font-size="11" fill="var(--text-muted)">
+          <text x="524" y="126">novelty</text><text x="524" y="144">experimental rigor</text>
+          <text x="524" y="162">clarity · significance</text>
+        </g>
+        <text class="fig-sans" x="350" y="256" text-anchor="middle" font-size="12.5" fill="var(--text)">grounded in <tspan font-weight="700">live web-scale literature search</tspan>, not just training data</text>
+        <text class="fig-sans" x="350" y="277" text-anchor="middle" font-size="11" fill="var(--text-muted)">my diagram of the architecture described in ScholarPeer (arXiv:2601.22638)</text>
+      </svg>
+      <figcaption>Why this is more than "an LLM with a review prompt". Grounding the review in a <b>live literature search</b> is what lets it catch a missing baseline, which is exactly the failure mode an overloaded human reviewer misses most often.</figcaption>
+    </figure>
 
     <h3>What ScholarPeer Can Do</h3>
     <p>

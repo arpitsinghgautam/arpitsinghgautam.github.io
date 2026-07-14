@@ -90,6 +90,45 @@
       ARC-AGI-3 is a fundamentally different kind of challenge.
     </p>
 
+    <figure class="blog-fig">
+      <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="arcGridT">
+        <title id="arcGridT">An ARC-style grid task: infer the transformation rule from examples, then apply it</title>
+        <g class="fig-sans" font-size="11.5" fill="var(--text-muted)">
+          <text x="146" y="46" text-anchor="middle">example 1</text>
+          <text x="366" y="46" text-anchor="middle">example 2</text>
+          <text x="586" y="46" text-anchor="middle">your turn</text>
+        </g>
+        <g stroke="var(--border)" fill="none">
+          <rect x="60" y="60" width="64" height="64"/><rect x="168" y="60" width="64" height="64"/>
+          <rect x="280" y="60" width="64" height="64"/><rect x="388" y="60" width="64" height="64"/>
+          <rect x="500" y="60" width="64" height="64"/><rect x="608" y="60" width="64" height="64"/>
+        </g>
+        <g stroke="var(--border)" stroke-width="0.5" opacity="0.7">
+          <path d="M76 60v64M92 60v64M108 60v64M60 76h64M60 92h64M60 108h64"/>
+          <path d="M184 60v64M200 60v64M216 60v64M168 76h64M168 92h64M168 108h64"/>
+          <path d="M296 60v64M312 60v64M328 60v64M280 76h64M280 92h64M280 108h64"/>
+          <path d="M404 60v64M420 60v64M436 60v64M388 76h64M388 92h64M388 108h64"/>
+          <path d="M516 60v64M532 60v64M548 60v64M500 76h64M500 92h64M500 108h64"/>
+          <path d="M624 60v64M640 60v64M656 60v64M608 76h64M608 92h64M608 108h64"/>
+        </g>
+        <g fill="var(--accent)">
+          <rect x="61" y="61" width="15" height="15"/><rect x="77" y="61" width="15" height="15"/>
+          <rect x="217" y="61" width="15" height="15"/><rect x="201" y="61" width="15" height="15"/>
+          <rect x="281" y="93" width="15" height="15"/><rect x="281" y="109" width="15" height="15"/>
+          <rect x="437" y="93" width="15" height="15"/><rect x="437" y="109" width="15" height="15"/>
+          <rect x="517" y="77" width="15" height="15"/><rect x="517" y="93" width="15" height="15"/>
+        </g>
+        <g fill="var(--text-muted)">
+          <polygon points="160,92 142,84 142,100"/><polygon points="380,92 362,84 362,100"/><polygon points="600,92 582,84 582,100"/>
+        </g>
+        <text class="fig-sans" x="640" y="100" text-anchor="middle" font-size="26" font-weight="700" fill="var(--text-muted)">?</text>
+        <text class="fig-sans" x="350" y="176" text-anchor="middle" font-size="13" fill="var(--text)">The rule is <tspan font-weight="700">never stated</tspan>. The example pairs are the entire specification.</text>
+        <text class="fig-sans" x="350" y="200" text-anchor="middle" font-size="12" fill="var(--text-muted)">Two or three demonstrations, one new input, and you must generalize on the first try.</text>
+        <text class="fig-sans" x="350" y="228" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">my own illustration of the ARC-AGI-1 task format (Chollet, 2019)</text>
+      </svg>
+      <figcaption>The original format. A human usually sees the rule in seconds (here: <b>mirror the shape to the opposite edge</b>), which is precisely the point: these puzzles are trivially easy for people and brutally hard for models trained on the whole internet.</figcaption>
+    </figure>
+
     <h2>What ARC-AGI-3 Actually Tests</h2>
     <p>
       ARC-AGI-3 moves from passive pattern recognition to <strong>interactive agentic reasoning</strong>. Instead of looking at grid examples and predicting a transformation, the agent must:
@@ -104,6 +143,41 @@
       This is much closer to what we mean when we talk about general intelligence: not "apply the learned rule" but "figure out what the rules even are, then use them." The evaluation is correspondingly stricter - partial credit is rare, and approximate reasoning scores zero.
     </p>
 
+    <figure class="blog-fig">
+      <svg viewBox="0 0 700 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="arcShiftT">
+        <title id="arcShiftT">ARC-AGI-3 moves from one-shot prediction to an interactive loop inside a single episode</title>
+        <rect x="30" y="34" width="300" height="220" rx="9" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="50" y="60" font-size="13" font-weight="700" fill="var(--text-muted)">ARC-AGI-1 / 2 - passive</text>
+        <rect x="52" y="80" width="120" height="34" rx="5" fill="var(--bg-subtle)" stroke="var(--border)"/>
+        <text class="fig-sans" x="112" y="102" text-anchor="middle" font-size="12" fill="var(--text)">example pairs</text>
+        <polygon points="112,140 104,124 120,124" fill="var(--text-muted)"/>
+        <rect x="52" y="146" width="120" height="34" rx="5" fill="var(--bg-subtle)" stroke="var(--border)"/>
+        <text class="fig-sans" x="112" y="168" text-anchor="middle" font-size="12" fill="var(--text)">infer the rule</text>
+        <polygon points="112,206 104,190 120,190" fill="var(--text-muted)"/>
+        <rect x="52" y="212" width="120" height="30" rx="5" fill="var(--bg-subtle)" stroke="var(--accent)"/>
+        <text class="fig-sans" x="112" y="232" text-anchor="middle" font-size="12" font-weight="700" fill="var(--accent)">one answer</text>
+        <text class="fig-sans" x="192" y="132" font-size="12" fill="var(--text-muted)">the goal is given.</text>
+        <text class="fig-sans" x="192" y="152" font-size="12" fill="var(--text-muted)">you get examples.</text>
+        <text class="fig-sans" x="192" y="172" font-size="12" fill="var(--text-muted)">you answer once.</text>
+
+        <rect x="370" y="34" width="300" height="220" rx="9" fill="var(--bg)" stroke="var(--accent)"/>
+        <text class="fig-sans" x="390" y="60" font-size="13" font-weight="700" fill="var(--accent)">ARC-AGI-3 - interactive</text>
+        <circle cx="520" cy="155" r="66" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <rect x="470" y="76" width="100" height="28" rx="5" fill="var(--bg-subtle)" stroke="var(--border)"/>
+        <text class="fig-sans" x="520" y="95" text-anchor="middle" font-size="11.5" fill="var(--text)">act</text>
+        <rect x="596" y="141" width="74" height="28" rx="5" fill="var(--bg-subtle)" stroke="var(--border)"/>
+        <text class="fig-sans" x="633" y="160" text-anchor="middle" font-size="11.5" fill="var(--text)">observe</text>
+        <rect x="464" y="206" width="112" height="28" rx="5" fill="var(--bg-subtle)" stroke="var(--border)"/>
+        <text class="fig-sans" x="520" y="225" text-anchor="middle" font-size="11.5" fill="var(--text)">update world model</text>
+        <rect x="374" y="141" width="80" height="28" rx="5" fill="var(--bg-subtle)" stroke="var(--border)"/>
+        <text class="fig-sans" x="414" y="160" text-anchor="middle" font-size="11.5" fill="var(--text)">infer goal</text>
+        <text class="fig-sans" x="520" y="160" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--text-muted)">within ONE</text>
+        <text class="fig-sans" x="520" y="176" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--text-muted)">episode</text>
+        <text class="fig-sans" x="520" y="276" text-anchor="middle" font-size="12" fill="var(--text-muted)">no examples. no stated objective.</text>
+      </svg>
+      <figcaption>The step change. In ARC-AGI-1 and 2 the objective is handed to you and you answer once. In ARC-AGI-3 you must <b>discover what the goal even is</b> by acting, and all the learning has to happen inside a single episode.</figcaption>
+    </figure>
+
     <h2>Why This Is Hard for Current AI Systems</h2>
     <p>
       The difficulty isn't just increased task complexity. ARC-AGI-3 targets specific failure modes of current LLMs and RL agents:
@@ -114,6 +188,37 @@
       <li><strong>Credit assignment across long horizons.</strong> The goal may only become clear after dozens of exploratory steps. Standard RL with sparse rewards struggles here.</li>
       <li><strong>Exact correctness.</strong> Like its predecessors, ARC-AGI-3 requires precise solutions. "Close enough" scores zero.</li>
     </ul>
+
+    <figure class="blog-fig">
+      <svg viewBox="0 0 700 245" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="arcGapT">
+        <title id="arcGapT">The mismatch between what large models are optimized for and what ARC-AGI-3 demands</title>
+        <rect x="26" y="34" width="292" height="182" rx="9" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="46" y="60" font-size="13" font-weight="700" fill="var(--text-muted)">what large models are built for</text>
+        <g class="fig-sans" font-size="12" fill="var(--text)">
+          <text x="46" y="92">· recall patterns seen in training</text>
+          <text x="46" y="120">· interpolate inside a vast prior</text>
+          <text x="46" y="148">· the objective is in the prompt</text>
+          <text x="46" y="176">· answer in one shot</text>
+        </g>
+        <text class="fig-sans" x="46" y="204" font-size="11.5" fill="var(--text-muted)">strength: coverage</text>
+
+        <text class="fig-sans" x="350" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="var(--accent)">the</text>
+        <text class="fig-sans" x="350" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="var(--accent)">gap</text>
+        <line x1="350" y1="146" x2="350" y2="196" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <line x1="350" y1="54" x2="350" y2="96" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+        <rect x="382" y="34" width="292" height="182" rx="9" fill="var(--bg)" stroke="var(--accent)"/>
+        <text class="fig-sans" x="402" y="60" font-size="13" font-weight="700" fill="var(--accent)">what ARC-AGI-3 demands</text>
+        <g class="fig-sans" font-size="12" fill="var(--text)">
+          <text x="402" y="92">· an environment nobody has seen</text>
+          <text x="402" y="120">· no prior to interpolate within</text>
+          <text x="402" y="148">· the objective must be discovered</text>
+          <text x="402" y="176">· adapt continuously, mid-episode</text>
+        </g>
+        <text class="fig-sans" x="402" y="204" font-size="11.5" fill="var(--text-muted)">requirement: fluid intelligence</text>
+      </svg>
+      <figcaption>Scale does not close this gap, which is the whole design intent. A bigger prior helps enormously on the left column and does <b>almost nothing</b> on the right, because there is nothing in the training distribution to retrieve.</figcaption>
+    </figure>
 
     <h2>The Landscape of Approaches</h2>
 

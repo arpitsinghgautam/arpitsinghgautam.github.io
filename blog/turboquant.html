@@ -82,6 +82,39 @@
       The algorithm has three steps: random rotation, per-element quantization, and QJL residual correction. Each is elegant. Together they make extreme KV cache compression safe.
     </p>
 
+    <figure class="blog-fig">
+      <svg viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="tqPipeT">
+        <title id="tqPipeT">The three steps of TurboQuant: random rotation, per-element quantization, QJL residual correction</title>
+        <text class="fig-sans" x="40" y="28" font-size="12.5" fill="var(--text-muted)">input: a KV key/value vector, dominated by a few outlier coordinates</text>
+
+        <rect x="40" y="46" width="190" height="94" rx="8" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="56" y="70" font-size="13.5" font-weight="700" fill="var(--accent)">1. Random rotation</text>
+        <text class="fig-sans" x="56" y="92" font-size="12" fill="var(--text)">Hadamard + sign flips</text>
+        <text class="fig-mono" x="56" y="112" font-size="11.5" fill="var(--text-muted)">O(d log d)</text>
+        <text class="fig-sans" x="56" y="131" font-size="11.5" fill="var(--text-muted)">coords become ~Gaussian</text>
+
+        <rect x="255" y="46" width="190" height="94" rx="8" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="271" y="70" font-size="13.5" font-weight="700" fill="var(--accent)">2. Per-element quantize</text>
+        <text class="fig-sans" x="271" y="92" font-size="12" fill="var(--text)">3 to 4 bits</text>
+        <text class="fig-sans" x="271" y="112" font-size="11.5" fill="var(--text-muted)">levels concentrated where</text>
+        <text class="fig-sans" x="271" y="131" font-size="11.5" fill="var(--text-muted)">the density actually is</text>
+
+        <rect x="470" y="46" width="190" height="94" rx="8" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="486" y="70" font-size="13.5" font-weight="700" fill="var(--accent)">3. QJL correction</text>
+        <text class="fig-sans" x="486" y="92" font-size="12" fill="var(--text)">fixes the residual</text>
+        <text class="fig-sans" x="486" y="112" font-size="11.5" fill="var(--text-muted)">unbiased attention</text>
+        <text class="fig-sans" x="486" y="131" font-size="11.5" fill="var(--text-muted)">score estimates</text>
+
+        <polygon points="250,93 232,85 232,101" fill="var(--text-muted)"/>
+        <polygon points="465,93 447,85 447,101" fill="var(--text-muted)"/>
+
+        <rect x="40" y="166" width="620" height="44" rx="8" fill="var(--bg)" stroke="var(--accent)"/>
+        <text class="fig-sans" x="350" y="194" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--text)">3-4 bit KV cache · 6× less memory · up to 8× throughput (H100) · no fine-tuning, no calibration</text>
+        <text class="fig-sans" x="350" y="236" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">figures redrawn from the reported results in TurboQuant (Google Research, ICLR 2026)</text>
+      </svg>
+      <figcaption>The whole algorithm in one line. Each step exists to make the <b>next</b> one safe: the rotation manufactures a Gaussian, the quantizer is tuned for a Gaussian, and QJL removes the bias the quantizer leaves behind.</figcaption>
+    </figure>
+
     <h2>The Core Problem: KV Cache Outliers</h2>
     <p>
       KV cache tensors - the stored key and value vectors for each attention head - share a statistical property with most neural network activations: <strong>outliers</strong>. A few coordinates dominate the magnitude range, and naive quantization is ruined by them.
@@ -96,6 +129,53 @@
     <p>
       This is why naive INT4 quantization of KV caches degrades model quality. TurboQuant solves it with three steps.
     </p>
+
+    <figure class="blog-fig">
+      <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="tqOutT">
+        <title id="tqOutT">One outlier coordinate forces the quantization grid to span the whole range, collapsing the small values</title>
+        <text class="fig-sans" x="40" y="28" font-size="12.5" font-weight="700" fill="var(--text)">the vector</text>
+        <line x1="40" y1="238" x2="300" y2="238" stroke="var(--border)"/>
+        <g fill="var(--text-muted)">
+          <rect x="60" y="236" width="34" height="2"/>
+          <rect x="118" y="236" width="34" height="2"/>
+          <rect x="176" y="236" width="34" height="2"/>
+        </g>
+        <rect x="234" y="68" width="34" height="170" fill="var(--accent)"/>
+        <g class="fig-sans" font-size="11" fill="var(--text-muted)" text-anchor="middle">
+          <text x="77" y="254">0.001</text>
+          <text x="135" y="254">0.002</text>
+          <text x="193" y="254">0.001</text>
+        </g>
+        <text class="fig-sans" x="251" y="254" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--accent)">47.3</text>
+        <text class="fig-sans" x="170" y="288" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">three coordinates are invisible at this scale. That is the problem.</text>
+
+        <text class="fig-sans" x="380" y="28" font-size="12.5" font-weight="700" fill="var(--text)">the 3-bit grid it forces (8 levels)</text>
+        <g stroke="var(--border)">
+          <line x1="380" y1="200" x2="660" y2="200"/>
+        </g>
+        <g stroke="var(--border)" stroke-width="1">
+          <line x1="380" y1="192" x2="380" y2="208"/><line x1="415" y1="192" x2="415" y2="208"/>
+          <line x1="450" y1="192" x2="450" y2="208"/><line x1="485" y1="192" x2="485" y2="208"/>
+          <line x1="520" y1="192" x2="520" y2="208"/><line x1="555" y1="192" x2="555" y2="208"/>
+          <line x1="590" y1="192" x2="590" y2="208"/><line x1="625" y1="192" x2="625" y2="208"/>
+          <line x1="660" y1="192" x2="660" y2="208"/>
+        </g>
+        <rect x="380" y="192" width="35" height="16" fill="var(--accent)" opacity="0.22"/>
+        <g class="fig-sans" font-size="10.5" fill="var(--text-muted)">
+          <text x="380" y="224" text-anchor="middle">0.001</text>
+          <text x="660" y="224" text-anchor="middle">47.3</text>
+        </g>
+        <text class="fig-sans" x="520" y="248" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">each bucket is ~5.9 units wide</text>
+        <g stroke="var(--accent)" stroke-width="1.5">
+          <line x1="397" y1="188" x2="397" y2="120"/>
+        </g>
+        <polygon points="397,186 391,170 403,170" fill="var(--accent)"/>
+        <text class="fig-sans" x="410" y="112" font-size="12" font-weight="700" fill="var(--accent)">all three small values</text>
+        <text class="fig-sans" x="410" y="130" font-size="12" font-weight="700" fill="var(--accent)">land in this one bin</text>
+        <text class="fig-sans" x="520" y="288" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">75% of the information, gone - because of one coordinate</text>
+      </svg>
+      <figcaption>Why naive INT4 wrecks a KV cache. The quantization grid has to stretch from <code>0.001</code> to <code>47.3</code> to cover the outlier, so every bucket is ~5.9 units wide and the three <b>informative</b> small values are quantized to the same number.</figcaption>
+    </figure>
 
     <h2>Step 1 - Random Rotation: Spread the Energy</h2>
     <p>
@@ -118,6 +198,43 @@ After rotation:   [ 23.6,  -23.6,   23.6,  -23.6  ]</code></pre>
     <p>
       A full random matrix multiplication is O(d²) and expensive. TurboQuant uses structured random rotations (Hadamard matrices + random sign flips) that run in O(d log d) - the same trick as Fast Johnson-Lindenstrauss transforms.
     </p>
+
+    <figure class="blog-fig">
+      <svg viewBox="0 0 700 285" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="tqRotT">
+        <title id="tqRotT">A random rotation spreads the outlier energy evenly across all coordinates</title>
+        <text class="fig-sans" x="40" y="26" font-size="12.5" font-weight="700" fill="var(--text)">before rotation</text>
+        <text class="fig-sans" x="380" y="26" font-size="12.5" font-weight="700" fill="var(--accent)">after rotation (same scale)</text>
+
+        <line x1="40" y1="212" x2="330" y2="212" stroke="var(--border)"/>
+        <g fill="var(--text-muted)">
+          <rect x="60" y="210" width="40" height="2"/>
+          <rect x="115" y="210" width="40" height="2"/>
+          <rect x="170" y="210" width="40" height="2"/>
+        </g>
+        <rect x="225" y="62" width="40" height="150" fill="var(--accent)"/>
+        <text class="fig-sans" x="245" y="56" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--accent)">47.3</text>
+        <text class="fig-sans" x="185" y="234" text-anchor="middle" font-size="11" fill="var(--text-muted)">one coordinate holds all the energy</text>
+
+        <line x1="380" y1="147" x2="670" y2="147" stroke="var(--border)"/>
+        <text class="fig-mono" x="374" y="151" text-anchor="end" font-size="10.5" fill="var(--text-muted)">0</text>
+        <g fill="var(--accent)">
+          <rect x="400" y="72" width="40" height="75"/>
+          <rect x="455" y="147" width="40" height="75"/>
+          <rect x="510" y="72" width="40" height="75"/>
+          <rect x="565" y="147" width="40" height="75"/>
+        </g>
+        <g class="fig-sans" font-size="11" font-weight="700" fill="var(--text-muted)" text-anchor="middle">
+          <text x="420" y="66">+23.6</text>
+          <text x="475" y="236">-23.6</text>
+          <text x="530" y="66">+23.6</text>
+          <text x="585" y="236">-23.6</text>
+        </g>
+        <text class="fig-sans" x="525" y="258" text-anchor="middle" font-size="11" fill="var(--text-muted)">energy shared evenly - no coordinate dominates</text>
+
+        <text class="fig-sans" x="350" y="278" text-anchor="middle" font-size="12" fill="var(--text)">the L2 norm is <tspan font-weight="700">unchanged</tspan> (a rotation is an isometry) - only the distribution moved</text>
+      </svg>
+      <figcaption>The trick that makes the rest work. Rotating by a random orthogonal matrix preserves the vector's length but makes its coordinates approximately i.i.d. Gaussian <b>whatever the original distribution was</b>, so the quantizer can finally spend all 8 levels on signal instead of on a sparse tail.</figcaption>
+    </figure>
 
     <h2>Step 2 - Per-Element Quantization</h2>
     <p>
@@ -184,6 +301,33 @@ Residual:  r = 0.03</code></pre>
     <p>
       The training-free property is critical for practical adoption. TurboQuant can be applied post-hoc to any existing model - Llama, Gemma, Mistral - without retraining or calibration datasets.
     </p>
+
+    <figure class="blog-fig">
+      <svg viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="tqResT">
+        <title id="tqResT">TurboQuant reported results: 3 to 4 bits, 6x memory reduction, up to 8x throughput, no accuracy loss</title>
+        <text class="fig-sans" x="350" y="28" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--text)">what it buys you</text>
+
+        <rect x="40" y="46" width="145" height="86" rx="8" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="112" y="88" text-anchor="middle" font-size="27" font-weight="700" fill="var(--accent)">3-4</text>
+        <text class="fig-sans" x="112" y="110" text-anchor="middle" font-size="12" fill="var(--text-muted)">bits per value</text>
+
+        <rect x="198" y="46" width="145" height="86" rx="8" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="270" y="88" text-anchor="middle" font-size="27" font-weight="700" fill="var(--accent)">6×</text>
+        <text class="fig-sans" x="270" y="110" text-anchor="middle" font-size="12" fill="var(--text-muted)">less KV memory</text>
+
+        <rect x="356" y="46" width="145" height="86" rx="8" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="428" y="88" text-anchor="middle" font-size="27" font-weight="700" fill="var(--accent)">8×</text>
+        <text class="fig-sans" x="428" y="110" text-anchor="middle" font-size="12" fill="var(--text-muted)">throughput (H100)</text>
+
+        <rect x="514" y="46" width="146" height="86" rx="8" fill="var(--bg)" stroke="var(--border)"/>
+        <text class="fig-sans" x="587" y="88" text-anchor="middle" font-size="27" font-weight="700" fill="var(--text)">0</text>
+        <text class="fig-sans" x="587" y="110" text-anchor="middle" font-size="12" fill="var(--text-muted)">accuracy loss</text>
+
+        <text class="fig-sans" x="350" y="163" text-anchor="middle" font-size="13" fill="var(--text)">and it needs <tspan font-weight="700">no fine-tuning, no calibration data, and no change to the model</tspan></text>
+        <text class="fig-sans" x="350" y="190" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">my chart; numbers as reported in TurboQuant (Google Research, ICLR 2026)</text>
+      </svg>
+      <figcaption>The part that makes this deployable rather than merely clever: it is a <b>drop-in</b>. No calibration set, no retraining, no architecture change, which is what separates a serving win from a research result.</figcaption>
+    </figure>
 
     <h2>Connecting to My Work on RAMP</h2>
     <p>
