@@ -70,14 +70,11 @@
     </div>
     <div class="item-desc">
       <ul>
-        <li>Engineered <strong>StreamServe</strong> (arXiv:2604.09562), a disaggregated LLM serving system with adaptive speculative flows for low-latency inference.</li>
-        <li>Built a distributed inference system with disaggregated serving, speculative decoding, and KV-cache quantization: <strong>4× throughput</strong>, latency from 2.5 s down to &lt;1 s vs vLLM baselines (5+ patents to be filed).</li>
-        <li>Engineered <strong>RAMP</strong> (arXiv:2603.17891), an RL-based mixed-precision quantization framework with activation-aware smoothing; Pareto dominance over GPTQ / AWQ with <strong>2.6% superior fidelity at 3.7× compression</strong> on Llama-2-7B.</li>
-        <li>Designed a diffusion-based generative stability method for automated fact verification (published, FEVER @ EACL 2026).</li>
-        <li>Studied reasoning transfer from larger to smaller models via sequential SFT and preference-based refinement (accepted, AAAI ToM 2026).</li>
-        <li>Currently building a Mamba-based reranker for adversarial robustness in RAG systems.</li>
+        <li>Engineered <strong>StreamServe</strong> (<a href="https://arxiv.org/abs/2604.09562" target="_blank" rel="noopener">arXiv:2604.09562</a>), a prefill-decode disaggregated LLM serving system co-optimizing multi-signal routing (FlowGuard) and dynamic speculative execution (SpecuStream): <strong>11-18× latency reduction</strong> and up to <strong>4.4× average throughput</strong> over TP-vLLM baselines on 4× A800 GPUs.</li>
+        <li>Developed <strong>RAMP</strong> (<a href="https://arxiv.org/abs/2603.17891" target="_blank" rel="noopener">arXiv:2603.17891</a>), the first zero-shot transferable mixed-precision quantization policy for LLMs: bit allocation as a constrained MDP solved via Soft Actor-Critic, with Scale Folding to absorb activation outliers. SOTA Pareto frontier at <strong>3.65 effective bits (3.68 GB) at 5.54 perplexity</strong>, outperforming AWQ/GPTQ, with zero-shot transfer to Mistral-7B and Llama-2-13B.</li>
+        <li>Designed <strong>DiffuTruth</strong> (<a href="https://aclanthology.org/2026.fever-1.4/" target="_blank" rel="noopener">FEVER @ EACL 2026</a>), an unsupervised hallucination detector grounded in non-equilibrium thermodynamics: a Generative Stress Test via discrete text diffusion computes NLI-based semantic energy. <strong>SOTA 0.725 AUROC on FEVER</strong> and a <strong>&gt;4% zero-shot robustness gain</strong> on multi-hop HOVER.</li>
       </ul>
-      <div class="tags"><span class="tag">LLM Inference</span><span class="tag">Distributed Systems</span><span class="tag">RL</span><span class="tag">Quantization</span><span class="tag">RAG</span><span class="tag">Patents</span></div>
+      <div class="tags"><span class="tag">LLM Inference</span><span class="tag">Disaggregated Serving</span><span class="tag">Quantization</span><span class="tag">RL</span><span class="tag">Hallucination Detection</span></div>
     </div>
   </div>
 
@@ -90,8 +87,9 @@
     </div>
     <div class="item-desc">
       <ul>
-        <li>Built CogniSQL-R1-Zero - Text-to-SQL reasoning model via GRPO RL and DeepSpeed across 4× A100 GPUs. SOTA on BIRD benchmark, outperforming 236B+ models (arXiv).</li>
-        <li>Agentic framework with self-healing, test-time scaling, and CoT reasoning - 30% accuracy gain; Copilot now in production.</li>
+        <li>Developed <strong>CogniSQL-R1-Zero</strong> (<a href="https://arxiv.org/abs/2507.06013" target="_blank" rel="noopener">arXiv:2507.06013</a>), an execution-aligned Text-to-SQL reasoning model trained via pure GRPO on a lightweight sparse-reward signal with no cold-start SFT; converged in 6.2 hours on 4× A100 GPUs via DeepSpeed ZeRO-2.</li>
+        <li>Set SOTA for mid-sized models: <strong>59.97% execution accuracy on BIRD</strong> with a 7B backbone, outperforming Mistral 123B, DeepSeek-Coder 236B, and GPT-4; pushed to <strong>69.68% via test-time scaling</strong> with best-of-6 execution search.</li>
+        <li>Architected a parallel multi-agent reasoning pipeline (query decomposition, runtime self-healing, majority-voting ensembles): <strong>+30% execution accuracy on proprietary schemas</strong>, shipped as a deployed enterprise Text-to-SQL copilot.</li>
       </ul>
       <div class="tags"><span class="tag">GRPO</span><span class="tag">Text-to-SQL</span><span class="tag">DeepSpeed</span><span class="tag">Agentic AI</span></div>
     </div>
@@ -148,8 +146,42 @@
     <div class="item-desc">Sprint tickets, model building, API implementation, and database maintenance.</div>
   </div>
 
+  <!-- ── PATENTS ────────────────────────────────────────────── -->
+  <h2 class="section-title">Patents</h2>
+
+  <div class="item">
+    <div class="item-header">
+      <span class="item-title">Federated and Self-Learning Techniques for Root Cause Detection in Edge-Cloud Environments</span>
+      <span class="item-meta">Filed May 2026</span>
+    </div>
+    <div class="item-desc">Co-inventor. U.S. Patent Application No. 19/670,270 (pending).</div>
+  </div>
+
+  <div class="item">
+    <div class="item-header">
+      <span class="item-title">6 Edge-AI inventions approved for USPTO filing</span>
+      <span class="item-meta">2025 – 2026</span>
+    </div>
+    <div class="item-desc">Co-inventor. Approved by the Dell Technologies Internal Patent Committee; formal drafts in progress with Dell Legal.</div>
+  </div>
+
   <!-- ── RESEARCH ───────────────────────────────────────────── -->
   <h2 class="section-title">Research</h2>
+
+  <div class="item">
+    <div class="item-header">
+      <span class="item-title">Research Collaborator - Manipal University Jaipur</span>
+      <span class="item-meta">Remote · Jul 2025 – Present</span>
+    </div>
+    <div class="item-desc">
+      Advisor: Dr. Varun Tiwari.
+      <ul>
+        <li><strong>D-CLS</strong> (under review, <em>Complex &amp; Intelligent Systems</em>): a training-free logit-suppression decoding method that mitigates object hallucination in VLMs, cutting CHAIR hallucination metrics by up to <strong>19.1%</strong> at zero compute cost while preserving fluency.</li>
+        <li><strong>Amortization as Robustness</strong> (under review, <em>Neural Computing and Applications</em>): a distributionally robust RL framework (PPO) for algorithmic recourse, achieving <strong>2.6× lower L2 cost</strong> and <strong>28× lower deployment latency</strong> across heterogeneous Rashomon ensembles.</li>
+        <li><strong>PRISM</strong> (under review, <em>Discover Computing</em>): a mechanistic diagnostic framework using component-wise mixed precision, showing that low-bit quantization disproportionately collapses <strong>MLP parametric memory</strong> while preserving external RAG context utilization.</li>
+      </ul>
+    </div>
+  </div>
 
   <div class="item">
     <div class="item-header">
@@ -159,7 +191,6 @@
     <div class="item-desc">
       <ul>
         <li>Hybrid CNN+GRU+LSTM for lymphoma detection from histopathology images - Dr. Vivek Bhardwaj (accepted ICCCNT @ IIT Indore 2025, oral).</li>
-        <li>Hybrid sentiment classifier: transformer embeddings + attention-driven recurrence + numerical fusion - Dr. Jayesh Gangrade (submitted Discover Computing).</li>
         <li>Real-time QUIC traffic classifier with LightGBM and SHAP+LIME explainability - Mr. Rajesh Kumar (accepted ICCCNT @ IIT Indore 2025).</li>
       </ul>
     </div>
@@ -211,7 +242,23 @@
       <span class="item-title">Teaching Assistant - Manipal University Jaipur</span>
       <span class="item-meta">Jan 2024 – May 2024</span>
     </div>
-    <div class="item-desc">Tutorials and lab sessions for AI3241 Reinforcement Learning and AI3231 Computer Vision &amp; Pattern Lab.</div>
+    <div class="item-desc">Tutorials and lab sessions for AI3241 Reinforcement Learning (Dr. Animesh Kumar) and AI3231 Computer Vision &amp; Pattern Lab (Prof. Harish Sharma).</div>
+  </div>
+
+  <div class="item">
+    <div class="item-header">
+      <span class="item-title">Open-Source Contributor - Deep-ML</span>
+      <span class="item-meta">2025</span>
+    </div>
+    <div class="item-desc">Author of educational challenges on <a href="https://deep-ml.com/" target="_blank" rel="noopener">Deep-ML</a> spanning quantization, RAG, RLHF, and inference optimization.</div>
+  </div>
+
+  <div class="item">
+    <div class="item-header">
+      <span class="item-title">Hackathon Mentor (4×)</span>
+      <span class="item-meta">2023 – 2025</span>
+    </div>
+    <div class="item-desc">Mentored teams at global and regional hackathons.</div>
   </div>
 
   <div class="item">
@@ -251,15 +298,33 @@
   <div style="padding: 6px 0 20px">
     <p style="font-size:0.9rem;margin-bottom:8px"><strong>Languages &amp; Frameworks:</strong></p>
     <div class="tags">
-      <span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">TensorFlow</span>
-      <span class="tag">TRL</span><span class="tag">DeepSpeed</span><span class="tag">LangChain</span>
+      <span class="tag">Python</span><span class="tag">CUDA</span><span class="tag">Triton</span><span class="tag">PyTorch</span>
+      <span class="tag">TensorFlow</span><span class="tag">TRL</span><span class="tag">DeepSpeed</span><span class="tag">LangChain</span>
       <span class="tag">OpenCV</span><span class="tag">Scikit-learn</span><span class="tag">HuggingFace</span>
       <span class="tag">Streamlit</span><span class="tag">Java</span><span class="tag">SQL</span><span class="tag">C++</span>
+    </div>
+    <p style="font-size:0.9rem;margin-top:18px;margin-bottom:8px"><strong>LLM Serving &amp; Quantization:</strong></p>
+    <div class="tags">
+      <span class="tag">vLLM</span><span class="tag">TensorRT-LLM</span><span class="tag">GPTQ</span><span class="tag">AWQ</span>
+      <span class="tag">SmoothQuant</span><span class="tag">NF4</span><span class="tag">MXFP4</span>
+      <span class="tag">KV-cache compression</span><span class="tag">Speculative decoding</span>
+    </div>
+    <p style="font-size:0.9rem;margin-top:18px;margin-bottom:8px"><strong>RL &amp; Training:</strong></p>
+    <div class="tags">
+      <span class="tag">SAC</span><span class="tag">PPO</span><span class="tag">GRPO</span><span class="tag">DPO</span>
+      <span class="tag">Knowledge distillation</span><span class="tag">RLHF</span>
+    </div>
+    <p style="font-size:0.9rem;margin-top:18px;margin-bottom:8px"><strong>Interpretability &amp; Evaluation:</strong></p>
+    <div class="tags">
+      <span class="tag">TransformerLens</span><span class="tag">nnsight</span><span class="tag">Activation patching</span>
+      <span class="tag">Linear probes</span><span class="tag">Calibration (ECE)</span><span class="tag">Selective prediction</span>
+      <span class="tag">PySR</span>
     </div>
     <p style="font-size:0.9rem;margin-top:18px;margin-bottom:8px"><strong>Core Competencies:</strong></p>
     <div class="tags">
       <span class="tag">LLM Inference</span><span class="tag">Quantization</span><span class="tag">Distributed Training</span>
       <span class="tag">Reinforcement Learning</span><span class="tag">RAG</span><span class="tag">Reasoning LLMs</span>
+      <span class="tag">Mechanistic Interpretability</span><span class="tag">AI Safety</span>
       <span class="tag">Computer Vision</span><span class="tag">NLP</span><span class="tag">Agentic AI</span>
       <span class="tag">Mainframes / IBM Z</span><span class="tag">Robotics</span>
     </div>
