@@ -6,19 +6,19 @@
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X6P1E490Z0');</script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="How I rebuilt the Triton + Helion GPU kernel stack from scratch in ~4,000 lines of Python: NVRTC, tensor-core PTX, and an autotuner, reaching memory-bandwidth parity with Triton and ~92% of its cold matmul.">
+  <meta name="description" content="A from-scratch nano-Triton and nano-Helion in ~4,000 lines of Python: NVRTC, a group-cyclic register layout, tensor-core PTX, and a correctness-first autotuner, at memory-bandwidth parity with Triton and ~92% of its cold matmul.">
   <link rel="canonical" href="https://arpitsinghgautam.me/blog/nano-triton">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Arpit Singh Gautam">
   <meta property="og:title" content="Rebuilding Triton and Helion from Scratch in 4,000 Lines of Python">
-  <meta property="og:description" content="How I rebuilt the Triton + Helion GPU kernel stack from scratch in ~4,000 lines of Python: NVRTC, tensor-core PTX, and an autotuner, reaching memory-bandwidth parity with Triton and ~92% of its cold matmul.">
+  <meta property="og:description" content="A from-scratch nano-Triton and nano-Helion in ~4,000 lines of Python: NVRTC, a group-cyclic register layout, tensor-core PTX, and a correctness-first autotuner, at memory-bandwidth parity with Triton and ~92% of its cold matmul.">
   <meta property="og:url" content="https://arpitsinghgautam.me/blog/nano-triton">
   <meta property="og:image" content="https://arpitsinghgautam.me/nano-triton/assets/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@Asg_Wolverine">
   <meta name="twitter:creator" content="@Asg_Wolverine">
   <meta name="twitter:title" content="Rebuilding Triton and Helion from Scratch in 4,000 Lines of Python">
-  <meta name="twitter:description" content="How I rebuilt the Triton + Helion GPU kernel stack from scratch in ~4,000 lines of Python: NVRTC, tensor-core PTX, and an autotuner, reaching memory-bandwidth parity with Triton and ~92% of its cold matmul.">
+  <meta name="twitter:description" content="A from-scratch nano-Triton and nano-Helion in ~4,000 lines of Python: NVRTC, a group-cyclic register layout, tensor-core PTX, and a correctness-first autotuner, at memory-bandwidth parity with Triton and ~92% of its cold matmul.">
   <meta name="twitter:image" content="https://arpitsinghgautam.me/nano-triton/assets/og-card.png">
   <title>Rebuilding Triton and Helion from Scratch in 4,000 Lines of Python - Arpit Singh Gautam</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -65,7 +65,7 @@
     <h1>Rebuilding Triton and Helion from Scratch in 4,000 Lines of Python</h1>
     <div class="blog-post-meta">
       <span><i class="fas fa-calendar-alt" aria-hidden="true"></i> Jul 2026</span>
-      <span><i class="fas fa-clock" aria-hidden="true"></i> 12 min read</span>
+      <span><i class="fas fa-clock" aria-hidden="true"></i> 15 min read</span>
       <span><i class="fas fa-tag" aria-hidden="true"></i> GPU Kernels · Compilers · CUDA</span>
     </div>
   </div>
@@ -73,10 +73,13 @@
   <div class="blog-post-body">
 
     <p>
-      I spent the last while rebuilding Triton and Helion, the two-layer stack that powers most custom GPU kernels in modern ML, from scratch. Not as a simulator and not as a toy: the rebuild JIT-compiles Python to real tensor-core machine code, ties real Triton on memory-bound kernels, and reaches about <strong>92% of its cold matmul throughput</strong>, in roughly <strong>4,000 lines of Python</strong> you can read in an afternoon.
+      Triton and Helion are how most custom GPU kernels get written today. Triton, from OpenAI, lets you write a kernel as a Python function over a block of data and handles the thread mapping, memory coalescing, shared memory and tensor cores for you. Helion, from PyTorch, sits one level higher and generates and tunes Triton kernels from tile-level code. Both are excellent, and both are large: Triton alone is hundreds of thousands of lines built on MLIR and LLVM.
     </p>
     <p>
-      This post is the story: the architectural bet that makes a nano possible, the one layout rule that buys most of the performance, the matmul pipeline war, and the autotuner that cannot ship a wrong kernel.
+      I wanted to understand how that stack actually works, and reading the source was not getting me there. The reliable way to understand a big system is to rebuild a small one, so that is what I did: a working Triton and a working Helion, small enough to read in an afternoon but fast enough to benchmark honestly against the originals.
+    </p>
+    <p>
+      The result is about <strong>4,000 lines of Python</strong> with no dependencies beyond torch. Memory-bound kernels like softmax and layernorm match Triton at the memory-bandwidth ceiling; fp16 matmul reaches <strong>76 to 83 percent</strong> of Triton's tensor-core throughput sustained, and <strong>110 TFLOP/s cold</strong>. This is the long version of how it works and where the performance came from.
     </p>
 
     <figure class="blog-fig">
@@ -84,31 +87,7 @@
     </figure>
 
     <p>
-      Everything below is open and MIT licensed: <a href="https://arpitsinghgautam.me/nano-triton/" target="_blank" rel="noopener"><strong>the full from-zero explainer</strong></a> and <a href="https://github.com/arpitsinghgautam/nano-triton" target="_blank" rel="noopener"><strong>the code on GitHub</strong></a>.
-    </p>
-
-    <h2>Why rebuild something that already exists</h2>
-    <p>
-      <a href="https://github.com/triton-lang/triton" target="_blank" rel="noopener">Triton</a> (from OpenAI) changed who can write fast GPU kernels: you program a block of data instead of individual threads, and the compiler handles thread mapping, memory coalescing, shared memory and tensor cores. <a href="https://github.com/pytorch/helion" target="_blank" rel="noopener">Helion</a> (from PyTorch) sits one level higher, generating and autotuning Triton kernels from PyTorch-like tile code.
-    </p>
-    <p>
-      Both are superb tools. They are also industrial compilers with hundreds of thousands of lines, MLIR passes, and years of accumulated scheduling wisdom baked in. Reading them taught me very little, for the same reason reading a city map teaches you little about urban planning.
-    </p>
-    <p>
-      The better way is to rebuild the system small: keep the architecture, shrink the surface, keep the performance real, and the ideas become yours. I wanted that for the kernel stack. So the project has two parts, mirroring the production stack layer for layer:
-    </p>
-    <ul>
-      <li><strong>newt</strong>, a nano-Triton (Triton was the original genus name for newts, so a newt is literally a small triton).</li>
-      <li><strong>deuteron</strong>, a nano-Helion (a deuteron is a lighter atomic nucleus than a helion).</li>
-    </ul>
-
-    <figure class="blog-fig">
-      <img src="/nano-triton/assets/stack.svg" alt="Two layers mirror two layers: newt maps to Triton, deuteron maps to Helion" decoding="async" loading="lazy" width="880" height="320">
-      <figcaption>Two layers mirroring two layers. The naming is not a joke at the expense of the originals: it is a promise that the <b>architecture</b> is the same, only the surface area is smaller.</figcaption>
-    </figure>
-
-    <p>
-      A newt kernel is a Triton kernel with the serial numbers filed off. If you know <code>tl.*</code>, you already know <code>nl.*</code>:
+      The Triton layer is called <strong>newt</strong> (a newt is a small triton) and the Helion layer is called <strong>deuteron</strong> (a lighter nucleus than a helion). It is on PyPI, so <code>pip install nano-triton</code> gives you both; you need torch and an NVIDIA GPU, since newt compiles the kernels at runtime with NVRTC. If you have written a Triton kernel, newt will look familiar. Swap <code>tl</code> for <code>nl</code> and most of it runs unchanged:
     </p>
     <pre><code>@newt.jit
 def add_kernel(x_ptr, y_ptr, out_ptr, n, BLOCK: nl.constexpr):
@@ -119,101 +98,152 @@ def add_kernel(x_ptr, y_ptr, out_ptr, n, BLOCK: nl.constexpr):
     y = nl.load(y_ptr + offs, mask=mask)
     nl.store(out_ptr + offs, x + y, mask=mask)</code></pre>
 
-    <h2>The cheat code: NVIDIA ships a compiler as a library</h2>
+    <figure class="blog-fig">
+      <img src="/nano-triton/assets/stack.svg" alt="The two layers, and the production stack they mirror" decoding="async" loading="lazy" width="880" height="320">
+      <figcaption>The two layers, and the production stack they mirror. The naming is not a joke at the expense of the originals: it is a promise that the <b>architecture</b> is the same, only the surface area is smaller.</figcaption>
+    </figure>
+
+    <h2>Compiling to the GPU without MLIR or LLVM</h2>
     <p>
-      Triton lowers Python through its own IR, MLIR and LLVM down to PTX. A nano cannot carry that, and it turns out it does not need to. NVRTC (NVIDIA Runtime Compilation) is a full CUDA C++ compiler shipped as a shared library, callable in-process.
+      The first question was how to get from Python to something the GPU can run, without rebuilding the parts of Triton I had no interest in reimplementing. Triton lowers its IR through MLIR and LLVM to PTX, and that machinery is most of the compiler and none of the ideas I wanted to learn.
     </p>
     <p>
-      So newt's pipeline is: Python AST, then typed block values (every value gets a shape, dtype and layout), then a CUDA C++ source string, then NVRTC, then a cubin, loaded and launched through the raw CUDA driver API via ctypes. No nvcc subprocess, no MLIR, no wrapper packages, no dependencies beyond torch.
+      The way around it is <strong>NVRTC</strong>, NVIDIA's runtime compiler. It is a full CUDA C++ compiler shipped as a library: you pass it a string of CUDA C++ and get back a compiled binary, in-process, with no temporary files and no subprocess. This is the decision the whole project rests on. NVRTC handles register allocation and instruction scheduling, which are the hardest and most time-consuming parts of a backend, so newt does not have to.
+    </p>
+    <p>
+      The pipeline is therefore short. newt parses the Python function into a syntax tree, assigns every value a shape, dtype and layout, emits CUDA C++, compiles it with NVRTC, and launches the result through the CUDA driver API using ctypes. Compiled binaries are cached in memory and on disk, keyed by the compile-time constants, dtypes, <code>num_warps</code> and <code>num_stages</code>, so the second call and the second process both pay nothing. Setting <code>NEWT_DEBUG=1</code> prints the generated CUDA C++, which was by a wide margin the most useful debugging feature in the project.
     </p>
 
     <figure class="blog-fig">
-      <img src="/nano-triton/assets/pipeline.svg" alt="How a newt kernel runs: Python AST to typed block values to CUDA C++ to NVRTC to cubin" decoding="async" loading="lazy" width="880" height="430">
-      <figcaption>The compilation path. Everything to the right of the CUDA C++ string is rented from NVIDIA, which is precisely why the whole thing fits in 4,000 lines.</figcaption>
+      <img src="/nano-triton/assets/pipeline.svg" alt="The newt compile and launch pipeline" decoding="async" loading="lazy" width="880" height="430">
+      <figcaption>The newt compile and launch pipeline. Everything to the right of the CUDA C++ string is rented from NVIDIA, which is precisely why the whole thing fits in 4,000 lines.</figcaption>
     </figure>
 
     <p>
-      This is the bet that makes the whole project feasible: NVRTC does register allocation and instruction scheduling, which are the person-decades parts of a compiler. What remains is the one problem that makes Triton <em>Triton</em>: translating block semantics into thread semantics well. That problem fits in about 2,500 lines.
+      That leaves one real problem, and it is the one that makes Triton worth studying: turning block-level semantics into thread-level code.
     </p>
 
-    <h2>One rule for where data lives</h2>
+    <h2>The register layout</h2>
     <p>
-      When a kernel says "load a block of 1,024 floats", where do they go? In registers, spread across the threads of the block by a single fixed rule I call the group-cyclic layout: consecutive elements are dealt to threads in 16-byte groups, round robin.
+      When a kernel loads "a block of 1,024 floats," those values have to be distributed across the threads of the block, and the distribution largely determines performance. newt uses a single rule, the <strong>group-cyclic layout</strong>. The exact mapping is:
     </p>
+    <pre><code>element i  -&gt;  thread (i / VEC) mod T,  slot (i / (T * VEC)) * VEC + i mod VEC</code></pre>
+    <p>
+      where T is the number of threads and VEC is how many elements fit in 16 bytes (4 floats, or 8 halves). In words: consecutive elements are handed to threads in contiguous 16-byte groups, round robin. A worked example with 8 elements, 2 threads and VEC = 2:
+    </p>
+    <pre><code>element:  e0 e1 e2 e3 e4 e5 e6 e7
+thread:   t0 t0 t1 t1 t0 t0 t1 t1</code></pre>
 
     <figure class="blog-fig">
-      <img src="/nano-triton/assets/layout.svg" alt="The group-cyclic layout: consecutive elements dealt to threads in 16-byte groups, round robin" decoding="async" loading="lazy" width="880" height="250">
+      <img src="/nano-triton/assets/layout.svg" alt="The group-cyclic layout" decoding="async" loading="lazy" width="880" height="250">
       <figcaption>One rule decides where every element of a block lives. Getting this single decision right is what removes the need for a whole analysis subsystem.</figcaption>
     </figure>
 
-    <p>One rule, three wins:</p>
-    <ol>
-      <li><strong>Coalescing by construction.</strong> Adjacent threads always hold adjacent memory, so every warp access collapses into one wide transaction.</li>
-      <li><strong>Vectorization.</strong> Each thread owns 16 contiguous bytes, so a load can be a single 128-bit instruction. Here newt diverges from Triton on purpose: Triton proves contiguity with static analysis; newt emits a tiny runtime check per group ("are these offsets consecutive, aligned, all unmasked?") and branches to the fast path. A few integer compares against a ~500-cycle memory access is a wonderful trade, and this single trick took vector-add from 82% of Triton to parity.</li>
-      <li><strong>Simplicity.</strong> Elementwise math never cares where elements live; each thread loops over its own slots.</li>
-    </ol>
+    <p>This one rule gives three properties without any further work:</p>
+    <ul>
+      <li><strong>Coalescing.</strong> Adjacent threads hold adjacent memory, so a warp-wide load becomes one wide memory transaction instead of up to 32 scattered ones.</li>
+      <li><strong>Vectorization.</strong> Each thread owns a contiguous 16 bytes, which is exactly one 128-bit load or store.</li>
+      <li><strong>Simplicity.</strong> Elementwise operations never need to know where an element lives; each thread iterates over its own slots.</li>
+    </ul>
     <p>
-      Reductions follow the classic three-stage shape (registers, then a <code>__shfl_xor_sync</code> butterfly within each warp, then shared memory across warps), and broadcasts stage through a reusable shared-memory arena.
+      There is one deliberate difference from Triton. Triton proves that accesses are contiguous through static analysis at compile time. Writing that analysis is a substantial amount of work, so newt takes a different route: it emits a small runtime check (are these offsets consecutive, aligned and unmasked?) and branches to the vectorized path when the check passes, falling back to a predicated scalar path when it does not. A few integer comparisons in front of a 500-cycle memory access is a good trade, and it is what brought vector-add from about 82 percent of Triton to parity.
     </p>
 
-    <h2>The easy half: hitting the memory roof</h2>
+    <h2>Reductions and broadcasting</h2>
     <p>
-      For memory-bound kernels, that layout rule is essentially the whole game. Softmax reads and writes each byte once; whoever saturates DRAM bandwidth wins, and coalesced plus vectorized plus fused gets you there. Any correct compiler that manages those three ties. This is the roofline model in action:
+      <code>nl.sum</code> and friends have to combine values that live in different threads, and newt lowers them in three stages. Each thread first reduces its own slots in registers. Then each warp reduces its 32 lanes with a <code>__shfl_xor_sync</code> butterfly, where lanes exchange values directly through the register file with no memory involved, in five steps for 32 lanes. Finally one value per warp is written to shared memory and a single warp finishes the cross-warp reduction and broadcasts the result back. This is the same three-level shape Triton uses.
+    </p>
+    <p>
+      Broadcasting between different-sized blocks sometimes needs a value held by one thread to become visible to another. newt stages the smaller operand through a reusable shared-memory scratch area with barriers on either side. Reshapes that only add or remove size-1 dimensions are free, because they change metadata and never move data.
+    </p>
+
+    <h2>Memory-bound kernels</h2>
+    <p>
+      Memory-bound kernels were the easy part. Softmax, layernorm and elementwise operations touch each byte once, so performance is bounded entirely by memory bandwidth. Once the layout is coalesced and vectorized and the passes are fused into a single kernel, there is nothing left to optimize.
     </p>
 
     <figure class="blog-fig">
-      <img src="/nano-triton/assets/bench-membound.svg" alt="Memory-bound benchmarks: newt reaches parity with Triton" decoding="async" loading="lazy" width="880" height="340">
-      <figcaption>Same kernel source (modulo <code>nl</code> vs <code>tl</code>), same config sweep, medians over 50 reps with the L2 cache flushed between reps.</figcaption>
+      <img src="/nano-triton/assets/bench-membound.svg" alt="Memory-bound kernels, newt vs Triton vs torch" decoding="async" loading="lazy" width="880" height="340">
+      <figcaption>Memory-bound kernels, newt vs Triton vs torch. Parity here is the expected result, not an achievement.</figcaption>
     </figure>
 
     <p>
-      Parity is the expected result, and that is the point: it says the compiler is not leaving bandwidth on the table, and it points at where the real fight is.
+      newt matches Triton on all of them. This is worth stating plainly rather than celebrating: parity here is the expected result, not an achievement. Any correct compiler that coalesces, vectorizes and fuses lands in the same place, because the bandwidth ceiling is a hard limit. The workload that actually distinguishes compilers is matrix multiplication.
     </p>
 
-    <h2>The hard half: the matmul war</h2>
+    <h2>Matmul</h2>
     <p>
-      Matrix multiplication is compute-bound. The game flips from "save bandwidth" to "never let the tensor cores stall", and every scheduling imperfection shows up in the TFLOP/s. newt's <code>dot</code> went through three generations, each one a readable commit:
+      Matmul is compute-bound: the arithmetic dominates the memory traffic, so the objective changes from conserving bandwidth to keeping the tensor cores busy. Every scheduling inefficiency shows up directly in the achieved TFLOP/s. newt's matmul went through three versions.
     </p>
 
     <figure class="blog-fig">
-      <img src="/nano-triton/assets/journey.svg" alt="The fp16 matmul journey: 63 to 80 to 110 TFLOP per second across three generations" decoding="async" loading="lazy" width="880" height="330">
-      <figcaption>Three generations of <code>dot</code>. Each step is a scheduling idea, not a micro-optimization, which is why each one is worth reading as its own commit.</figcaption>
+      <img src="/nano-triton/assets/journey.svg" alt="The three versions, at 4096-cubed" decoding="async" loading="lazy" width="880" height="330">
+      <figcaption>The three versions, at 4096-cubed. Each step is a scheduling idea, not a micro-optimization, which is why each one is worth reading as its own commit.</figcaption>
     </figure>
 
     <p>
-      <strong>Generation 1: WMMA plus synchronous staging (63 TF sustained at 4096^3).</strong> NVIDIA's high-level WMMA API drives the tensor cores but hides the register layout and costs extra shared-memory round trips. Worse, the loop stalls every iteration: load tile, wait ~500 cycles, compute, repeat.
+      <strong>Version 1: WMMA with synchronous staging.</strong> The first implementation used WMMA, NVIDIA's high-level tensor-core API, and staged tiles into shared memory synchronously. At 4096-cubed it reached 63 TFLOP/s against Triton's 119 on the same GPU. The bottleneck was clear in hindsight: the loop stalled every iteration, loading a tile, waiting roughly 500 cycles for it to arrive, then computing. The tensor cores were idle most of the time.
     </p>
     <p>
-      <strong>Generation 2: the cp.async ring (80 TF).</strong> Modern GPUs can copy global memory to shared memory in the background with <code>cp.async</code>, without the data passing through registers. The textbook use is prefetching future tiles, but a compiler tracing a user's loop cannot do that: future tiles' addresses have not been computed yet.
+      <strong>Version 2: a cp.async pipeline.</strong> The standard fix is <code>cp.async</code>, which copies from global to shared memory in the background while computation proceeds, so you can prefetch the next tile while working on the current one. This ran into a real obstacle. newt generates code while tracing the user's loop, and the address of the next tile does not exist yet; it is produced later by code that has not executed. You cannot prefetch an address you cannot compute.
     </p>
     <p>
-      The fix is my favorite idea in the project: invert the problem and <strong>delay consumption instead of prefetching</strong>. Keep an N-slot ring of tiles in flight; each iteration consumes the tile staged S-1 iterations ago, then starts this iteration's background copy. Same overlap, one barrier per k-step, no loop rewriting, and the leftover tiles flush wherever the accumulator is next read. The number of slots is the same <code>num_stages</code> knob real Triton exposes, and the autotuner searches over it.
+      The solution was to invert the problem. Instead of prefetching the next tile, newt keeps a ring of tiles in flight and consumes the one it started several iterations earlier. The overlap is identical, but every address involved has already been computed, because it belongs to a past iteration, and this required no change to the user's loop. The depth of the ring, <code>num_stages</code>, is exposed as a tuning parameter, exactly as in Triton, and the ordering is slightly different depending on depth: at two stages newt issues the copy first and uses two barriers, and at three or more it consumes first and gets away with a single barrier per k-step. Any tiles still in flight at the end of the loop are flushed at the point where the accumulator is first read. This brought matmul to about 80 TFLOP/s.
     </p>
 
     <figure class="blog-fig">
-      <img src="/nano-triton/assets/ring.svg" alt="The cp.async ring: consume the tile staged S-1 iterations ago, then start this iteration's copy" decoding="async" loading="lazy" width="880" height="330">
-      <figcaption>Deferred consumption. You cannot prefetch a tile whose address does not exist yet, but you can delay the math by S-1 iterations and buy exactly the same overlap.</figcaption>
+      <img src="/nano-triton/assets/ring.svg" alt="The deferred-consumption pipeline" decoding="async" loading="lazy" width="880" height="330">
+      <figcaption>The deferred-consumption pipeline. You cannot prefetch a tile whose address does not exist yet, but you can delay the math by several iterations and buy exactly the same overlap.</figcaption>
     </figure>
 
     <p>
-      <strong>Generation 3: raw PTX, swizzle and fragment ping-pong (82 TF sustained, 110 TF cold).</strong> WMMA went away: fp16/bf16 dots now compile to raw <code>ldmatrix</code> and <code>mma.sync.m16n8k16</code> inline PTX over shared memory whose 16-byte chunks are XOR-permuted by row index, which kills bank conflicts without padding. Because NVIDIA documents the accumulator's per-lane register layout, newt can convert fragments to and from the normal layout whenever the kernel does elementwise math on them; that conversion is what makes a fused flash-attention kernel expressible.
-    </p>
-    <p>
-      The final piece: within one k-step, the fragment loads and the mma math form their own dependency chain. Double-buffering the fragments, so step k+1's <code>ldmatrix</code> issues before step k's math, took the cold-start number from 96 to 110 TFLOP/s.
+      <strong>Version 3: raw PTX, swizzling and fragment double-buffering.</strong> The last version replaced WMMA with the underlying <code>ldmatrix</code> and <code>mma.sync.aligned.m16n8k16</code> instructions, written as inline PTX. Two details did most of the work here. First, the shared-memory tiles are stored swizzled: each row's 16-byte chunks are permuted by XOR-ing the chunk index with the row index, which eliminates the bank conflicts that <code>ldmatrix</code> would otherwise hit, and does it without the memory overhead of padding. Second, the accumulator lives in registers with the specific per-lane layout NVIDIA documents for the mma instruction, which means newt can convert it to and from the normal group-cyclic layout whenever the kernel does elementwise math on it. That conversion is what makes a fused flash-attention kernel expressible at all. Finally, the fragment registers are double-buffered within a k-step, so the <code>ldmatrix</code> loads for the next step are issued before the current multiply runs. That last change, a few lines, moved the cold-start number from 96 to 110 TFLOP/s.
     </p>
 
     <figure class="blog-fig">
-      <img src="/nano-triton/assets/bench-matmul.svg" alt="fp16 matmul across sizes: newt versus Triton" decoding="async" loading="lazy" width="880" height="360">
+      <img src="/nano-triton/assets/bench-matmul.svg" alt="fp16 matmul across sizes" decoding="async" loading="lazy" width="880" height="360">
       <figcaption>fp16 matmul across sizes. The gap that remains is Triton's finest-grained machinery, and it is documented rather than hand-waved.</figcaption>
     </figure>
 
     <p>
-      The honest summary: 76-83% of Triton sustained on my thermally limited 110 W laptop, and 109.7 TFLOP/s cold, about 92% of Triton's own cold numbers. The remaining gap is Triton's finest-grained machinery (per-iteration address strength reduction and warp specialization), known, documented, and out of scope for a nano on purpose. Benchmarks on a laptop deserve their caveats spelled out: the numbers above come from same-run columns with cooldown between suites, because that is the only fair comparison on a machine that throttles.
+      The remaining gap to Triton is its most specialized machinery, which I did not implement: strength reduction of the address arithmetic across iterations, and warp specialization into producer and consumer roles. These are well understood and deliberately out of scope; past a point they stop illustrating the ideas and become an engineering project of their own. fp32 matmul, which runs on the tensor cores as tf32, still uses the older WMMA path and sits around 45 percent of Triton; porting it to the raw PTX path is mechanical work I have not done yet.
     </p>
 
-    <h2>deuteron: kernels that check themselves</h2>
+    <h2>The full numbers</h2>
     <p>
-      One level up, deuteron is ~700 lines doing to newt what Helion does to Triton. You write tile-level code with zero kernel details:
+      One caveat before the tables: the test machine is a 110-watt laptop that thermally throttles under sustained load, so the only fair comparison is same-run columns, taken with a cooldown between suites. fp16 matmul, in TFLOP/s, with each newt row corresponding to one of the three versions above:
+    </p>
+    <div style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr><th>fp16 matmul (TFLOP/s)</th><th>1024</th><th>2048</th><th>4096</th><th>8192</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>newt v1 (WMMA, synchronous)</td><td>39.1</td><td>69.1</td><td>63.3</td><td>62.8</td></tr>
+        <tr><td>newt v2 (+ cp.async ring)</td><td>63.7</td><td>70.6</td><td>79.5</td><td>70.1</td></tr>
+        <tr><td>newt v3 (+ mma.sync, swizzle, N stages)</td><td>67.2</td><td>82.7</td><td>81.7</td><td>77.0</td></tr>
+        <tr><td>triton (same run)</td><td>81.2</td><td>101.1</td><td>119.0</td><td>100.8</td></tr>
+        <tr><td>torch / cuBLAS (same run)</td><td>67.8</td><td>103.1</td><td>100.3</td><td>95.0</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>Memory-bound kernels, in GB/s:</p>
+    <div style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr><th>kernel (fp32)</th><th>torch</th><th>newt</th><th>triton</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>fused softmax 4096x8192</td><td>760</td><td>765</td><td>767</td></tr>
+        <tr><td>layernorm 4096x8192</td><td>625</td><td>767</td><td>764</td></tr>
+        <tr><td>vector add 64M</td><td>782</td><td>777</td><td>779</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h2>deuteron: the autotuning layer</h2>
+    <p>
+      newt is the compiler; deuteron is the layer on top that removes the remaining kernel details, the way Helion does for Triton. You write tiles, with no program ids, offsets, masks or block sizes:
     </p>
     <pre><code>@dt.kernel
 def matmul(x, y, out):
@@ -223,64 +253,87 @@ def matmul(x, y, out):
             acc += x[tile_m, tile_k] @ y[tile_k, tile_n]
         out[tile_m, tile_n] = acc</code></pre>
     <p>
-      deuteron traces the AST: the outer <code>dt.tile</code> loop becomes the launch grid, indexing becomes pointer math plus boundary masks, <code>@</code> becomes a tensor-core dot fused into the accumulator. The output is a newt kernel source string in which every tile size is a compile-time constant, and printing it is the most satisfying demo in the repo, because it looks exactly like the hand-written tutorial kernel.
+      deuteron traces this. The outer loop becomes the launch grid, tensor indexing becomes pointer arithmetic and boundary masks, and <code>@</code> becomes a fused tensor-core dot. It generates newt source, and every tile size becomes a <code>constexpr</code>. You can print the generated kernel with <code>matmul.to_newt_source(x, y, out)</code>, and the output is essentially the hand-written kernel from the tutorial, which is the most satisfying thing in the repo to look at.
     </p>
 
     <figure class="blog-fig">
-      <img src="/nano-triton/assets/deuteron.svg" alt="What happens on a deuteron kernel's first call: trace, generate, autotune against an eager oracle" decoding="async" loading="lazy" width="880" height="270">
-      <figcaption>A deuteron kernel's first call. The oracle path on the left is what makes the autotuner trustworthy rather than merely fast.</figcaption>
+      <img src="/nano-triton/assets/deuteron.svg" alt="What deuteron does on the first call" decoding="async" loading="lazy" width="880" height="270">
+      <figcaption>What deuteron does on the first call. The oracle path is what makes the autotuner trustworthy rather than merely fast.</figcaption>
     </figure>
 
     <p>
-      The design decision worth stealing is Helion's oracle trick, replicated here: <strong>the same function also runs as plain PyTorch</strong>, which gives ground-truth outputs for free. During autotuning, every candidate config runs on cloned inputs and its output is compared against the oracle; a config that compiles, runs, and computes garbage is rejected before it is ever timed. The autotuner cannot ship a wrong kernel, by construction.
-    </p>
-
-    <h2>Trust before speed</h2>
-    <p>
-      A compiler that is fast and wrong is worse than useless. The suite sits at <strong>176 tests</strong> comparing every operation against PyTorch references, and the tricky corners (sync hazards, layout algebra, swizzle consistency, pipeline wait-counting) got hammered with hundreds of small targeted GPU programs. Whatever broke became a regression test.
+      The important design decision, taken from Helion, is how it tunes. The same function also runs as ordinary PyTorch, which gives a correct reference for free. During autotuning, each candidate configuration (block sizes, <code>num_warps</code>, <code>num_stages</code>) is run on cloned inputs and checked against that reference before it is timed. A configuration that compiles and runs but produces the wrong result is discarded before its performance is ever measured, so the tuner cannot select a fast but incorrect kernel. Winners are cached to disk, keyed by the kernel source, a shape bucket and the dtypes, so the next call with similar shapes launches immediately.
     </p>
     <p>
-      The single most valuable debugging feature cost one line: <code>NEWT_DEBUG=1</code> prints the generated CUDA source. Being able to <em>read what the compiler wrote</em> turns most bug hunts into text diffs.
+      One detail that fell out nicely: masks propagate through the traced expressions, so a reduction on a padded tile automatically gets the right identity value (negative infinity for max, zero for sum). The layernorm example computes a correct variance on rows of length 1,500, which is not a power of two, with no explicit mask handling anywhere in the user code.
     </p>
 
-    <h2>What I took away from this</h2>
-    <p>Some of these I expected going in. Most I did not.</p>
+    <h2>Testing</h2>
+    <p>
+      A fast compiler that is occasionally wrong is not useful, so correctness got the majority of the effort. There are <strong>176 tests</strong> comparing every operation against PyTorch, along with a large number of small targeted kernels aimed at the components most likely to fail subtly: synchronization, the layout arithmetic, and the swizzle. Every bug that was found became a regression test. The CI runs a GPU-free subset that checks the generated CUDA source structurally, so the compiler is exercised on every push even without a GPU on the runner.
+    </p>
+
+    <h2>Trying it yourself</h2>
+    <pre><code>pip install nano-triton</code></pre>
+    <p>
+      Then the shortest interesting thing to run is the deuteron matmul, because it prints the kernel it generated:
+    </p>
+    <pre><code>import torch
+import deuteron as dt
+
+@dt.kernel
+def matmul(x, y, out):
+    for tile_m, tile_n in dt.tile([x.shape[0], y.shape[1]]):
+        acc = dt.zeros([tile_m, tile_n], dtype=dt.float32)
+        for tile_k in dt.tile(x.shape[1]):
+            acc += x[tile_m, tile_k] @ y[tile_k, tile_n]
+        out[tile_m, tile_n] = acc
+
+x = torch.randn(512, 512, device="cuda", dtype=torch.float16)
+y = torch.randn(512, 512, device="cuda", dtype=torch.float16)
+out = torch.empty(512, 512, device="cuda", dtype=torch.float16)
+
+matmul(x, y, out)                          # traces, autotunes, caches, launches
+print(matmul.to_newt_source(x, y, out))    # the generated newt kernel</code></pre>
+    <p>
+      The repository has the full example progression, from vector add up to a fused flash-attention kernel, and <code>python -m pytest tests</code> runs the suite (the GPU tests self-skip if there is no CUDA device).
+    </p>
+
+    <h2>What is supported</h2>
+    <p>
+      newt covers <code>program_id</code>, <code>arange</code>, masked <code>load</code>/<code>store</code>, the full set of arithmetic, comparison and bitwise operators with numpy-style broadcasting, <code>where</code>, <code>maximum</code>, <code>minimum</code>, <code>fma</code>, the usual transcendentals (<code>exp</code>, <code>log</code>, <code>sqrt</code>, <code>rsqrt</code>, <code>sin</code>, <code>cos</code>, <code>tanh</code>, <code>erf</code>, <code>sigmoid</code> and so on), full and axis reductions (<code>sum</code>, <code>max</code>, <code>min</code>), <code>dot</code> with an accumulator, dtype casts, <code>reshape</code>, <code>trans</code> and <code>broadcast_to</code>, <code>atomic_add</code> and <code>atomic_max</code>, and <code>for</code> / <code>while</code> / <code>if</code> with constexpr pruning. Dtypes run from fp16, bf16, fp32 and fp64 through the integer and unsigned types and bool. Grids go up to 3D, <code>num_warps</code> from 1 to 32, <code>num_stages</code> from 1 to 8, and <code>@autotune</code> / <code>@heuristics</code> work as they do in Triton.
+    </p>
+
+    <h2>What I left out</h2>
+    <p>
+      Most of the difficulty in a project like this is deciding what not to build. NVRTC meant no register allocator. The group-cyclic layout meant no contiguity analysis. Deferred consumption meant no rewriting of the user's loop. The parts left unimplemented are the last few percent of matmul scheduling described above, the tf32 port to the raw PTX path, plus in-kernel random number generation, device-side printing, non-NVIDIA backends, and fp8. None of them changes the point the project is meant to demonstrate: the modern GPU kernel stack, from tile-level Python down to tensor-core machine code, fits in about 4,000 lines once the essential problems are separated from the incidental ones.
+    </p>
+    <p>
+      Everything is open and MIT licensed, including a from-zero explainer for readers without a GPU background, the full benchmarks with their caveats, and a commit history where each stage of the matmul work is a separate commit.
+    </p>
     <ul>
-      <li>NVRTC changes what a small compiler can be. Register allocation and instruction scheduling are the parts that take person-decades, and it turns out you can just rent them. The lines you actually write should go into the semantics gap.</li>
-      <li>One good layout rule quietly replaces a whole subsystem. Once elements are dealt out group-cyclically, coalescing and vectorization stop being analysis problems.</li>
-      <li>A runtime check costing a few integer ops is a fair price for skipping static analysis, as long as it guards something as slow as a DRAM access.</li>
-      <li>Deferred consumption was the best idea in the project. I could not prefetch tiles whose addresses did not exist yet, but delaying the math by S-1 iterations bought the same overlap without touching the user's loop.</li>
-      <li>Getting softmax to tie Triton felt like a milestone until I understood it is a floor: any correct compiler saturates the bus there. Matmul is where you find out whether your scheduling is any good.</li>
-      <li>The eager oracle is the reason I trust my own autotuner. Filter configs on correctness first and the search can be as aggressive as you like.</li>
-      <li>On a laptop, a benchmark number without its thermal context is a lie. I ended up trusting only same-run columns, with cooldown between suites.</li>
-    </ul>
-
-    <h2>Go read it</h2>
-    <p>
-      The whole thing is built to be read: a <a href="https://arpitsinghgautam.me/nano-triton/" target="_blank" rel="noopener">from-zero explainer</a> that assumes no GPU background, a README with the architecture diagrams, benchmarks with the methodology spelled out, and a git history where each compiler stage is one self-contained commit.
-    </p>
-    <ul>
+      <li>Install: <strong><code>pip install nano-triton</code></strong></li>
       <li>Site: <a href="https://arpitsinghgautam.me/nano-triton/" target="_blank" rel="noopener">arpitsinghgautam.me/nano-triton</a></li>
       <li>Code: <a href="https://github.com/arpitsinghgautam/nano-triton" target="_blank" rel="noopener">github.com/arpitsinghgautam/nano-triton</a></li>
     </ul>
     <p>
-      If you build something on top of it, or spot a scheduling trick I left on the table, I want to hear about it.
+      If you build something on top of it, or find a scheduling improvement I missed, I would be glad to hear about it.
     </p>
 
     <h2>Credits and further reading</h2>
     <p>
-      This project stands on other people's work, and the reading list is half the value of the write-up:
+      This project builds directly on other people's work, and the reading list is half the value of the writeup.
     </p>
     <ul>
-      <li><strong>Philippe Tillet and the Triton team at OpenAI</strong>: <a href="https://github.com/triton-lang/triton" target="_blank" rel="noopener">Triton</a> defined the block programming model that newt copies; the MAPL 2019 paper is still the best short read on why the block level is the right level.</li>
+      <li><strong>Philippe Tillet and the Triton team at OpenAI</strong>: <a href="https://github.com/triton-lang/triton" target="_blank" rel="noopener">Triton</a> defined the block programming model that newt copies, and the MAPL 2019 paper is still the best short read on why the block level is the right level to program at.</li>
       <li><strong>Jason Ansel and the PyTorch compiler team</strong>: <a href="https://github.com/pytorch/helion" target="_blank" rel="noopener">Helion</a> is the tile-level layer deuteron miniaturizes, and the correctness-first autotuning idea is theirs.</li>
-      <li><strong>Simon Boehm</strong>: <a href="https://siboehm.com/articles/22/CUDA-MMM" target="_blank" rel="noopener">How to Optimize a CUDA Matmul Kernel</a> is the classic worklog of the compute-roof fight; if you enjoyed the matmul section, read it next.</li>
-      <li><strong>Horace He</strong>: <a href="https://horace.io/brrr_intro.html" target="_blank" rel="noopener">Making Deep Learning Go Brrrr From First Principles</a> is the cleanest telling of the memory-bound vs compute-bound framing used throughout this post.</li>
-      <li><strong>Sasha Rush</strong>: <a href="https://github.com/srush/GPU-Puzzles" target="_blank" rel="noopener">GPU Puzzles</a> and <a href="https://github.com/srush/Triton-Puzzles" target="_blank" rel="noopener">Triton Puzzles</a>, the hands-on way to learn everything above.</li>
-      <li><strong>Tri Dao</strong>: <a href="https://github.com/Dao-AILab/flash-attention" target="_blank" rel="noopener">FlashAttention</a> is where fused attention comes from; the repo's fused-attention example is a homage.</li>
-      <li><strong>Mark Saroufim and the <a href="https://github.com/gpu-mode/lectures" target="_blank" rel="noopener">GPU MODE</a> community</strong>: the lectures and Discord where kernel knowledge actually circulates.</li>
-      <li><strong>Andrej Karpathy</strong>: <a href="https://github.com/karpathy/nanoGPT" target="_blank" rel="noopener">nanoGPT</a> and <a href="https://github.com/karpathy/llm.c" target="_blank" rel="noopener">llm.c</a> set the tone for minimal rebuilds that keep real performance.</li>
-      <li><strong>NVIDIA docs</strong>: the <a href="https://docs.nvidia.com/cuda/parallel-thread-execution/" target="_blank" rel="noopener">PTX ISA</a> sections on mma and ldmatrix document the exact register mappings newt relies on, and <a href="https://docs.nvidia.com/cuda/nvrtc/" target="_blank" rel="noopener">NVRTC</a> is the library that makes a 4,000-line compiler possible at all.</li>
+      <li><strong>Simon Boehm</strong>: <a href="https://siboehm.com/articles/22/CUDA-MMM" target="_blank" rel="noopener">How to Optimize a CUDA Matmul Kernel</a> is the classic worklog of the same compute-bound problem; if you want the CUDA-level version of the matmul section, read it next.</li>
+      <li><strong>Horace He</strong>: <a href="https://horace.io/brrr_intro.html" target="_blank" rel="noopener">Making Deep Learning Go Brrrr From First Principles</a> is the clearest explanation of the memory-bound versus compute-bound distinction used throughout this post.</li>
+      <li><strong>Sasha Rush</strong>: <a href="https://github.com/srush/GPU-Puzzles" target="_blank" rel="noopener">GPU Puzzles</a> and <a href="https://github.com/srush/Triton-Puzzles" target="_blank" rel="noopener">Triton Puzzles</a>, the hands-on way to learn the material above.</li>
+      <li><strong>Tri Dao</strong>: <a href="https://github.com/Dao-AILab/flash-attention" target="_blank" rel="noopener">FlashAttention</a> is the origin of fused attention; the fused-attention example in the repo is a homage to it.</li>
+      <li><strong>Mark Saroufim and the <a href="https://github.com/gpu-mode/lectures" target="_blank" rel="noopener">GPU MODE</a> community</strong>: the lectures and Discord where much of this knowledge circulates.</li>
+      <li><strong>Andrej Karpathy</strong>: <a href="https://github.com/karpathy/nanoGPT" target="_blank" rel="noopener">nanoGPT</a> and <a href="https://github.com/karpathy/llm.c" target="_blank" rel="noopener">llm.c</a> set the precedent for small rebuilds that keep real performance.</li>
+      <li><strong>NVIDIA's documentation</strong>: the <a href="https://docs.nvidia.com/cuda/parallel-thread-execution/" target="_blank" rel="noopener">PTX ISA</a> pages on mma and ldmatrix document the exact register mappings newt depends on, and <a href="https://docs.nvidia.com/cuda/nvrtc/" target="_blank" rel="noopener">NVRTC</a> is the library that makes a 4,000-line compiler possible.</li>
     </ul>
 
     <div class="blog-cta">
