@@ -60,13 +60,13 @@
   <h2 class="section-title">Research &amp; AI Systems</h2>
   <div class="projects-grid">
 
-    <a class="project-entry" href="https://github.com/arpitsinghgautam/newt" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <a class="project-entry" href="/blog/nano-triton" style="text-decoration:none;color:inherit">
       <img class="project-thumb" src="assets/img/portfolio/newt-thumb.svg" alt="newt and deuteron - mini-Triton JIT compiler" decoding="async" loading="lazy">
       <div class="project-info">
-        <div class="project-title">newt &amp; deuteron <i class="fas fa-external-link-alt" style="font-size:0.7rem;color:var(--text-muted)" aria-hidden="true"></i></div>
-        <div class="project-desc">A mini-Triton JIT compiler for LLM GPU kernels: maps Python block-level semantics to GPU thread layouts via NVRTC. Reaches bandwidth parity with OpenAI Triton on memory-bound kernels (Softmax, LayerNorm) and 110 TFLOP/s on FP16 tensor-core matmuls, using custom PTX intrinsics, swizzled shared memory, and software pipelining.</div>
+        <div class="project-title">newt &amp; deuteron <span style="font-size:0.72rem;background:var(--accent);color:#fff;padding:1px 7px;border-radius:10px;margin-left:6px;font-weight:600">~4,000 lines</span></div>
+        <div class="project-desc">The Triton + Helion GPU kernel stack rebuilt from scratch: Python JIT-compiled to real tensor-core machine code via NVRTC, raw <code>mma</code>/<code>ldmatrix</code> PTX with XOR-swizzled shared memory, and a correctness-first autotuner. Memory-bandwidth parity with Triton and ~92% of its cold fp16 matmul. Read the writeup.</div>
         <div class="tags"><span class="tag">Compilers</span><span class="tag">CUDA / PTX</span><span class="tag">GPU Kernels</span><span class="tag">Triton</span></div>
-        <div class="project-date" style="margin-top:6px">2026 · GitHub ↗</div>
+        <div class="project-date" style="margin-top:6px">2026 · MIT licensed · site + code</div>
       </div>
     </a>
 

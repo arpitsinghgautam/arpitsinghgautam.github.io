@@ -921,6 +921,7 @@ p { margin-top: 0; margin-bottom: 1rem; }
 /* --- Blog figures: inline SVG, inherits the light/dark toggle via CSS vars --- */
 .blog-fig { margin: 28px 0; }
 .blog-fig svg { display: block; width: 100%; height: auto; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 8px; }
+.blog-fig img { display: block; width: 100%; height: auto; margin: 0; }
 .blog-fig figcaption { margin-top: 9px; font-size: 0.84rem; color: var(--text-muted); line-height: 1.55; text-align: center; }
 .blog-fig figcaption b { color: var(--text); font-weight: 600; }
 .fig-mono { font-family: var(--font-mono); }

@@ -47,6 +47,12 @@
 
   <!-- Blog posts -->
   <url>
+    <loc>https://arpitsinghgautam.me/blog/nano-triton</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://arpitsinghgautam.me/blog/sair-distillation-challenge</loc>
     <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
