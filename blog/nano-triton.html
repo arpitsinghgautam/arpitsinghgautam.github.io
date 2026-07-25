@@ -103,7 +103,7 @@
     </ul>
 
     <figure class="blog-fig">
-      <img src="/nano-triton/assets/stack.svg" alt="Two layers mirror two layers: newt maps to Triton, deuteron maps to Helion" decoding="async" loading="lazy">
+      <img src="/nano-triton/assets/stack.svg" alt="Two layers mirror two layers: newt maps to Triton, deuteron maps to Helion" decoding="async" loading="lazy" width="880" height="320">
       <figcaption>Two layers mirroring two layers. The naming is not a joke at the expense of the originals: it is a promise that the <b>architecture</b> is the same, only the surface area is smaller.</figcaption>
     </figure>
 
@@ -128,7 +128,7 @@ def add_kernel(x_ptr, y_ptr, out_ptr, n, BLOCK: nl.constexpr):
     </p>
 
     <figure class="blog-fig">
-      <img src="/nano-triton/assets/pipeline.svg" alt="How a newt kernel runs: Python AST to typed block values to CUDA C++ to NVRTC to cubin" decoding="async" loading="lazy">
+      <img src="/nano-triton/assets/pipeline.svg" alt="How a newt kernel runs: Python AST to typed block values to CUDA C++ to NVRTC to cubin" decoding="async" loading="lazy" width="880" height="430">
       <figcaption>The compilation path. Everything to the right of the CUDA C++ string is rented from NVIDIA, which is precisely why the whole thing fits in 4,000 lines.</figcaption>
     </figure>
 
@@ -142,7 +142,7 @@ def add_kernel(x_ptr, y_ptr, out_ptr, n, BLOCK: nl.constexpr):
     </p>
 
     <figure class="blog-fig">
-      <img src="/nano-triton/assets/layout.svg" alt="The group-cyclic layout: consecutive elements dealt to threads in 16-byte groups, round robin" decoding="async" loading="lazy">
+      <img src="/nano-triton/assets/layout.svg" alt="The group-cyclic layout: consecutive elements dealt to threads in 16-byte groups, round robin" decoding="async" loading="lazy" width="880" height="250">
       <figcaption>One rule decides where every element of a block lives. Getting this single decision right is what removes the need for a whole analysis subsystem.</figcaption>
     </figure>
 
@@ -162,7 +162,7 @@ def add_kernel(x_ptr, y_ptr, out_ptr, n, BLOCK: nl.constexpr):
     </p>
 
     <figure class="blog-fig">
-      <img src="/nano-triton/assets/bench-membound.svg" alt="Memory-bound benchmarks: newt reaches parity with Triton" decoding="async" loading="lazy">
+      <img src="/nano-triton/assets/bench-membound.svg" alt="Memory-bound benchmarks: newt reaches parity with Triton" decoding="async" loading="lazy" width="880" height="340">
       <figcaption>Same kernel source (modulo <code>nl</code> vs <code>tl</code>), same config sweep, medians over 50 reps with the L2 cache flushed between reps.</figcaption>
     </figure>
 
@@ -176,7 +176,7 @@ def add_kernel(x_ptr, y_ptr, out_ptr, n, BLOCK: nl.constexpr):
     </p>
 
     <figure class="blog-fig">
-      <img src="/nano-triton/assets/journey.svg" alt="The fp16 matmul journey: 63 to 80 to 110 TFLOP per second across three generations" decoding="async" loading="lazy">
+      <img src="/nano-triton/assets/journey.svg" alt="The fp16 matmul journey: 63 to 80 to 110 TFLOP per second across three generations" decoding="async" loading="lazy" width="880" height="330">
       <figcaption>Three generations of <code>dot</code>. Each step is a scheduling idea, not a micro-optimization, which is why each one is worth reading as its own commit.</figcaption>
     </figure>
 
@@ -191,7 +191,7 @@ def add_kernel(x_ptr, y_ptr, out_ptr, n, BLOCK: nl.constexpr):
     </p>
 
     <figure class="blog-fig">
-      <img src="/nano-triton/assets/ring.svg" alt="The cp.async ring: consume the tile staged S-1 iterations ago, then start this iteration's copy" decoding="async" loading="lazy">
+      <img src="/nano-triton/assets/ring.svg" alt="The cp.async ring: consume the tile staged S-1 iterations ago, then start this iteration's copy" decoding="async" loading="lazy" width="880" height="330">
       <figcaption>Deferred consumption. You cannot prefetch a tile whose address does not exist yet, but you can delay the math by S-1 iterations and buy exactly the same overlap.</figcaption>
     </figure>
 
@@ -203,7 +203,7 @@ def add_kernel(x_ptr, y_ptr, out_ptr, n, BLOCK: nl.constexpr):
     </p>
 
     <figure class="blog-fig">
-      <img src="/nano-triton/assets/bench-matmul.svg" alt="fp16 matmul across sizes: newt versus Triton" decoding="async" loading="lazy">
+      <img src="/nano-triton/assets/bench-matmul.svg" alt="fp16 matmul across sizes: newt versus Triton" decoding="async" loading="lazy" width="880" height="360">
       <figcaption>fp16 matmul across sizes. The gap that remains is Triton's finest-grained machinery, and it is documented rather than hand-waved.</figcaption>
     </figure>
 
@@ -227,7 +227,7 @@ def matmul(x, y, out):
     </p>
 
     <figure class="blog-fig">
-      <img src="/nano-triton/assets/deuteron.svg" alt="What happens on a deuteron kernel's first call: trace, generate, autotune against an eager oracle" decoding="async" loading="lazy">
+      <img src="/nano-triton/assets/deuteron.svg" alt="What happens on a deuteron kernel's first call: trace, generate, autotune against an eager oracle" decoding="async" loading="lazy" width="880" height="270">
       <figcaption>A deuteron kernel's first call. The oracle path on the left is what makes the autotuner trustworthy rather than merely fast.</figcaption>
     </figure>
 
