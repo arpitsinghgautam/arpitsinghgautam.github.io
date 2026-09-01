@@ -13,19 +13,19 @@
   <meta property="og:title" content="Distilling Math Reasoning into a 7.44 KB Cheatsheet - Arpit Singh Gautam">
   <meta property="og:description" content="My SAIR Mathematics Distillation Challenge run: a two-phase decision procedure for equational implication over magmas, tuned on the accuracy-cost-size frontier.">
   <meta property="og:url" content="https://arpitsinghgautam.me/blog/sair-distillation-challenge">
-  <meta property="og:image" content="https://arpitsinghgautam.me/assets/img/section/about1.jpg">
+  <meta property="og:image" content="https://arpitsinghgautam.me/assets/img/blog/sair-thumb-16x9.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@Asg_Wolverine">
   <meta name="twitter:creator" content="@Asg_Wolverine">
   <meta name="twitter:title" content="Distilling Math Reasoning into a 7.44 KB Cheatsheet - Arpit Singh Gautam">
   <meta name="twitter:description" content="My SAIR Mathematics Distillation Challenge run: a two-phase decision procedure for equational implication over magmas, tuned on the accuracy-cost-size frontier.">
-  <meta name="twitter:image" content="https://arpitsinghgautam.me/assets/img/section/about1.jpg">
+  <meta name="twitter:image" content="https://arpitsinghgautam.me/assets/img/blog/sair-thumb-16x9.png">
   <title>Distilling Math Reasoning into a 7.44 KB Cheatsheet - Arpit Singh Gautam</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="stylesheet" href="../assets/css/fontawesome.css">
   <link rel="stylesheet" href="../assets/css/main.css">
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Distilling Math Reasoning into a 7.44 KB Cheatsheet: My SAIR Equational-Theories Run", "image": "https://arpitsinghgautam.me/assets/img/section/about1.jpg", "author": {"@type": "Person", "name": "Arpit Singh Gautam", "url": "https://arpitsinghgautam.me/"}, "publisher": {"@type": "Person", "name": "Arpit Singh Gautam"}, "mainEntityOfPage": "https://arpitsinghgautam.me/blog/sair-distillation-challenge"}
+  {"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Distilling Math Reasoning into a 7.44 KB Cheatsheet: My SAIR Equational-Theories Run", "image": "https://arpitsinghgautam.me/assets/img/blog/sair-thumb-16x9.png", "author": {"@type": "Person", "name": "Arpit Singh Gautam", "url": "https://arpitsinghgautam.me/"}, "publisher": {"@type": "Person", "name": "Arpit Singh Gautam"}, "mainEntityOfPage": "https://arpitsinghgautam.me/blog/sair-distillation-challenge"}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arpitsinghgautam.me/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://arpitsinghgautam.me/blog"}, {"@type": "ListItem", "position": 3, "name": "Distilling Math Reasoning into a 7.44 KB Cheatsheet", "item": "https://arpitsinghgautam.me/blog/sair-distillation-challenge"}]}
@@ -94,7 +94,8 @@
     <p>
       Given two equational laws, does Equation 1 <strong>imply</strong> Equation 2 over <em>all</em> magmas?
     </p>
-    <pre><code>Example: E_4 (x = x * y)  implies  E_3 (x = x * x).</code></pre>
+    <math class="eqn" display="block" data-tex="E_4 : (x = x * y) \implies E_3 : (x = x * x)"><msub><mi>E</mi><mn>4</mn></msub><mo>:</mo><mo form="prefix">(</mo><mi>x</mi><mo>=</mo><mi>x</mi><mo>∗</mo><mi>y</mi><mo form="postfix">)</mo><mo>⟹</mo><msub><mi>E</mi><mn>3</mn></msub><mo>:</mo><mo form="prefix">(</mo><mi>x</mi><mo>=</mo><mi>x</mi><mo>∗</mo><mi>x</mi><mo form="postfix">)</mo></math>
+    <p class="eqn-note">An example instance: does law 4 imply law 3 in every magma?</p>
     <p>
       This is deceptively hard. The answer is a universally quantified statement over every possible magma, so a single counterexample magma settles a FALSE, but proving TRUE means the implication holds in structures you never explicitly checked.
     </p>

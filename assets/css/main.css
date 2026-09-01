@@ -930,6 +930,49 @@ p { margin-top: 0; margin-bottom: 1rem; }
 .blog-cta p { margin: 0; font-size: 0.93rem; }
 
 /* ================================================================
+   MATHEMATICS
+   Native MathML, compiled from LaTeX at build time by
+   generators/render_math.py. The LaTeX source of each equation lives in
+   its data-tex attribute; edit that and re-run the generator, never edit
+   the MathML by hand. No KaTeX, no MathJax, no CDN request: the maths
+   inherits the page colour, the reader's text size and the light/dark
+   theme for free, and there is no flash of unstyled formulae on load.
+   ================================================================ */
+math {
+  font-family: "Cambria Math", "Latin Modern Math", "STIX Two Math", "TeX Gyre Termes Math", serif;
+  color: var(--text);
+  font-style: normal;
+}
+/* Displayed equation: centred, breathing room, scrolls rather than
+   overflowing the column on a narrow screen.
+   Do NOT set `display: block` here. The browser gives block equations
+   `display: block math`, and overriding it with plain `block` turns every
+   child into a block box, so the equation stacks vertically instead of
+   laying out as maths. Leave display alone and style around it. */
+math[display="block"] {
+  text-align: center;
+  font-size: 1.1rem;
+  margin: 26px 0;
+  padding: 4px 2px;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+/* Inline maths sits on the text baseline without stretching the line box. */
+.blog-post-body math:not([display="block"]) {
+  font-size: 1.05em;
+  line-height: 1;
+  white-space: nowrap;
+}
+/* Optional caption under a displayed equation, for naming or sourcing it. */
+.eqn-note {
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin: -14px 0 26px;
+}
+
+/* ================================================================
    RESPONSIVE
    ================================================================ */
 @media (max-width: 620px) {
