@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6P1E490Z0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X6P1E490Z0');</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="On-policy distillation supervision disagrees with ground truth up to 50.6% of the time and the student converges anyway. A close reading of arXiv:2608.31046.">
+  <link rel="canonical" href="https://arpitsinghgautam.me/blog/on-policy-distillation-noisy-teacher">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Arpit Singh Gautam">
+  <meta property="og:title" content="Why On-Policy Distillation Works Even When the Teacher Is Wrong Half the Time - Arpit Singh Gautam">
+  <meta property="og:description" content="On-policy distillation supervision disagrees with ground truth up to 50.6% of the time and the student converges anyway. A close reading of arXiv:2608.31046.">
+  <meta property="og:url" content="https://arpitsinghgautam.me/blog/on-policy-distillation-noisy-teacher">
+  <meta property="og:image" content="https://arpitsinghgautam.me/assets/img/blog/on-policy-distillation-noisy-teacher-thumb.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@Asg_Wolverine">
+  <meta name="twitter:creator" content="@Asg_Wolverine">
+  <meta name="twitter:title" content="Why On-Policy Distillation Works Even When the Teacher Is Wrong Half the Time - Arpit Singh Gautam">
+  <meta name="twitter:description" content="On-policy distillation supervision disagrees with ground truth up to 50.6% of the time and the student converges anyway. A close reading of arXiv:2608.31046.">
+  <meta name="twitter:image" content="https://arpitsinghgautam.me/assets/img/blog/on-policy-distillation-noisy-teacher-thumb.png">
+  <title>Why On-Policy Distillation Works Even When the Teacher Is Wrong Half the Time - Arpit Singh Gautam</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="../assets/css/fontawesome.css">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Why On-Policy Distillation Works Even When the Teacher Is Wrong Half the Time", "image": "https://arpitsinghgautam.me/assets/img/blog/on-policy-distillation-noisy-teacher-thumb.png", "datePublished": "2026-09-01", "author": {"@type": "Person", "name": "Arpit Singh Gautam", "url": "https://arpitsinghgautam.me/"}, "publisher": {"@type": "Person", "name": "Arpit Singh Gautam"}, "mainEntityOfPage": "https://arpitsinghgautam.me/blog/on-policy-distillation-noisy-teacher"}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arpitsinghgautam.me/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://arpitsinghgautam.me/blog"}, {"@type": "ListItem", "position": 3, "name": "Why On-Policy Distillation Works Even When the Teacher Is Wrong Half the Time", "item": "https://arpitsinghgautam.me/blog/on-policy-distillation-noisy-teacher"}]}
+  </script>
+  <style>
+    /* Figure-local classes, scoped per figure so the three inline SVGs cannot collide. */
+    #opdf1 .ttl, #opdf2 .ttl, #opdf3 .ttl { fill: var(--text); font-size: 13.5px; font-weight: 600; }
+    #opdf1 .hd,  #opdf2 .hd,  #opdf3 .hd  { fill: var(--text); font-size: 12.5px; font-weight: 600; }
+    #opdf1 .lb,  #opdf2 .lb,  #opdf3 .lb  { fill: var(--text-muted); font-size: 11px; }
+    /* Maths inside the figure. MathML cannot live in SVG, so identifiers are italic
+       serif with real subscripts, matching the displayed equations in the body. */
+    #opdf1 .mth { fill: var(--text-muted); font-size: 12px;
+                  font-family: "Cambria Math", "Latin Modern Math", "STIX Two Math", Georgia, serif; }
+    #opdf1 .mth-in { font-family: "Cambria Math", "Latin Modern Math", "STIX Two Math", Georgia, serif; }
+    #opdf1 .lb-in { font-family: var(--font); font-style: normal; }
+    #opdf1 .pos { fill: var(--link); font-size: 12.5px; font-weight: 700;
+                  font-family: "Cambria Math", "Latin Modern Math", Georgia, serif; }
+    #opdf1 .neg { fill: var(--accent); font-size: 12.5px; font-weight: 700;
+                  font-family: "Cambria Math", "Latin Modern Math", Georgia, serif; }
+    #opdf2 .lbs { fill: var(--text-muted); font-size: 10px; }
+    #opdf2 .val { fill: var(--text); font-size: 11px; font-family: var(--font-mono); }
+    #opdf2 .big { fill: var(--accent); font-size: 19px; font-weight: 700; font-family: var(--font-mono); }
+    #opdf2 .tag { fill: var(--accent); font-size: 9.5px; font-weight: 700; letter-spacing: 0.06em; }
+    #opdf3 .ax { fill: var(--text-muted); font-size: 10px; }
+    #opdf3 .xl { fill: var(--text); font-size: 11px; }
+    #opdf3 .b0 { fill: var(--bg-hover); stroke: var(--border); stroke-width: 1; }
+    #opdf3 .b1 { fill: var(--accent); }
+    #opdf3 .b2 { fill: var(--link); }
+    #opdf3 .b3 { fill: var(--link); fill-opacity: 0.42; stroke: var(--link); stroke-width: 1; }
+    #opdf3 .grid { stroke: var(--border); stroke-width: 1; stroke-dasharray: 2 4; }
+  </style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<button id="back-to-top" title="Back to top" aria-label="Back to top"><i class="fas fa-arrow-up" aria-hidden="true"></i></button>
+
+<header class="site-header">
+  <div class="header-top">
+    <a class="nav-brand" href="/">Arpit Singh <span class="brand-accent">Gautam</span></a>
+    <div class="header-icons">
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap" aria-hidden="true"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle dark mode">🌙</button>
+    </div>
+  </div>
+  <div class="header-nav">
+    <a href="/">About</a>
+    <a href="/publications">Publications</a>
+    <a href="/experience">Experience</a>
+    <a href="/media-awards">Media &amp; Awards</a>
+    <a href="/projects">Projects</a>
+    <a href="/blog" class="active">Blog</a>
+    <a href="/misc">Misc</a>
+  </div>
+</header>
+
+<main class="page-wrap" id="main" tabindex="-1">
+
+  <div class="blog-post-hero">
+    <div class="breadcrumb"><a href="/blog">← Blog</a></div>
+    <h1>Why On-Policy Distillation Works Even When the Teacher Is Wrong Half the Time</h1>
+    <div class="blog-post-meta">
+      <span><i class="fas fa-calendar-alt" aria-hidden="true"></i> Sep 2026</span>
+      <span><i class="fas fa-clock" aria-hidden="true"></i> 11 min read</span>
+      <span><i class="fas fa-tag" aria-hidden="true"></i> Distillation · RL · Post-Training</span>
+    </div>
+  </div>
+
+  <div class="blog-post-body">
+
+    <blockquote>
+      This post is a close reading of someone else's work. The paper is <a href="https://arxiv.org/abs/2608.31046" target="_blank" rel="noopener">Does On-Policy Distillation Really Distill? From Noisy Teacher to Self-Improvement</a> by <strong>Yi Ding and Ruqi Zhang</strong>, posted to arXiv on 31 August 2026 as arXiv:2608.31046. Every number below is theirs unless I say otherwise, and where I do arithmetic on top of their numbers I mark it. The figures here are mine; their figures stay in their paper and I link to them.
+    </blockquote>
+
+    <p>
+      On-policy distillation is supposed to be the well-behaved option. You let the student generate its own trajectories, you have a bigger teacher score every token, and instead of one sparse reward at the end of a rollout you get dense supervision everywhere. That is the pitch, and it is a good pitch.
+    </p>
+    <p>
+      Ding and Zhang measured how good that dense supervision actually is. On student-sampled trajectories, the sign of the teacher's token-level advantage disagrees with ground-truth correctness <strong>30.6% of the time for a 4B teacher, 34.7% for a 30B-A3B teacher, and 50.6% for a 235B-A22B teacher.</strong> The biggest teacher is at coin-flip agreement with the truth.
+    </p>
+    <p>
+      Then they checked whether it mattered. Train on only the noisy trajectories, train on only the clean ones, or train normally, and the student converges to comparable performance in a comparable number of gradient steps.
+    </p>
+    <p>
+      That is the interesting part. Not that the supervision is noisy, but that the student is indifferent to it. If the signal can be half wrong and produce the same result, the signal is not what is doing the work.
+    </p>
+
+    <h2>What the advantage actually is</h2>
+
+    <p>
+      Start with the objective, because the whole result falls out of it. On-policy distillation minimises the reverse KL between student and teacher over trajectories the student sampled itself. Written as a policy gradient, each token carries an advantage:
+    </p>
+
+    <math class="eqn" display="block" data-tex="A_i = \log\frac{\pi_t(y_i \mid x, y_{&lt;i})}{\pi_s(y_i \mid x, y_{&lt;i})}"><msub><mi>A</mi><mi>i</mi></msub><mo>=</mo><mi mathvariant="normal">log</mi><mo>⁡</mo><mfrac><mrow><msub><mi>π</mi><mi>t</mi></msub><mo form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>∣</mo><mi>x</mi><mo separator="true">,</mo><msub><mi>y</mi><mrow><mo lspace="0" rspace="0">&lt;</mo><mi>i</mi></mrow></msub><mo form="postfix">)</mo></mrow><mrow><msub><mi>π</mi><mi>s</mi></msub><mo form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>∣</mo><mi>x</mi><mo separator="true">,</mo><msub><mi>y</mi><mrow><mo lspace="0" rspace="0">&lt;</mo><mi>i</mi></mrow></msub><mo form="postfix">)</mo></mrow></mfrac></math>
+
+    <p>
+      Look at what that quantity is. It is positive when the teacher assigns more probability mass to the sampled token than the student did, and negative when it assigns less. It is a measure of <strong>disagreement in confidence</strong>. There is nothing in it that knows whether the trajectory ended in a correct answer.
+    </p>
+    <p>
+      Most of the time that is a reasonable proxy. A stronger model probably does put more mass on better continuations. But the proxy breaks in a specific and predictable place.
+    </p>
+
+    <figure class="blog-fig">
+      <svg id="opdf1" viewBox="0 0 720 350" width="720" height="350" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="f1t f1d">
+        <title id="f1t">What the on-policy distillation advantage actually measures</title>
+        <desc id="f1d">Two token positions compared. Where the student is unsure the teacher-student log ratio is informative. At the answer token the student has committed, so the ratio is pinned negative whatever the teacher believes.</desc>
+        <rect width="720" height="350" fill="var(--bg-subtle)"/>
+        <text class="ttl fig-sans" x="30" y="26">The OPD advantage measures disagreement in confidence, not correctness</text>
+        <text class="mth" x="30" y="45"><tspan font-style="italic">A</tspan><tspan font-size="0.72em" dy="2.4">i</tspan><tspan dy="-2.4"> </tspan><tspan>=</tspan><tspan> </tspan><tspan>log</tspan><tspan>(</tspan><tspan> </tspan><tspan font-style="italic">π</tspan><tspan font-size="0.72em" dy="2.4">t</tspan><tspan dy="-2.4">(</tspan><tspan font-style="italic">y</tspan><tspan font-size="0.72em" dy="2.4">i</tspan><tspan dy="-2.4">)</tspan><tspan> </tspan><tspan>/</tspan><tspan> </tspan><tspan font-style="italic">π</tspan><tspan font-size="0.72em" dy="2.4">s</tspan><tspan dy="-2.4">(</tspan><tspan font-style="italic">y</tspan><tspan font-size="0.72em" dy="2.4">i</tspan><tspan dy="-2.4">)</tspan><tspan> </tspan><tspan>)</tspan><tspan class="lb-in">     positive when the teacher likes the sampled token more than the student did</tspan></text>
+        <line x1="365" y1="60" x2="365" y2="300" stroke="var(--border)" stroke-width="1" stroke-dasharray="3 3"/>
+        <text class="hd fig-sans" x="30" y="80">Mid-trajectory: the student is unsure</text>
+        <text class="lb fig-sans" x="30" y="145">student</text>
+        <text class="mth" x="30" y="159"><tspan font-style="italic">π</tspan><tspan font-size="0.72em" dy="2.4">s</tspan><tspan dy="-2.4"> </tspan></text>
+        <line x1="84" y1="170" x2="250" y2="170" stroke="var(--border)" stroke-width="1"/>
+        <rect x="84"  y="149" width="34" height="21" fill="var(--accent)"/>
+        <rect x="142" y="152" width="34" height="18" fill="var(--bg-hover)" stroke="var(--border)"/>
+        <rect x="200" y="158" width="34" height="12" fill="var(--bg-hover)" stroke="var(--border)"/>
+        <text class="mth" x="86" y="144">0.35</text>
+        <text class="lb fig-sans" x="30" y="227">teacher</text>
+        <text class="mth" x="30" y="241"><tspan font-style="italic">π</tspan><tspan font-size="0.72em" dy="2.4">t</tspan><tspan dy="-2.4"> </tspan></text>
+        <line x1="84" y1="252" x2="250" y2="252" stroke="var(--border)" stroke-width="1"/>
+        <rect x="84"  y="219" width="34" height="33" fill="var(--link)"/>
+        <rect x="142" y="240" width="34" height="12" fill="var(--bg-hover)" stroke="var(--border)"/>
+        <rect x="200" y="243" width="34" height="9"  fill="var(--bg-hover)" stroke="var(--border)"/>
+        <text class="mth" x="86" y="214">0.55</text>
+        <text class="lb fig-sans" x="84"  y="268">sampled</text>
+        <text class="lb fig-sans" x="150" y="268">alt</text>
+        <text class="lb fig-sans" x="208" y="268">alt</text>
+        <text class="mth" x="262" y="186"><tspan font-style="italic">A</tspan><tspan font-size="0.72em" dy="2.4">i</tspan><tspan dy="-2.4"> </tspan><tspan>=</tspan><tspan> </tspan><tspan>log</tspan><tspan>(</tspan><tspan>0</tspan><tspan>.</tspan><tspan>5</tspan><tspan>5</tspan><tspan>/</tspan><tspan>0</tspan><tspan>.</tspan><tspan>3</tspan><tspan>5</tspan><tspan>)</tspan></text>
+        <text class="pos" x="262" y="204">= +0.45</text>
+        <text class="lb fig-sans" x="262" y="222">informative</text>
+        <text class="hd fig-sans" x="392" y="80">Answer token: the student has committed</text>
+        <text class="lb fig-sans" x="392" y="145">student</text>
+        <text class="mth" x="392" y="159"><tspan font-style="italic">π</tspan><tspan font-size="0.72em" dy="2.4">s</tspan><tspan dy="-2.4"> </tspan></text>
+        <line x1="446" y1="170" x2="612" y2="170" stroke="var(--border)" stroke-width="1"/>
+        <rect x="446" y="112"   width="34" height="58"  fill="var(--accent)"/>
+        <rect x="504" y="168.8" width="34" height="1.2" fill="var(--bg-hover)" stroke="var(--border)"/>
+        <rect x="562" y="169.4" width="34" height="0.6" fill="var(--bg-hover)" stroke="var(--border)"/>
+        <text class="mth" x="448" y="107">0.97</text>
+        <text class="lb fig-sans" x="392" y="227">teacher</text>
+        <text class="mth" x="392" y="241"><tspan font-style="italic">π</tspan><tspan font-size="0.72em" dy="2.4">t</tspan><tspan dy="-2.4"> </tspan></text>
+        <line x1="446" y1="252" x2="612" y2="252" stroke="var(--border)" stroke-width="1"/>
+        <rect x="446" y="216" width="34" height="36" fill="var(--link)"/>
+        <rect x="504" y="237" width="34" height="15" fill="var(--bg-hover)" stroke="var(--border)"/>
+        <rect x="562" y="246" width="34" height="6"  fill="var(--bg-hover)" stroke="var(--border)"/>
+        <text class="mth" x="448" y="211">0.60</text>
+        <text class="lb fig-sans" x="440" y="268">boxed answer</text>
+        <text class="lb fig-sans" x="570" y="268">alt</text>
+        <text class="mth" x="624" y="186"><tspan>log</tspan><tspan>(</tspan><tspan>0</tspan><tspan>.</tspan><tspan>6</tspan><tspan>0</tspan><tspan>/</tspan><tspan>0</tspan><tspan>.</tspan><tspan>9</tspan><tspan>7</tspan><tspan>)</tspan></text>
+        <text class="neg" x="624" y="204">= -0.48</text>
+        <text class="lb fig-sans" x="624" y="222">pinned</text>
+        <line x1="30" y1="292" x2="690" y2="292" stroke="var(--border)" stroke-width="1"/>
+        <text class="lb fig-sans" x="30" y="311">Once <tspan class="mth-in"><tspan font-style="italic">π</tspan><tspan font-size="0.72em" dy="2.4">s</tspan><tspan dy="-2.4"> </tspan></tspan> is close to 1 the ratio <tspan class="mth-in"><tspan font-style="italic">π</tspan><tspan font-size="0.72em" dy="2.4">t</tspan><tspan dy="-2.4"> </tspan><tspan>/</tspan><tspan> </tspan><tspan font-style="italic">π</tspan><tspan font-size="0.72em" dy="2.4">s</tspan><tspan dy="-2.4"> </tspan></tspan> cannot rise far above 1, so the advantage at the answer position is</text>
+        <text class="lb fig-sans" x="30" y="327">negative whether the answer is right or wrong. Measured on the 235B-A22B teacher: 97.8% of correct answers and 96.6% of incorrect answers get a</text>
+        <text class="lb fig-sans" x="30" y="343">negative advantage. Bar values are illustrative. The two percentages are from arXiv:2608.31046 Section 2.2.</text>
+      </svg>
+      <figcaption><b>Figure 1.</b> The same quantity behaves differently depending on how confident the student already is. Bar values are illustrative; the two percentages are measured in Section 2.2 of the paper. Figure mine.</figcaption>
+    </figure>
+
+    <p>
+      Consider the token inside <code>\boxed{}</code>. By the time the student emits it, it has already done the reasoning and committed to an answer, so <math data-tex="\pi_s"><msub><mi>π</mi><mi>s</mi></msub></math> for that token is close to 1. The ratio <math data-tex="\pi_t / \pi_s"><msub><mi>π</mi><mi>t</mi></msub><mo>/</mo><msub><mi>π</mi><mi>s</mi></msub></math> is then bounded above by roughly <math data-tex="1/\pi_s"><mn>1</mn><mo>/</mo><msub><mi>π</mi><mi>s</mi></msub></math>, which is barely above 1. Whatever the teacher believes about the answer, the log ratio at a position where the student is already certain is pinned near zero or below it.
+    </p>
+    <p>
+      The paper measures exactly this for the 235B-A22B teacher: <strong>97.8% of <code>\boxed{}</code> answer tokens get a negative advantage when the answer is correct, and 96.6% get one when it is wrong.</strong>
+    </p>
+
+    <h2>The teacher is a below-chance judge of its student's answers</h2>
+
+    <p>
+      Those two numbers are worth pushing on, and this next bit is my arithmetic rather than the paper's.
+    </p>
+    <p>
+      Treat the sign of the advantage on the answer token as a prediction: positive means "this trajectory is correct". Sensitivity is 2.2%. Specificity is 96.6%. Balanced accuracy is <math data-tex="(2.2 + 96.6)/2 = 49.4\%"><mo form="prefix">(</mo><mn>2.2</mn><mo>+</mo><mn>96.6</mn><mo form="postfix">)</mo><mo>/</mo><mn>2</mn><mo>=</mo><mn>49.4</mn><mtext>%</mtext></math>, which is a shade under a coin flip.
+    </p>
+    <p>
+      Worse, the sign points the wrong way. A positive signal appears on 3.4% of incorrect trajectories and only 2.2% of correct ones. At the single position in the entire rollout that carries the answer, a vote of confidence from the teacher is very slightly evidence that the answer is wrong.
+    </p>
+
+    <figure class="blog-fig">
+      <svg id="opdf2" viewBox="0 0 720 360" width="720" height="360" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="f2t f2d">
+        <title id="f2t">The teacher's answer-token signal read as a correctness classifier</title>
+        <desc id="f2d">For the 235B-A22B teacher, 97.8 percent of correct trajectories and 96.6 percent of incorrect trajectories get a negative advantage on the boxed answer token. Read as a classifier this gives balanced accuracy of 49.4 percent, and a positive signal is slightly more common on incorrect answers.</desc>
+
+        <text class="ttl fig-sans" x="30" y="26">Sign of the teacher advantage on the boxed answer token, 235B-A22B teacher</text>
+
+        <text class="lb fig-sans" x="30" y="50">Share of trajectories receiving a NEGATIVE advantage at the answer position</text>
+
+        <text class="hd fig-sans"  x="30" y="82">correct</text>
+        <text class="lbs fig-sans" x="30" y="95">answers</text>
+        <rect x="130" y="66" width="401" height="30" fill="var(--border)"/>
+        <rect x="531" y="66" width="9"   height="30" fill="var(--link)"/>
+        <text class="val" x="140" y="86">97.8% negative</text>
+        <line x1="536" y1="62" x2="560" y2="46" stroke="var(--text-muted)" stroke-width="1"/>
+        <text class="val" x="564" y="44">2.2% positive</text>
+
+        <text class="hd fig-sans"  x="30" y="139">incorrect</text>
+        <text class="lbs fig-sans" x="30" y="152">answers</text>
+        <rect x="130" y="123" width="396" height="30" fill="var(--border)"/>
+        <rect x="526" y="123" width="14"  height="30" fill="var(--link)"/>
+        <text class="val" x="140" y="143">96.6% negative</text>
+        <line x1="536" y1="157" x2="560" y2="172" stroke="var(--text-muted)" stroke-width="1"/>
+        <text class="val" x="564" y="176">3.4% positive</text>
+
+        <text class="lbs fig-sans" x="130" y="112">0%</text>
+        <text class="lbs fig-sans" x="522" y="112">100%</text>
+        <text class="lbs fig-sans" x="30" y="196">Source: arXiv:2608.31046, Section 2.2. Bars are to scale.</text>
+
+        <line x1="30" y1="212" x2="690" y2="212" stroke="var(--border)" stroke-width="1"/>
+        <text class="tag fig-sans" x="30" y="232">OUR CALCULATION</text>
+        <text class="hd fig-sans"  x="150" y="232">Read the sign as a prediction of correctness</text>
+
+        <text class="lb fig-sans" x="30" y="256">Rate of a POSITIVE signal, by actual outcome (axis 0 to 5%)</text>
+
+        <line x1="150" y1="330" x2="450" y2="330" stroke="var(--border)" stroke-width="1"/>
+        <text class="lbs fig-sans" x="147" y="344">0%</text>
+        <text class="lbs fig-sans" x="207" y="344">1%</text>
+        <text class="lbs fig-sans" x="267" y="344">2%</text>
+        <text class="lbs fig-sans" x="327" y="344">3%</text>
+        <text class="lbs fig-sans" x="387" y="344">4%</text>
+        <text class="lbs fig-sans" x="444" y="344">5%</text>
+
+        <text class="lb fig-sans" x="60" y="283">correct</text>
+        <rect x="150" y="270" width="132" height="18" fill="var(--link)"/>
+        <text class="val" x="290" y="284">2.2%</text>
+
+        <text class="lb fig-sans" x="60" y="313">incorrect</text>
+        <rect x="150" y="300" width="204" height="18" fill="var(--accent)"/>
+        <text class="val" x="362" y="314">3.4%</text>
+
+        <text class="lb fig-sans"  x="480" y="268">Balanced accuracy</text>
+        <text class="big" x="480" y="292">49.4%</text>
+        <text class="lb fig-sans"  x="480" y="310">(2.2 + 96.6) / 2</text>
+        <text class="lb fig-sans"  x="480" y="326">Chance is 50.0%, and the</text>
+        <text class="lb fig-sans"  x="480" y="341">sign points the wrong way.</text>
+      </svg>
+      <figcaption><b>Figure 2.</b> Top bars are the paper's measurement. The lower panel is my derivation from those two percentages. Figure mine.</figcaption>
+    </figure>
+
+    <p>
+      This also explains why the noise rate climbs with teacher size, which otherwise looks backwards. The teacher is scoring trajectories that are off-policy for it, because the student wrote them. A more capable teacher has a sharper and more idiosyncratic distribution, so its disagreement with the student's sampled tokens goes up, not down. Capability and agreement are different properties, and this objective only ever reads the second one.
+    </p>
+
+    <h2>Most tokens carry nothing at all</h2>
+
+    <p>
+      The other half of the diagnosis is about coverage rather than correctness. During on-policy distillation, <strong>29.2% of tokens have exactly zero advantage and 51.7% have an advantage smaller than 1e-4 in magnitude.</strong> Half the supervision is numerically absent.
+    </p>
+    <p>
+      The paper also shows the converse: training only on the tokens where the student is most confident yields limited improvement, because those are precisely the tokens where the log ratio has no room to say anything. See <a href="https://arxiv.org/html/2608.31046v1#S3.F3" target="_blank" rel="noopener">Figure 3 in the paper</a>, which is worth opening.
+    </p>
+    <p>
+      So the picture is a signal that is missing on half the tokens, is uninformative wherever the student is confident, and disagrees with the truth up to half the time where it does fire. And yet the training works.
+    </p>
+
+    <h2>Delete the teacher and see what is left</h2>
+
+    <p>
+      This is the experiment that turns an observation into a claim about mechanism. Replace the entire teacher-derived advantage with <strong>a single fixed negative number</strong>, applied to low-probability tokens, and the student improves about as much as it does under real on-policy distillation. Their <a href="https://arxiv.org/html/2608.31046v1#S3.F4" target="_blank" rel="noopener">Figure 4</a> is the load-bearing evidence.
+    </p>
+    <p>
+      A constant. No teacher forward pass, no distribution to compare against, no supervision of any kind. The only information left in the update is <em>which of the student's own tokens were improbable</em>, and that turns out to be most of what on-policy distillation was buying.
+    </p>
+    <p>
+      From there the method almost writes itself. OPSA, On-Policy Self-Adaptation, takes the lowest 20% of tokens by log probability and assigns each a negative advantage scaled by the entropy at that position:
+    </p>
+
+    <math class="eqn" display="block" data-tex="r_i = \frac{2(H_i - H_{\mathrm{min}})}{H_{\mathrm{max}} - H_{\mathrm{min}}} - 1"><msub><mi>r</mi><mi>i</mi></msub><mo>=</mo><mfrac><mrow><mn>2</mn><mo form="prefix">(</mo><msub><mi>H</mi><mi>i</mi></msub><mo>−</mo><msub><mi>H</mi><mi mathvariant="normal">min</mi></msub><mo form="postfix">)</mo></mrow><mrow><msub><mi>H</mi><mi mathvariant="normal">max</mi></msub><mo>−</mo><msub><mi>H</mi><mi mathvariant="normal">min</mi></msub></mrow></mfrac><mo>−</mo><mn>1</mn></math>
+    <math class="eqn" display="block" data-tex="A^{\mathrm{dyn}} = A^{\mathrm{fix}} - \tfrac{1}{4}\,\delta\,r_i"><msup><mi>A</mi><mi mathvariant="normal">dyn</mi></msup><mo>=</mo><msup><mi>A</mi><mi mathvariant="normal">fix</mi></msup><mo>−</mo><mfrac displaystyle="false"><mn>1</mn><mn>4</mn></mfrac><mspace width="0.1667em"/><mi>δ</mi><mspace width="0.1667em"/><msub><mi>r</mi><mi>i</mi></msub></math>
+
+    <p>
+      With <math data-tex="A^{\mathrm{fix}} = -3/4"><msup><mi>A</mi><mi mathvariant="normal">fix</mi></msup><mo>=</mo><mo>−</mo><mn>3</mn><mo>/</mo><mn>4</mn></math> and <math data-tex="\delta = 1"><mi>δ</mi><mo>=</mo><mn>1</mn></math> this reduces to
+    </p>
+
+    <math class="eqn" display="block" data-tex="A^{\mathrm{dyn}} = -\frac{1}{2} - \frac{H_i - H_{\mathrm{min}}}{2(H_{\mathrm{max}} - H_{\mathrm{min}})}"><msup><mi>A</mi><mi mathvariant="normal">dyn</mi></msup><mo>=</mo><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>−</mo><mfrac><mrow><msub><mi>H</mi><mi>i</mi></msub><mo>−</mo><msub><mi>H</mi><mi mathvariant="normal">min</mi></msub></mrow><mrow><mn>2</mn><mo form="prefix">(</mo><msub><mi>H</mi><mi mathvariant="normal">max</mi></msub><mo>−</mo><msub><mi>H</mi><mi mathvariant="normal">min</mi></msub><mo form="postfix">)</mo></mrow></mfrac></math>
+
+    <p>
+      which runs from <math data-tex="-1/2"><mo>−</mo><mn>1</mn><mo>/</mo><mn>2</mn></math> at the lowest-entropy positions to <math data-tex="-1"><mo>−</mo><mn>1</mn></math> at the highest. Every advantage is negative. The method never tells the model what it should have said. It only pushes down tail tokens, and it pushes hardest where the model was least sure.
+    </p>
+    <p>
+      One small thing that made the design click for me: <math data-tex="-3/4"><mo>−</mo><mn>3</mn><mo>/</mo><mn>4</mn></math> is exactly the midpoint of the <math data-tex="[-1, -1/2]"><mo form="prefix">[</mo><mo>−</mo><mn>1</mn><mo separator="true">,</mo><mo>−</mo><mn>1</mn><mo>/</mo><mn>2</mn><mo form="postfix">]</mo></math> range. The fixed-advantage ablation from the previous section is the entropy-averaged version of the adaptive rule, which is why it worked as well as it did.
+    </p>
+    <p>
+      Training uses DAPO-17k <strong>questions only, with no answers and no labels</strong>. There is no teacher, no verifiable reward and no reference answer anywhere in the loop.
+    </p>
+
+    <h2>The number in the abstract, and the number that calibrates it</h2>
+
+    <p>
+      The headline is that OPSA takes Qwen3-1.7B from 13.44 to 48.85 Avg@32 on AIME24, a gain of 35.41 points, and beats on-policy distillation by 16.77. Both are accurate against their Table 3, and worth pairing with a third: measured against GRPO, the strongest trained baseline in that table at 33.96, the margin is 14.89.
+    </p>
+    <p>
+      Here is the comparison I could not stop thinking about, and it is one the paper prints the ingredients for without drawing. Qwen3-1.7B ships with a thinking mode. Averaged across AIME24, AIME25 and HMMT25:
+    </p>
+
+    <table>
+      <thead>
+        <tr><th>Qwen3-1.7B setting</th><th>Avg@32</th><th>Pass@32</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>base</td><td>9.62</td><td>31.11</td></tr>
+        <tr><td>base + OPSA</td><td><strong>35.83</strong></td><td>65.56</td></tr>
+        <tr><td>Thinking mode</td><td><strong>35.24</strong></td><td>71.11</td></tr>
+        <tr><td>Thinking mode + OPSA</td><td>40.71</td><td>72.22</td></tr>
+      </tbody>
+    </table>
+
+    <p>
+      35.83 against 35.24. Per benchmark the agreement is just as close: 48.85 against 46.56 on AIME24, 35.31 against 36.25 on AIME25, 23.33 against 22.92 on HMMT25.
+    </p>
+
+    <figure class="blog-fig">
+      <svg id="opdf3" viewBox="0 0 720 420" width="720" height="420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="f3t f3d">
+        <title id="f3t">OPSA on the base model against the same model's own thinking mode</title>
+        <desc id="f3d">Grouped bars for Qwen3-1.7B on AIME24, AIME25 and HMMT25. On Avg@32 the base model plus OPSA lands almost exactly on the model's built-in thinking mode. On Pass@32 thinking mode is still ahead.</desc>
+
+        <text class="ttl fig-sans" x="30" y="24">Qwen3-1.7B: label-free OPSA training against the model's built-in thinking mode</text>
+
+        <rect class="b0" x="62"  y="37" width="12" height="12"/><text class="lb fig-sans" x="79"  y="47">Qwen3-1.7B</text>
+        <rect class="b1" x="155" y="37" width="12" height="12"/><text class="lb fig-sans" x="172" y="47">+ OPSA</text>
+        <rect class="b2" x="226" y="37" width="12" height="12"/><text class="lb fig-sans" x="243" y="47">Thinking mode</text>
+        <rect class="b3" x="335" y="37" width="12" height="12"/><text class="lb fig-sans" x="352" y="47">Thinking mode + OPSA</text>
+
+        <text class="hd fig-sans" x="62" y="80">Avg@32 (percent)</text>
+        <line class="grid" x1="62" y1="236.7" x2="352" y2="236.7"/>
+        <line class="grid" x1="62" y1="163.3" x2="352" y2="163.3"/>
+        <line class="grid" x1="62" y1="90"    x2="352" y2="90"/>
+        <text class="ax fig-sans" x="40" y="314">0</text>
+        <text class="ax fig-sans" x="34" y="240">20</text>
+        <text class="ax fig-sans" x="34" y="167">40</text>
+        <text class="ax fig-sans" x="34" y="94">60</text>
+
+        <rect class="b0" x="71"  y="260.7" width="19" height="49.3"/>
+        <rect class="b1" x="91"  y="130.9" width="19" height="179.1"/>
+        <rect class="b2" x="111" y="139.3" width="19" height="170.7"/>
+        <rect class="b3" x="131" y="117.5" width="19" height="192.5"/>
+        <rect class="b0" x="167" y="274.5" width="19" height="35.5"/>
+        <rect class="b1" x="187" y="180.5" width="19" height="129.5"/>
+        <rect class="b2" x="207" y="177.1" width="19" height="132.9"/>
+        <rect class="b3" x="227" y="153.1" width="19" height="156.9"/>
+        <rect class="b0" x="264" y="289.0" width="19" height="21.0"/>
+        <rect class="b1" x="284" y="224.5" width="19" height="85.5"/>
+        <rect class="b2" x="304" y="226.0" width="19" height="84.0"/>
+        <rect class="b3" x="324" y="211.5" width="19" height="98.5"/>
+
+        <line x1="62" y1="310" x2="352" y2="310" stroke="var(--text-muted)" stroke-width="1"/>
+        <text class="xl fig-sans" x="110.5" y="326" text-anchor="middle">AIME24</text>
+        <text class="xl fig-sans" x="206.5" y="326" text-anchor="middle">AIME25</text>
+        <text class="xl fig-sans" x="303.5" y="326" text-anchor="middle">HMMT25</text>
+
+        <text class="hd fig-sans" x="428" y="80">Pass@32 (percent)</text>
+        <line class="grid" x1="428" y1="255" x2="700" y2="255"/>
+        <line class="grid" x1="428" y1="200" x2="700" y2="200"/>
+        <line class="grid" x1="428" y1="145" x2="700" y2="145"/>
+        <line class="grid" x1="428" y1="90"  x2="700" y2="90"/>
+        <text class="ax fig-sans" x="406" y="314">0</text>
+        <text class="ax fig-sans" x="400" y="259">25</text>
+        <text class="ax fig-sans" x="400" y="204">50</text>
+        <text class="ax fig-sans" x="400" y="149">75</text>
+        <text class="ax fig-sans" x="394" y="94">100</text>
+
+        <rect class="b0" x="436" y="222"   width="18" height="88"/>
+        <rect class="b1" x="455" y="134"   width="18" height="176"/>
+        <rect class="b2" x="474" y="134"   width="18" height="176"/>
+        <rect class="b3" x="493" y="126.7" width="18" height="183.3"/>
+        <rect class="b0" x="526" y="244"   width="18" height="66"/>
+        <rect class="b1" x="545" y="163.3" width="18" height="146.7"/>
+        <rect class="b2" x="564" y="148.7" width="18" height="161.3"/>
+        <rect class="b3" x="583" y="148.7" width="18" height="161.3"/>
+        <rect class="b0" x="617" y="258.7" width="18" height="51.3"/>
+        <rect class="b1" x="636" y="200"   width="18" height="110"/>
+        <rect class="b2" x="655" y="178"   width="18" height="132"/>
+        <rect class="b3" x="674" y="178"   width="18" height="132"/>
+
+        <line x1="428" y1="310" x2="700" y2="310" stroke="var(--text-muted)" stroke-width="1"/>
+        <text class="xl fig-sans" x="473.5" y="326" text-anchor="middle">AIME24</text>
+        <text class="xl fig-sans" x="563.5" y="326" text-anchor="middle">AIME25</text>
+        <text class="xl fig-sans" x="654.5" y="326" text-anchor="middle">HMMT25</text>
+
+        <line x1="30" y1="342" x2="690" y2="342" stroke="var(--border)" stroke-width="1"/>
+        <text class="lb fig-sans" x="30" y="360">Averaged over the three benchmarks, base + OPSA scores 35.83 Avg@32 and thinking mode scores 35.24. A gap of 0.59 points.</text>
+        <text class="lb fig-sans" x="30" y="376">On Pass@32 they separate: 65.56 against 71.11. Applied on top of thinking mode, OPSA adds 5.47 Avg@32 and 1.11 Pass@32.</text>
+        <text class="lb fig-sans" x="30" y="400">Data: Table 3, arXiv:2608.31046, Ding and Zhang. Both rows are the paper's; placing them side by side is ours. Axes start at zero.</text>
+      </svg>
+      <figcaption><b>Figure 3.</b> Both rows are the paper's. Putting them next to each other is mine. Axes start at zero.</figcaption>
+    </figure>
+
+    <p>
+      A label-free training run, with no teacher and no rewards, lands a non-thinking model approximately where the same model's own thinking mode already was. Read one way that is deflationary. Read the other way it is the most interesting thing in the paper, because it says the capability was already in the weights and the entire job of training was changing which tokens get sampled.
+    </p>
+    <p>
+      The Pass@32 column is where the two stop agreeing: 65.56 against 71.11. And applied on top of thinking mode, OPSA adds only 5.47 Avg@32 and 1.11 Pass@32. The authors say the same thing plainly in their limitations, that OPSA "primarily operates by redistributing the policy's existing probability mass" and may not expand the exploration frontier. I would only add that this framing deserves to sit next to the headline rather than in an appendix.
+    </p>
+
+    <h2>The saving is memory, not step time</h2>
+
+    <p>
+      Their overhead table gives OPSA a 46.3s step against 61.2s for on-policy distillation and 186.2s for GRPO. A 24% cut over OPD is nice but it undersells the change.
+    </p>
+    <p>
+      My estimate, not theirs: on-policy distillation with the 235B-A22B teacher has to keep that teacher resident and run a forward pass through it every step. At BF16 that is about <math data-tex="235 \times 10^{9} \times 2\ \text{bytes} = 470\ \text{GB}"><mn>235</mn><mo>×</mo><msup><mn>10</mn><mn>9</mn></msup><mo>×</mo><mn>2</mn><mspace width="0.25em"/><mtext>bytes</mtext><mo>=</mo><mn>470</mn><mspace width="0.25em"/><mtext>GB</mtext></math> of weights before activations or KV cache, so roughly six 80 GB accelerators doing nothing but being the teacher. OPSA needs zero of them.
+    </p>
+    <p>
+      If you post-train on a small cluster, that is not a speedup, it is the difference between an experiment you can run and one you cannot.
+    </p>
+
+    <h2>Is it just longer outputs?</h2>
+
+    <p>
+      This was my first objection. OPSA generates 23,205 tokens per AIME24 problem against 4,457 for the base model and 15,286 for on-policy distillation, and inference time goes from 1.78s to 6.58s. Longer chains score better on competition maths, so some of the gain could be bought rather than learned.
+    </p>
+    <p>
+      They ran the control. Forcing GRPO and OPD out to comparable lengths by injecting "wait" makes both slightly worse, not better: GRPO drops from 33.96 to 32.81 at 23,261 tokens, OPD from 32.08 to 31.67 at 23,472 tokens, against OPSA's 48.85 at 23,205. Length alone does not buy the result.
+    </p>
+    <p>
+      My one reservation, and it is a reservation about the control rather than the finding: injecting "wait" forces length onto a model that was never trained to use it, which is not the same experiment as training a baseline to produce longer trajectories. It rules out the cheapest explanation, not every version of it.
+    </p>
+
+    <h2>What to take away</h2>
+
+    <ul>
+      <li><strong>The advantage in on-policy distillation is a confidence-disagreement signal, not a correctness signal.</strong> If you are debugging one, this is the assumption to check first, and it fails hardest exactly where the student is most confident.</li>
+      <li><strong>A bigger teacher is not automatically a better one here.</strong> Agreement with your student's sampled tokens is what the objective reads, and that gets worse with scale, not better.</li>
+      <li><strong>Before paying for a teacher, run the constant-advantage ablation.</strong> If a fixed negative number on the low-probability tail reproduces most of your gain, the teacher is a line item you can delete.</li>
+      <li><strong>Compare against the model's own thinking mode, not just its base mode.</strong> Otherwise you cannot tell recovered capability from new capability, and those have very different implications for what to do next.</li>
+      <li><strong>Watch Pass@k, not only Avg@k.</strong> Avg@k rising while Pass@k stays flat is the signature of redistribution rather than expansion.</li>
+    </ul>
+
+    <div class="blog-cta">
+      <p>
+        <strong>The paper:</strong> <a href="https://arxiv.org/abs/2608.31046" target="_blank" rel="noopener">arXiv:2608.31046</a>, Yi Ding and Ruqi Zhang, <em>Does On-Policy Distillation Really Distill? From Noisy Teacher to Self-Improvement</em>, 31 August 2026.<br>
+        Questions? <a href="https://twitter.com/Asg_Wolverine" target="_blank" rel="noopener">@Asg_Wolverine</a>
+      </p>
+    </div>
+
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-icons">
+      <a href="mailto:arpitsinghgautam777@gmail.com" title="Email"><i class="fas fa-envelope" aria-hidden="true"></i></a>
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap" aria-hidden="true"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+      <a href="https://topmate.io/arpit_singh_gautam/" title="TopMate" target="_blank" rel="noopener"><i class="fas fa-calendar-check" aria-hidden="true"></i></a>
+    </div>
+    <span>© 2026 Arpit Singh Gautam · Bengaluru, India</span>
+  </div>
+</footer>
+
+<script>
+  function toggleTheme(){var cur=document.documentElement.getAttribute('data-theme');var next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);localStorage.setItem('theme',next);document.getElementById('theme-toggle').textContent=next==='dark'?'☀️':'🌙';}
+  (function(){var t=document.documentElement.getAttribute('data-theme');var btn=document.getElementById('theme-toggle');if(btn)btn.textContent=t==='dark'?'☀️':'🌙';})();
+  var btt=document.getElementById('back-to-top');
+  window.addEventListener('scroll',function(){if(window.scrollY>300){btt.classList.add('visible');}else{btt.classList.remove('visible');}});
+  btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+</body>
+</html>
