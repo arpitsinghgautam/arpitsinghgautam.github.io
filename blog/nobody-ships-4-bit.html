@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6P1E490Z0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X6P1E490Z0');</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="MXFP4 is 4.25 bits and NVFP4 is 4.5. Put the scale factors on the same axis as the element and the block-quantization design space becomes one question. A close reading of arXiv:2609.00450, MICRO 2026.">
+  <link rel="canonical" href="https://arpitsinghgautam.me/blog/nobody-ships-4-bit">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Arpit Singh Gautam">
+  <meta property="og:title" content="Nobody Ships 4-Bit: Where That Extra Half a Bit Actually Goes - Arpit Singh Gautam">
+  <meta property="og:description" content="MXFP4 is 4.25 bits and NVFP4 is 4.5. Put the scale factors on the same axis as the element and the block-quantization design space becomes one question. A close reading of arXiv:2609.00450, MICRO 2026.">
+  <meta property="og:url" content="https://arpitsinghgautam.me/blog/nobody-ships-4-bit">
+  <meta property="og:image" content="https://arpitsinghgautam.me/assets/img/blog/nobody-ships-4-bit-thumb.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@Asg_Wolverine">
+  <meta name="twitter:creator" content="@Asg_Wolverine">
+  <meta name="twitter:title" content="Nobody Ships 4-Bit: Where That Extra Half a Bit Actually Goes - Arpit Singh Gautam">
+  <meta name="twitter:description" content="MXFP4 is 4.25 bits and NVFP4 is 4.5. Put the scale factors on the same axis as the element and the block-quantization design space becomes one question. A close reading of arXiv:2609.00450, MICRO 2026.">
+  <meta name="twitter:image" content="https://arpitsinghgautam.me/assets/img/blog/nobody-ships-4-bit-thumb.png">
+  <title>Nobody Ships 4-Bit: Where That Extra Half a Bit Actually Goes - Arpit Singh Gautam</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="../assets/css/fontawesome.css">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Nobody Ships 4-Bit: Where That Extra Half a Bit Actually Goes", "image": "https://arpitsinghgautam.me/assets/img/blog/nobody-ships-4-bit-thumb.png", "datePublished": "2026-09-02", "author": {"@type": "Person", "name": "Arpit Singh Gautam", "url": "https://arpitsinghgautam.me/"}, "publisher": {"@type": "Person", "name": "Arpit Singh Gautam"}, "mainEntityOfPage": "https://arpitsinghgautam.me/blog/nobody-ships-4-bit"}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arpitsinghgautam.me/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://arpitsinghgautam.me/blog"}, {"@type": "ListItem", "position": 3, "name": "Nobody Ships 4-Bit: Where That Extra Half a Bit Actually Goes", "item": "https://arpitsinghgautam.me/blog/nobody-ships-4-bit"}]}
+  </script>
+  <style>
+    /* Figure-local classes for the one drawn figure on this page. */
+  #mbf .ttl  { fill: var(--text); font-size: 14px; font-weight: 700; }
+  #mbf .sub  { fill: var(--text-muted); font-size: 11px; }
+  #mbf .hd   { fill: var(--text-muted); font-size: 10px; font-weight: 600; }
+  #mbf .nm   { fill: var(--text); font-size: 12.5px; font-weight: 600; }
+  #mbf .nm-o { fill: var(--accent); font-size: 12.5px; font-weight: 700; }
+  #mbf .cfg  { fill: var(--text-muted); font-size: 10px; font-family: var(--font-mono); }
+  #mbf .tick { fill: var(--text-muted); font-size: 9.5px; }
+  #mbf .val  { fill: var(--text); font-size: 11px; font-family: var(--font-mono); }
+  #mbf .gr   { fill: var(--text-muted); font-size: 11px; }
+  #mbf .gr-o { fill: var(--accent); font-size: 11px; font-weight: 700; }
+  #mbf .lg   { fill: var(--text-muted); font-size: 10.5px; }
+  #mbf .l1   { fill: var(--link); }
+  #mbf .l2   { fill: var(--accent); }
+  #mbf .grid { stroke: var(--border); stroke-width: 1; stroke-dasharray: 2 4; }
+
+    /* Paper screenshots are white-background captures. Keep them on a white plate so a
+       dark-theme reader gets a deliberate panel rather than a glaring rectangle. */
+    .paper-shot { background: #ffffff; border: 1px solid var(--border); border-radius: 8px;
+                  padding: 10px; }
+    .paper-shot img { border: none; border-radius: 3px; }
+  </style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<button id="back-to-top" title="Back to top" aria-label="Back to top"><i class="fas fa-arrow-up" aria-hidden="true"></i></button>
+
+<header class="site-header">
+  <div class="header-top">
+    <a class="nav-brand" href="/">Arpit Singh <span class="brand-accent">Gautam</span></a>
+    <div class="header-icons">
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap" aria-hidden="true"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle dark mode">&#127769;</button>
+    </div>
+  </div>
+  <div class="header-nav">
+    <a href="/">About</a>
+    <a href="/publications">Publications</a>
+    <a href="/experience">Experience</a>
+    <a href="/media-awards">Media &amp; Awards</a>
+    <a href="/projects">Projects</a>
+    <a href="/blog" class="active">Blog</a>
+    <a href="/misc">Misc</a>
+  </div>
+</header>
+
+<main class="page-wrap" id="main" tabindex="-1">
+
+  <div class="blog-post-hero">
+    <div class="breadcrumb"><a href="/blog">&larr; Blog</a></div>
+    <h1>Nobody Ships 4-Bit: Where That Extra Half a Bit Actually Goes</h1>
+    <div class="blog-post-meta">
+      <span><i class="fas fa-calendar-alt" aria-hidden="true"></i> Sep 2026</span>
+      <span><i class="fas fa-clock" aria-hidden="true"></i> 12 min read</span>
+      <span><i class="fas fa-tag" aria-hidden="true"></i> Quantization &middot; Hardware &middot; Inference</span>
+    </div>
+  </div>
+
+  <div class="blog-post-body">
+
+    <blockquote>
+      A close reading of <a href="https://arxiv.org/abs/2609.00450" target="_blank" rel="noopener">HBQ: Hierarchical Scaling Block Quantization with Hardware-Efficiency-Aware Design for Accurate LLM Inference</a> by <strong>Chun-Ting Chen, Dongmin Han, Hangyeol Mun, Jake Hyun, Arnab Raha, Amit Agarwal, Mark Anders, Mohamed Abdelfattah and Jae-sun Seo</strong>, Cornell and Intel, accepted to MICRO 2026.
+    </blockquote>
+
+    <p>
+      MXFP4 is 4.25 bits per weight. NVFP4 is 4.5. Neither of them is 4 bits, and the gap is not a rounding detail: it is scale-factor metadata, and it is 6% of your weight traffic between one format and the other.
+    </p>
+    <p>
+      Everybody knows the scale factors are there. Almost nobody puts them on the same axis as the element and asks the obvious question. You have a metadata budget. At what granularity should you spend it?
+    </p>
+    <p>
+      HBQ answers that question and lands somewhere counterintuitive. It reaches a <strong>finer</strong> scaling granularity than NVFP4 while spending <strong>less</strong> metadata, and the resulting datapath is smaller in silicon. Eight elements per finest scale for 0.31 bits, against NVFP4's sixteen elements for 0.5.
+    </p>
+    <p>
+      That is not a free lunch, and I will get to what it costs. But the reason it works is worth understanding whether or not you ever run this format, because it is a statement about what a scale factor is for.
+    </p>
+
+    <h2>What a scale factor is actually doing</h2>
+
+    <p>
+      Quantize a tensor to 4 bits and you have to map a real-valued distribution onto sixteen levels. A scale factor picks the mapping. Block quantization applies one scale per contiguous run of <math data-tex="B"><mi>B</mi></math> elements instead of one per tensor, because the local spread inside a small run is narrower than the global one.
+    </p>
+    <p>
+      Here is the part that gets collapsed. A scale factor does two separable jobs.
+    </p>
+    <p>
+      <strong>Dynamic range.</strong> It slides the representable window so the block's largest magnitude lands near the top of the format. This needs exponent bits, and it is a property of a fairly wide neighbourhood. A whole channel, or a 128-element run, mostly shares one answer.
+    </p>
+    <p>
+      <strong>Resolution.</strong> It sets how finely that window is subdivided where the values actually sit. This is local. Values a few positions apart can want noticeably different spacing.
+    </p>
+    <p>
+      Single-level block quantization forces you to buy both at the same granularity, and that is why the block-size argument feels stuck. Shrink the block and you pay for a full 8-bit scale to get resolution you needed and dynamic range you did not. Grow the block and you lose the resolution along with the cost.
+    </p>
+    <p>
+      The paper's design space exploration puts numbers on the stuck part. Going from <math data-tex="B = 16"><mi>B</mi><mo>=</mo><mn>16</mn></math> to <math data-tex="B = 128"><mi>B</mi><mo>=</mo><mn>128</mn></math> cuts area per MAC by 1.6x, because the dequantization multiply and, much more importantly, the floating-point accumulation get amortized over eight times as many elements. And accuracy falls, asymmetrically: weight MSE rises from 2.08e-06 to 2.89e-06 with the extra error sitting in high-magnitude regions, while activation and KV error nearly triples, from 9.93e-04 to 2.93e-03, with the extra error sitting in the small-magnitude elements.
+    </p>
+    <p>
+      That asymmetry is why weights and activations end up with different treatment later.
+    </p>
+
+    <h2>The budget view</h2>
+
+    <p>
+      Here is the reframing I want to argue for. Decompose every format's effective bit width into three parts: element bits, first-level scale bits per element, second-level scale bits per element. It is arithmetic, and it closes exactly against the numbers the paper publishes.
+    </p>
+
+    <table>
+      <thead><tr><th>format</th><th>element</th><th>L1 scale</th><th>L2 scale</th><th>total</th><th>paper</th></tr></thead>
+      <tbody>
+        <tr><td>MXFP4</td><td>4</td><td>8/32 = 0.25</td><td>none</td><td>4.25</td><td>4.25</td></tr>
+        <tr><td>NVFP4</td><td>4</td><td>8/16 = 0.5</td><td>none</td><td>4.5</td><td>4.5</td></tr>
+        <tr><td>VSQ</td><td>4</td><td>per channel, negligible</td><td>8/16 = 0.5</td><td>4.5</td><td>4.5</td></tr>
+        <tr><td>MicroExponent</td><td>3</td><td>8/16 = 0.5</td><td>1/2 = 0.5</td><td>4.0</td><td>4.0</td></tr>
+        <tr><td>HBQ-E, weights</td><td>4</td><td>8/128 = 0.0625</td><td>2/32 = 0.0625</td><td>4.125</td><td>4.13</td></tr>
+        <tr><td>HBQ-A, weights</td><td>4</td><td>8/128 = 0.0625</td><td>2/8 = 0.25</td><td>4.3125</td><td>4.31</td></tr>
+      </tbody>
+    </table>
+
+    <p>
+      Once the metadata is on its own axis, the design space stops being a list of format names and becomes one trade.
+    </p>
+
+    <figure class="blog-fig">
+<svg id="mbf" viewBox="0 0 720 400" width="720" height="400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="mbt mbd">
+<title id="mbt">Scale-factor metadata per element, and the granularity it buys</title>
+<desc id="mbd">Six block-quantization formats. Each bar is the metadata cost in bits per element, split into the first-level block scale and the second-level micro-block scale. The right column gives how many elements the finest scale factor covers. HBQ-A reaches an eight-element granularity for less metadata than NVFP4 spends on sixteen.</desc>
+<rect width="720" height="400" fill="var(--bg-subtle)"/>
+<text class="ttl" x="24" y="28">Where the metadata goes, and what it buys</text>
+<text class="sub" x="24" y="48">Scale-factor cost in bits per element. The element itself (4 or 5 bits) is not shown.</text>
+<line class="grid" x1="168.0" y1="76" x2="168.0" y2="330.0"/>
+<text class="tick" x="168.0" y="70" text-anchor="middle">0.00</text>
+<line class="grid" x1="256.6" y1="76" x2="256.6" y2="330.0"/>
+<text class="tick" x="256.6" y="70" text-anchor="middle">0.25</text>
+<line class="grid" x1="345.1" y1="76" x2="345.1" y2="330.0"/>
+<text class="tick" x="345.1" y="70" text-anchor="middle">0.50</text>
+<line class="grid" x1="433.7" y1="76" x2="433.7" y2="330.0"/>
+<text class="tick" x="433.7" y="70" text-anchor="middle">0.75</text>
+<line class="grid" x1="522.3" y1="76" x2="522.3" y2="330.0"/>
+<text class="tick" x="522.3" y="70" text-anchor="middle">1.00</text>
+<text class="hd" x="345.1" y="356.0" text-anchor="middle">metadata bits per element</text>
+<text class="hd" x="668" y="70" text-anchor="middle">finest scale</text>
+<text class="hd" x="668" y="82" text-anchor="middle">covers</text>
+<text class="nm" x="24" y="111.0">MicroExponent</text>
+<text class="cfg" x="24" y="125.0">B16 / uB2</text>
+<rect class="l1" x="168.0" y="102.0" width="177.1" height="19"/>
+<rect class="l2" x="345.1" y="102.0" width="177.1" height="19"/>
+<text class="val" x="531.3" y="116.0">1.0</text>
+<text class="gr" x="668" y="116.0" text-anchor="middle">2 elem</text>
+<text class="nm" x="24" y="151.0">NVFP4</text>
+<text class="cfg" x="24" y="165.0">B16</text>
+<rect class="l1" x="168.0" y="142.0" width="177.1" height="19"/>
+<text class="val" x="354.1" y="156.0">0.5</text>
+<text class="gr" x="668" y="156.0" text-anchor="middle">16 elem</text>
+<text class="nm" x="24" y="191.0">VSQ</text>
+<text class="cfg" x="24" y="205.0">chan / uB16</text>
+<rect class="l2" x="168.0" y="182.0" width="177.1" height="19"/>
+<text class="val" x="354.1" y="196.0">0.5</text>
+<text class="gr" x="668" y="196.0" text-anchor="middle">16 elem</text>
+<text class="nm-o" x="24" y="231.0">HBQ-A</text>
+<text class="cfg" x="24" y="245.0">B128 / uB8</text>
+<rect class="l1" x="168.0" y="222.0" width="22.1" height="19"/>
+<rect class="l2" x="190.1" y="222.0" width="88.6" height="19"/>
+<text class="val" x="287.7" y="236.0">0.3125</text>
+<text class="gr-o" x="668" y="236.0" text-anchor="middle">8 elem</text>
+<text class="nm" x="24" y="271.0">MXFP4</text>
+<text class="cfg" x="24" y="285.0">B32</text>
+<rect class="l1" x="168.0" y="262.0" width="88.6" height="19"/>
+<text class="val" x="265.6" y="276.0">0.25</text>
+<text class="gr" x="668" y="276.0" text-anchor="middle">32 elem</text>
+<text class="nm-o" x="24" y="311.0">HBQ-E</text>
+<text class="cfg" x="24" y="325.0">B128 / uB32</text>
+<rect class="l1" x="168.0" y="302.0" width="22.1" height="19"/>
+<rect class="l2" x="190.1" y="302.0" width="22.1" height="19"/>
+<text class="val" x="221.3" y="316.0">0.125</text>
+<text class="gr-o" x="668" y="316.0" text-anchor="middle">32 elem</text>
+<rect class="l1" x="168" y="368" width="13" height="11"/>
+<text class="lg" x="186" y="378">L1 block scale, FP8 or PoT8</text>
+<rect class="l2" x="352" y="368" width="13" height="11"/>
+<text class="lg" x="370" y="378">L2 micro-block scale</text>
+</svg>
+      <figcaption><b>The metadata budget.</b> Scale-factor cost in bits per element, split by level, against the granularity each format's finest scale actually reaches. Configurations and effective bit widths from Tables V and IX of arXiv:2609.00450; the decomposition and this chart are mine.</figcaption>
+    </figure>
+
+    <p>
+      Read the bottom two rows against the two above them. HBQ-A gets a scale factor every 8 elements for 0.3125 bits of metadata. NVFP4 gets one every 16 for 0.5. Twice the granularity for 62.5% of the cost. HBQ-E matches MXFP4's 32-element granularity for half the metadata.
+    </p>
+    <p>
+      The trick is that the two levels are not the same purchase. The L1 scale is an 8-bit floating-point number and it drags a floating-point accumulator behind it, so it is expensive and you want it amortized over as many elements as possible. The L2 scale is 2 bits with a deliberately narrow range, which means everything before L1 dequantization stays in fixed-point. Dynamic range is bought wholesale at <math data-tex="B = 128"><mi>B</mi><mo>=</mo><mn>128</mn></math>. Resolution is bought retail at <math data-tex="\mu B = 8"><mi>μ</mi><mi>B</mi><mo>=</mo><mn>8</mn></math>.
+    </p>
+    <p>
+      MicroExponent is the cautionary row. Block 16 with micro-block 2 is the finest granularity in the table, and it costs a full bit of scale overhead. At a 4-bit nominal budget that leaves about INT3 of actual element precision, and Llama3-8B perplexity lands at 9.45 against NVFP4's 6.88. Granularity you paid for by shrinking the element is not granularity.
+    </p>
+
+    <h2>Why the shape of the second scale matters</h2>
+
+    <p>
+      The second-level multiplier is 2 bits, so there are four of them. The obvious choices are powers of two, 1, 2, 4 and 8, or small integers, 1, 2, 3 and 4. HBQ uses neither. Significand scaling is defined as
+    </p>
+
+    <math class="eqn" display="block" data-tex="\alpha_{\mathrm{SIG}_x}(c) = 1 + \frac{c}{2^{x}}, \quad c \in \{0, 1, 2, 3\}"><msub><mi>α</mi><msub><mi mathvariant="normal">SIG</mi><mi>x</mi></msub></msub><mo form="prefix">(</mo><mi>c</mi><mo form="postfix">)</mo><mo>=</mo><mn>1</mn><mo>+</mo><mfrac><mi>c</mi><msup><mn>2</mn><mi>x</mi></msup></mfrac><mo separator="true">,</mo><mspace width="1em"/><mi>c</mi><mo>∈</mo><mtext>{</mtext><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>3</mn><mtext>}</mtext></math>
+
+    <p>
+      so the parameter <math data-tex="x"><mi>x</mi></math> trades span for granularity.
+    </p>
+
+    <table>
+      <thead><tr><th>scheme</th><th>multipliers</th><th>span</th></tr></thead>
+      <tbody>
+        <tr><td>PoT</td><td>1, 2, 4, 8</td><td>8.0x</td></tr>
+        <tr><td>INT</td><td>1, 2, 3, 4</td><td>4.0x</td></tr>
+        <tr><td>SIG<sub>1</sub></td><td>1, 1.5, 2, 2.5</td><td>2.5x</td></tr>
+        <tr><td>SIG<sub>2</sub></td><td>1, 1.25, 1.5, 1.75</td><td>1.75x</td></tr>
+        <tr><td>SIG<sub>3</sub></td><td>1, 1.125, 1.25, 1.375</td><td>1.375x</td></tr>
+      </tbody>
+    </table>
+
+    <p>
+      The authors give two reasons the power-of-two version underperforms, and both follow from the range-versus-resolution split. The levels overlap across different <math data-tex="\alpha"><mi>α</mi></math>, because FP4's own exponent field already moves in powers of two, so a power-of-two multiplier lands the block back on levels it could already reach. And the scheme spreads its four levels over a dynamic range that <math data-tex="B = 128"><mi>B</mi><mo>=</mo><mn>128</mn></math> plus an 8-bit L1 scale has already handled.
+    </p>
+    <p>
+      You can see both of those directly in their Figure 8(b), which plots the levels each scheme actually reaches.
+    </p>
+
+    <figure class="blog-fig">
+      <div class="paper-shot"><img src="../assets/img/blog/nobody-ships-4-bit/fig08b-quantization-levels.png" alt="Quantization levels reached by L1 FP4 alone and by each second-level scaling scheme, plotted on a shared log axis with the weight and activation error distributions beneath them." loading="lazy" width="1613" height="1034"></div>
+      <figcaption><b>Figure 8(b) of the paper.</b> Each row is a second-level scheme; the dots are the quantization levels it reaches and the curves beneath are the weight and activation error. Chen, Han, Mun, Hyun, Raha, Agarwal, Anders, Abdelfattah and Seo, <i>HBQ: Hierarchical Scaling Block Quantization with Hardware-Efficiency-Aware Design for Accurate LLM Inference</i>, MICRO 2026, <a href="https://arxiv.org/abs/2609.00450" target="_blank" rel="noopener">arXiv:2609.00450</a>. Reproduced under CC BY 4.0.</figcaption>
+    </figure>
+
+    <p>
+      Follow the PoT row. Four multipliers, and the dots cluster back onto the same positions the FP4 row above already occupies. Now follow SIG<sub>3</sub>. The dots fill in between the existing levels, in exactly the region where the error curve underneath is tallest.
+    </p>
+    <p>
+      The next panel is the one that decides the design.
+    </p>
+
+    <figure class="blog-fig">
+      <div class="paper-shot"><img src="../assets/img/blog/nobody-ships-4-bit/fig08c-l2-scheme-mse.png" alt="Mean squared error for activations and for weights across the five second-level scaling schemes, from wide range on the left to fine grained on the right. The two curves cross." loading="lazy" width="1613" height="494"></div>
+      <figcaption><b>Figure 8(c) of the paper.</b> Activation and KV error bottoms out at SIG<sub>1</sub>; weight error keeps falling to SIG<sub>3</sub>. The dashed lines are the block-16 baselines. Chen, Han, Mun, Hyun, Raha, Agarwal, Anders, Abdelfattah and Seo, <i>HBQ: Hierarchical Scaling Block Quantization with Hardware-Efficiency-Aware Design for Accurate LLM Inference</i>, MICRO 2026, <a href="https://arxiv.org/abs/2609.00450" target="_blank" rel="noopener">arXiv:2609.00450</a>. Reproduced under CC BY 4.0.</figcaption>
+    </figure>
+
+    <p>
+      The two curves cross. Activations and KV cache bottom out at SIG<sub>1</sub> and get sharply worse by SIG<sub>3</sub>, because they genuinely have wide local spread and need the span. Weights keep improving all the way to SIG<sub>3</sub>, because their distribution is concentrated and what they need is resolution, not room.
+    </p>
+    <p>
+      So HBQ uses SIG<sub>1</sub> for activations, and for weights it evaluates SIG<sub>2</sub> and SIG<sub>3</sub> per block offline and stores a 1-bit selector. No calibration set is involved on the weight path, which is a genuinely nice property: the choice is made from the weights themselves.
+    </p>
+
+    <h2>The exchange rate</h2>
+
+    <p>
+      Here is the calculation I think is the most useful thing to take away, and it is not in the paper. The paper's own progressive ablation walks from NVFP4 to HBQ-E one change at a time, on Llama3-8B.
+    </p>
+
+    <table>
+      <thead><tr><th>step</th><th>perplexity</th><th>area per MAC</th><th>system energy</th></tr></thead>
+      <tbody>
+        <tr><td>NVFP4, W4A4, B16</td><td>6.88</td><td>93.0</td><td>4.99 J</td></tr>
+        <tr><td>+ 5-bit activations</td><td>6.64</td><td>101.7</td><td>5.29 J</td></tr>
+        <tr><td>+ block size 128</td><td>6.95</td><td>66.3</td><td>3.36 J</td></tr>
+        <tr><td>+ L2 SIG scaling</td><td>6.68</td><td>72.4</td><td>3.72 J</td></tr>
+      </tbody>
+    </table>
+
+    <p>
+      Both of the last two rows are trades between the same two currencies. Price them.
+    </p>
+    <ul>
+      <li><strong>Through the block size.</strong> Going from 16 to 128 saves 35.4 square micrometres per MAC and costs 0.31 perplexity. That is 114 square micrometres per perplexity point.</li>
+      <li><strong>Through the second level.</strong> Adding SIG at <math data-tex="\mu B = 32"><mi>μ</mi><mi>B</mi><mo>=</mo><mn>32</mn></math> spends 6.1 square micrometres and recovers 0.27 perplexity. That is 23 square micrometres per perplexity point.</li>
+    </ul>
+    <p>
+      <strong>Accuracy bought through the second level costs about a fifth of what the same accuracy costs through the first.</strong> The energy column agrees independently: 6.2 joules per perplexity point against 1.3, a ratio of 4.7.
+    </p>
+    <p>
+      The paper asserts that micro-block size is the better tuning knob and explains why, which is that shrinking L1 de-amortizes the floating-point accumulator. The ratio puts a number on how much better, and the number is large enough to be a design rule rather than a preference.
+    </p>
+
+    <h2>What it costs, stated plainly</h2>
+
+    <p>
+      The headline is that HBQ-A hits weight-only accuracy at W4A5 with less silicon than NVFP4, and that is true as written. It is also worth reading twice, because the two formats do not spend their bits in the same place.
+    </p>
+    <p>
+      HBQ-A's weight budget is 4.31 bits, below NVFP4's 4.5. Its activation budget is 5.31, above NVFP4's 4.5. The comparison is fair on the axis the paper cares about, because the baselines were aligned on weight bit width to match external memory cost and weights dominate that traffic. But if you repeat the claim, repeat the activation number with it.
+    </p>
+    <p>
+      Two more things worth holding onto.
+    </p>
+    <p>
+      <strong>The hardware numbers are 28nm ASIC synthesis, not GPUs.</strong> Every competing format was reimplemented on the paper's own PE baseline and place-and-routed in the same technology. That is the right way to run a comparison and the wrong thing to quote as a fact about anyone's shipping silicon. "NVFP4 costs 93 square micrometres per MAC" means "an NVFP4 datapath built this way, here", not anything about what is inside a Blackwell.
+    </p>
+    <p>
+      <strong>The accuracy story is thinner than the hardware story.</strong> Wikitext-2 perplexity plus Winogrande and PIQA zero-shot is a narrow lens for a quantization paper, and the paper's own reasoning tables show the spread widening when you look harder: HBQ-E is 0.4% behind HBQ-A on zero-shot averages and about 3% behind on reasoning with the KV cache quantized. If you are choosing a configuration, that gap is the one that will bite, not the zero-shot one.
+    </p>
+
+    <h2>Where it lands</h2>
+
+    <figure class="blog-fig">
+      <div class="paper-shot"><img src="../assets/img/blog/nobody-ships-4-bit/fig11-area-vs-ppl.png" alt="Area per MAC against Llama3-8B perplexity. An arrow labelled increase block size points right and down; an arrow labelled add L2 SIG quantization points left to the two HBQ stars." loading="lazy" width="1600" height="895"></div>
+      <figcaption><b>Figure 11 of the paper.</b> Area per MAC against Llama3-8B perplexity. The two annotated arrows are the two moves: block size trades accuracy for area, the second-level scale buys the accuracy back. Chen, Han, Mun, Hyun, Raha, Agarwal, Anders, Abdelfattah and Seo, <i>HBQ: Hierarchical Scaling Block Quantization with Hardware-Efficiency-Aware Design for Accurate LLM Inference</i>, MICRO 2026, <a href="https://arxiv.org/abs/2609.00450" target="_blank" rel="noopener">arXiv:2609.00450</a>. Reproduced under CC BY 4.0.</figcaption>
+    </figure>
+
+    <p>
+      Two arrows, two different moves. Increasing block size walks you right and down: cheaper, worse. Adding the second-level scale walks you left for a small step up: most of the accuracy back, a fraction of the area. The Pareto front moves because those two moves are not symmetric, which is the whole content of the exchange-rate calculation above.
+    </p>
+    <p>
+      For scale, HBQ-A's 87 square micrometres per MAC against the weight-only baseline's 200 reproduces the paper's headline 2.3x area efficiency exactly. And at iso-silicon, 93 over 72 means an HBQ-E datapath fits 29% more MACs than an NVFP4 one in the same area, before any of the KV cache and partial-sum work that gets them to the 1.5x to 3x end-to-end speedup they report.
+    </p>
+
+    <h2>One more thing, for people sizing buffers</h2>
+
+    <p>
+      HBQ's weight path stores a 1-bit selector per L1 block to record whether that block chose SIG<sub>2</sub> or SIG<sub>3</sub>. That is a further 1/128 = 0.0078 bits per element. Add it and HBQ-A comes to 4.320 rather than 4.3125, and HBQ-E to 4.133 rather than 4.125, so the published 4.31 and 4.13 look like they exclude it.
+    </p>
+    <p>
+      It changes no conclusion in the paper. It is 2.5% of HBQ-A's metadata. But if you are sizing a weight buffer against a hard limit, count it, because it is real bits that have to live somewhere.
+    </p>
+
+    <h2>What I would take from this</h2>
+
+    <p>
+      Three things, in decreasing order of how much I would bet on them.
+    </p>
+    <p>
+      <strong>Say the effective bit width, not the format name.</strong> "We run 4-bit" is said about MXFP4 at 4.25, NVFP4 at 4.5, and weight-only schemes at 4.13 for weights and 16 for activations. Those are three different memory budgets and the conversation goes wrong immediately.
+    </p>
+    <p>
+      <strong>Granularity has a price and the price depends on where you buy it.</strong> If a format gives you a fine scale by shrinking the whole block, you are paying for dynamic range you already had. A coarse block with a cheap local refinement is a strictly better shape for the same metadata, and the five-to-one exchange rate above is roughly how much better.
+    </p>
+    <p>
+      <strong>Watch the weight side.</strong> In the paper's ablation of second-level schemes, varying the weight scheme moves Llama3-8B perplexity by 0.21 and varying the activation scheme moves it by 0.06. The second level earns most of its silicon on the weights, even though the activations are where the block-size error grew fastest. Those two facts sit oddly together, and I do not think the paper fully resolves them: the activation error, being concentrated in small-magnitude elements, is error the downstream accumulation is largely insensitive to. That is a guess and I would want to test it before believing it.
+    </p>
+
+    <hr>
+
+    <p style="font-size:0.88rem;color:var(--text-muted)">
+      Paper: <a href="https://arxiv.org/abs/2609.00450" target="_blank" rel="noopener">arXiv:2609.00450</a>, MICRO 2026, CC BY 4.0. The figures reproduced here are Figures 8 and 11 from that paper, attributed in each caption. The bar chart, the budget decomposition and the exchange-rate calculation are mine.
+    </p>
+
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-icons">
+      <a href="mailto:arpitsinghgautam777@gmail.com" title="Email"><i class="fas fa-envelope" aria-hidden="true"></i></a>
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap" aria-hidden="true"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+      <a href="https://topmate.io/arpit_singh_gautam/" title="TopMate" target="_blank" rel="noopener"><i class="fas fa-calendar-check" aria-hidden="true"></i></a>
+    </div>
+    <span>&copy; 2026 Arpit Singh Gautam &middot; Bengaluru, India</span>
+  </div>
+</footer>
+
+<script>
+  function toggleTheme(){var cur=document.documentElement.getAttribute('data-theme');var next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);localStorage.setItem('theme',next);document.getElementById('theme-toggle').textContent=next==='dark'?'\u2600\ufe0f':'\ud83c\udf19';}
+  (function(){var t=document.documentElement.getAttribute('data-theme');var btn=document.getElementById('theme-toggle');if(btn)btn.textContent=t==='dark'?'\u2600\ufe0f':'\ud83c\udf19';})();
+  var btt=document.getElementById('back-to-top');
+  window.addEventListener('scroll',function(){if(window.scrollY>300){btt.classList.add('visible');}else{btt.classList.remove('visible');}});
+  btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+</body>
+</html>
