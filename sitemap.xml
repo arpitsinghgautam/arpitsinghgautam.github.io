@@ -4,43 +4,43 @@
   <!-- Core pages -->
   <url>
     <loc>https://arpitsinghgautam.me/</loc>
-    <lastmod>2026-07-14</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/publications</loc>
-    <lastmod>2026-07-14</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/experience</loc>
-    <lastmod>2026-07-14</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/media-awards</loc>
-    <lastmod>2026-07-14</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/projects</loc>
-    <lastmod>2026-07-14</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/blog</loc>
-    <lastmod>2026-07-14</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/misc</loc>
-    <lastmod>2026-06-19</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -48,13 +48,13 @@
   <!-- Blog posts -->
   <url>
     <loc>https://arpitsinghgautam.me/blog/nobody-ships-4-bit</loc>
-    <lastmod>2026-09-02</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/blog/on-policy-distillation-noisy-teacher</loc>
-    <lastmod>2026-09-01</lastmod>
+    <lastmod>2026-09-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -66,31 +66,31 @@
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/blog/sair-distillation-challenge</loc>
-    <lastmod>2026-07-14</lastmod>
+    <lastmod>2026-09-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/blog/llm-quantization-gallery</loc>
-    <lastmod>2026-06-19</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/blog/turboquant</loc>
-    <lastmod>2026-06-19</lastmod>
+    <lastmod>2026-09-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/blog/arc-agi-challenge</loc>
-    <lastmod>2026-06-19</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/blog/paperbanana</loc>
-    <lastmod>2026-06-19</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -98,55 +98,55 @@
   <!-- Portfolio pages -->
   <url>
     <loc>https://arpitsinghgautam.me/portfolio/LLM-Quantization-Gallery</loc>
-    <lastmod>2026-06-19</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/portfolio/American-Sign-Language-Recognition-System</loc>
-    <lastmod>2026-06-19</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/portfolio/Buddy</loc>
-    <lastmod>2026-06-19</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/portfolio/Crime-Analysis-and-Prediction</loc>
-    <lastmod>2026-06-19</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/portfolio/Demand-Forecasting</loc>
-    <lastmod>2026-06-19</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/portfolio/Face-Scrambler</loc>
-    <lastmod>2026-06-19</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/portfolio/MUJ-Attendance-2.0</loc>
-    <lastmod>2026-06-19</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/portfolio/Operating-System-Scheduling-Algorithms</loc>
-    <lastmod>2026-06-19</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>https://arpitsinghgautam.me/portfolio/Recipe-Genie-Pad</loc>
-    <lastmod>2026-06-19</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
