@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6P1E490Z0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X6P1E490Z0');</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="TimesFM-3 is rank #1 on GIFT-Eval among pre-trained foundation models, and the weights are non-commercial. I re-derived the board and joined the column it does not have. Obeying the licence costs 2.5% by changing vendor and 7.6% by staying with Google.">
+  <link rel="canonical" href="https://arpitsinghgautam.me/blog/gift-eval-licence-column">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Arpit Singh Gautam">
+  <meta property="og:title" content="The Forecasting Leaderboard Needs a Licence Column - Arpit Singh Gautam">
+  <meta property="og:description" content="TimesFM-3 is rank #1 on GIFT-Eval among pre-trained foundation models, and the weights are non-commercial. I re-derived the board and joined the column it does not have. Obeying the licence costs 2.5% by changing vendor and 7.6% by staying with Google.">
+  <meta property="og:url" content="https://arpitsinghgautam.me/blog/gift-eval-licence-column">
+  <meta property="og:image" content="https://arpitsinghgautam.me/assets/img/blog/gift-eval-licence-column-thumb.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@Asg_Wolverine">
+  <meta name="twitter:creator" content="@Asg_Wolverine">
+  <meta name="twitter:title" content="The Forecasting Leaderboard Needs a Licence Column - Arpit Singh Gautam">
+  <meta name="twitter:description" content="TimesFM-3 is rank #1 on GIFT-Eval among pre-trained foundation models, and the weights are non-commercial. I re-derived the board and joined the column it does not have. Obeying the licence costs 2.5% by changing vendor and 7.6% by staying with Google.">
+  <meta name="twitter:image" content="https://arpitsinghgautam.me/assets/img/blog/gift-eval-licence-column-thumb.png">
+  <title>The Forecasting Leaderboard Needs a Licence Column - Arpit Singh Gautam</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="../assets/css/fontawesome.css">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BlogPosting", "headline": "The Forecasting Leaderboard Needs a Licence Column", "image": "https://arpitsinghgautam.me/assets/img/blog/gift-eval-licence-column-thumb.png", "datePublished": "2026-09-03", "author": {"@type": "Person", "name": "Arpit Singh Gautam", "url": "https://arpitsinghgautam.me/"}, "publisher": {"@type": "Person", "name": "Arpit Singh Gautam"}, "mainEntityOfPage": "https://arpitsinghgautam.me/blog/gift-eval-licence-column"}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arpitsinghgautam.me/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://arpitsinghgautam.me/blog"}, {"@type": "ListItem", "position": 3, "name": "The Forecasting Leaderboard Needs a Licence Column", "item": "https://arpitsinghgautam.me/blog/gift-eval-licence-column"}]}
+  </script>
+  <style>
+    /* Figure-local classes for the two drawn figures on this page. */
+  #lgp .ttl  { fill: var(--text); font-size: 14px; font-weight: 700; }
+  #lgp .sub  { fill: var(--text-muted); font-size: 11px; }
+  #lgp .row  { fill: var(--text); font-size: 12px; font-weight: 600; }
+  #lgp .cnt  { fill: var(--text-muted); font-size: 10.5px; }
+  #lgp .tick { fill: var(--text-muted); font-size: 9.5px; }
+  #lgp .lbl  { fill: var(--text-muted); font-size: 10px; }
+  #lgp .lblo { fill: var(--accent); font-size: 10.5px; font-weight: 700; }
+  #lgp .lgd  { fill: var(--text-muted); font-size: 10.5px; }
+  #lgp .note { fill: var(--text-muted); font-size: 10.5px; }
+  #lgp .grid { stroke: var(--border); stroke-width: 1; stroke-dasharray: 2 4; }
+  #lgp .axis { stroke: var(--border); stroke-width: 1.2; }
+  #lgp .lead { stroke: var(--accent); stroke-width: 1; stroke-dasharray: 2 3; }
+  #lcs .ttl  { fill: var(--text); font-size: 14px; font-weight: 700; }
+  #lcs .sub  { fill: var(--text-muted); font-size: 11px; }
+  #lcs .box  { fill: none; stroke: var(--border); stroke-width: 1.4; }
+  #lcs .boxh { fill: none; stroke: var(--accent); stroke-width: 1.8; }
+  #lcs .hd   { fill: var(--text); font-size: 12.5px; font-weight: 700; }
+  #lcs .hdo  { fill: var(--accent); font-size: 12.5px; font-weight: 700; }
+  #lcs .bd   { fill: var(--text-muted); font-size: 10.5px; }
+  #lcs .mono { fill: var(--text); font-size: 11px; font-family: var(--font-mono); }
+  #lcs .big  { fill: var(--accent); font-size: 20px; font-weight: 700; font-family: var(--font-mono); }
+  #lcs .cap  { fill: var(--text-muted); font-size: 10px; }
+  #lcs .arr  { stroke: var(--text-muted); stroke-width: 1.4; fill: none; }
+  #lcs .note { fill: var(--text-muted); font-size: 10.5px; }
+
+    /* Interface captures are dark, because the sites they came from render dark. Keep them
+       on a dark plate so a light-theme reader gets a deliberate panel, not a black slab.
+       Mirrors .paper-shot, which does the same job for white paper figures. */
+    .ui-shot { background: #0d1117; border: 1px solid var(--border); border-radius: 8px;
+               padding: 10px; }
+    .ui-shot img { border: none; border-radius: 3px; }
+  </style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<button id="back-to-top" title="Back to top" aria-label="Back to top"><i class="fas fa-arrow-up" aria-hidden="true"></i></button>
+
+<header class="site-header">
+  <div class="header-top">
+    <a class="nav-brand" href="/">Arpit Singh <span class="brand-accent">Gautam</span></a>
+    <div class="header-icons">
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap" aria-hidden="true"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle dark mode">&#127769;</button>
+    </div>
+  </div>
+  <div class="header-nav">
+    <a href="/">About</a>
+    <a href="/publications">Publications</a>
+    <a href="/experience">Experience</a>
+    <a href="/media-awards">Media &amp; Awards</a>
+    <a href="/projects">Projects</a>
+    <a href="/blog" class="active">Blog</a>
+    <a href="/misc">Misc</a>
+  </div>
+</header>
+
+<main class="page-wrap" id="main" tabindex="-1">
+
+  <div class="blog-post-hero">
+    <div class="breadcrumb"><a href="/blog">&larr; Blog</a></div>
+    <h1>The Forecasting Leaderboard Needs a Licence Column</h1>
+    <div class="blog-post-meta">
+      <span><i class="fas fa-calendar-alt" aria-hidden="true"></i> Sep 2026</span>
+      <span><i class="fas fa-clock" aria-hidden="true"></i> 12 min read</span>
+      <span><i class="fas fa-tag" aria-hidden="true"></i> Benchmarks &middot; Evaluation &middot; Time Series</span>
+    </div>
+  </div>
+
+  <div class="blog-post-body">
+
+    <p>
+      TimesFM-3 showed up twice in today's sweep. <code>google-research/timesfm</code> was ninth on GitHub trending with 1,626 stars gained that day, and <code>google/timesfm-3.0-pytorch</code> was on the Hugging Face trending list with 46,862 downloads in its first month.
+    </p>
+    <p>
+      Every write-up I opened led with the same fact and stopped there: the weights are non-commercial. Which is true, and I wanted to know what it costs, and nobody had said. So I went and got the leaderboard.
+    </p>
+    <p>
+      A couple of hours later I had a number for it, and two other things I had not gone looking for.
+    </p>
+
+    <h2>What Google claims, and whether it holds</h2>
+
+    <p>
+      <a href="https://research.google/blog/timesfm-3-a-zero-shot-foundation-model-for-multivariate-forecasting/" target="_blank" rel="noopener">Google says</a> TimesFM-3 is the top-ranked model on all three major forecasting benchmarks <strong>among all pre-trained foundation models</strong>. On <a href="https://huggingface.co/spaces/Salesforce/GIFT-Eval" target="_blank" rel="noopener">GIFT-Eval</a> that holds. I re-derived the board to check, and it sits at position 8 with every entry above it being an agentic system rather than a single model, which is what the qualifier excludes.
+    </p>
+    <p>
+      The licence is <code>timesfm-non-commercial-license-v1.0</code>. The <a href="https://github.com/google-research/timesfm" target="_blank" rel="noopener">repository README</a> says commercial or production use of the default pretrained weights is not permitted, and the model card repeats it in prose. Code stays Apache-2.0, and so do the weights for 2.5 and earlier.
+    </p>
+    <p>
+      GIFT-Eval has a column for test-data leakage, a column for whether replication code exists, and a filter for model type. Nothing on the board says anything about what you may do with the weights. For as long as the field's default was Apache-2.0 that cost nobody anything. TimesFM-3 is the first entry to reach the top of the board under a bespoke non-commercial licence.
+    </p>
+    <p>
+      Here is what the board says once you add the column.
+    </p>
+
+    <table>
+      <thead><tr><th>what you want</th><th>best available</th><th>position</th><th>normalised CRPS</th></tr></thead>
+      <tbody>
+        <tr><td>anything at all</td><td>TimesFM-3</td><td>8</td><td>0.4557</td></tr>
+        <tr><td>weights you can ship, any vendor</td><td>Granite-PatchTST-FM-r2, IBM</td><td>27</td><td>0.4672, +2.5%</td></tr>
+        <tr><td>weights you can ship, from Google</td><td>TimesFM-2.5, Apache-2.0</td><td>51</td><td>0.4903, +7.6%</td></tr>
+      </tbody>
+    </table>
+
+    <p>
+      Staying inside the Google line costs three times what changing vendor costs.
+    </p>
+
+    <h2>What TimesFM-3 is</h2>
+
+    <p>
+      330 million parameters, pretrained on more than a trillion time points. A decoder-only patched transformer, 20 layers at model dimension 1280 with 16 heads, context patch length 32 and forecast horizon patch length 64. The architecture line on the model card reads "Stacked Mixing Transformer with Variate Attention and CPM Iterative RevIN".
+    </p>
+    <p>
+      What changed against TimesFM-2.5 is that it is natively multivariate. Earlier versions forecast one series at a time. This one alternates causal temporal attention across time with full variate attention across series, and takes past-only and past-and-future covariates without per-task tuning. It also decodes the whole horizon in a single forward pass rather than autoregressively, using what Google calls Contiguous Patch Masking, and that turns out to be the property the ranking is really about.
+    </p>
+
+    <h2>Getting the numbers out</h2>
+
+    <p>
+      Scraping the board was the wrong instinct. It is a Gradio Space, so a plain fetch returns a loading spinner and the table only exists after a websocket round trip. I did eventually get it to render, which is where the screenshot below comes from, but by then I had noticed that scraping the rendered table was pointless because the Space stores everything anyway.
+    </p>
+    <p>
+      <code>results/</code> holds one <code>all_results.csv</code> per submission with a row for every evaluation configuration, one <code>config.json</code> per submission with its declared metadata, and <code>src/utils.py</code> with the aggregation code. All public, all sitting there.
+    </p>
+    <p>
+      So I downloaded the directory at a pinned commit and called the leaderboard's own aggregation on it.
+    </p>
+
+<pre><code class="language-python"># Excerpt. The download loop over results/&lt;model&gt;/ is omitted; it is a thread pool
+# over the file list in the Space's API listing.
+#
+# I did not reimplement the aggregation. Fetching the leaderboard's own src/utils.py
+# and calling it means the numbers below are its arithmetic on its data. The only
+# shim is the ipdb import in that file, which sits on an error path this never hits.
+REV = "b6cb73323064b1c114680e12b4455a262d8d41e8"   # snapshot, read 2026-09-03
+BASE = f"https://huggingface.co/spaces/Salesforce/GIFT-Eval/resolve/{REV}"
+
+src = requests.get(f"{BASE}/src/utils.py").text.replace("import ipdb", "ipdb = None", 1)
+Path("gift_utils.py").write_text(src, encoding="utf-8")
+import gift_utils
+
+board = gift_utils.get_grouped_dfs(root_dir="results",
+                                   ds_properties="results/dataset_properties.csv")["overall"]
+board.columns = ["MASE", "MASE_Rank", "CRPS", "CRPS_Rank"]
+
+# The one thing the board does not have: what you may do with the weights.
+def licence(model_link):
+    repo = re.match(r"https://huggingface\.co/([^/]+/[^/?#]+)", model_link or "")
+    if not repo:
+        return "no-weights-link"
+    tags = requests.get(f"https://huggingface.co/api/models/{repo[1]}").json()["tags"]
+    hits = [t.split(":", 1)[1] for t in tags if t.startswith("license:")]
+    return hits[0] if hits else "unstated"
+
+COMMERCIAL = {"apache-2.0", "mit", "bsd-3-clause", "cc-by-4.0", "openmdw-1.0"}
+</code></pre>
+
+    <p>
+      <code>COMMERCIAL</code> is the one judgement call in the whole thing, so I left it as a named constant at the top rather than burying it in a filter. Disagree by editing one line. I left <code>other</code> out of it, because that is what Hugging Face shows for any bespoke licence file, and a bespoke licence has to be read before it can be trusted.
+    </p>
+    <p>
+      How that aggregation works decides two of the things I found later. For each of the 97 evaluation configurations, every metric is divided by the Seasonal Naive result for that same configuration, so 1.0 means no better than repeating last season. The normalised values are then combined across configurations with a geometric mean:
+    </p>
+
+    <p style="text-align:center">
+      <math class="eqn" display="block" data-tex="\mathrm{CRPS}_{\mathrm{model}} = \left( \prod_{c=1}^{97} \frac{\mathrm{CRPS}_{\mathrm{model},c}}{\mathrm{CRPS}_{\mathrm{naive},c}} \right)^{1/97}"><msub><mi mathvariant="normal">CRPS</mi><mi mathvariant="normal">model</mi></msub><mo>=</mo><mo stretchy="true" form="prefix">(</mo><msubsup><mo largeop="true" movablelimits="true">∏</mo><mrow><mi>c</mi><mo lspace="0" rspace="0">=</mo><mn>1</mn></mrow><mn>97</mn></msubsup><mfrac><msub><mi mathvariant="normal">CRPS</mi><mrow><mi mathvariant="normal">model</mi><mo separator="true">,</mo><mi>c</mi></mrow></msub><msub><mi mathvariant="normal">CRPS</mi><mrow><mi mathvariant="normal">naive</mi><mo separator="true">,</mo><mi>c</mi></mrow></msub></mfrac><msup><mo stretchy="true" form="postfix">)</mo><mrow><mn>1</mn><mo lspace="0" rspace="0">/</mo><mn>97</mn></mrow></msup></math>
+    </p>
+
+    <p>
+      Geometric rather than arithmetic because these are ratios, and the arithmetic mean of ratios is dominated by whichever configuration happens to have the most headroom. Separately, each model is ranked against all the others <strong>within</strong> each configuration and those ranks are averaged, which gives <code>CRPS_Rank</code>, and that is what the board sorts on by default.
+    </p>
+    <p>
+      The snapshot has 127 submission directories. My run produced 128 rows, for a reason I come back to at the end. Dropping the two partial entries leaves 126.
+    </p>
+    <p>
+      I checked the reproduction against the live board before trusting any of it: STRIDE w/ Synapse 0.625 MASE and 12.67 mean CRPS rank, EXAONE-Forecast-Agent 0.610 and 18.299, TimesFM-3 0.667 and 24.33. Same to every published digit.
+    </p>
+
+    <figure class="blog-fig">
+      <div class="ui-shot"><img src="../assets/img/blog/gift-eval-licence-column/gifteval-board-table.png" alt="The GIFT-Eval leaderboard table showing its top twelve rows with columns for model, organization, test leakage, replication code, MASE, MASE rank, CRPS and CRPS rank. TimesFM-3 sits tenth in this sort order and every entry above it carries the yellow agentic marker." loading="lazy" width="1196" height="510"></div>
+      <figcaption><b>The live leaderboard, 3 September 2026.</b> Sorted the way it loads, by <code>MASE_Rank</code> ascending. The yellow dot is <code>agentic</code>, the red dot is <code>zero-shot</code>. Note the <code>Test Leak.</code> column, and note that nothing on the row says anything about the licence. Captured from <a href="https://salesforce-gift-eval.hf.space/" target="_blank" rel="noopener">salesforce-gift-eval.hf.space</a> with headless Chrome driven over the DevTools Protocol, because the Space is a Gradio app served over a websocket and a plain page fetch returns only a loading spinner.</figcaption>
+    </figure>
+
+    <h2>The seven above it are all agentic systems</h2>
+
+    <p>
+      Sort by mean CRPS rank and the top eight are:
+    </p>
+
+    <table>
+      <thead><tr><th></th><th>model</th><th>type</th><th>mean CRPS rank</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>STRIDE w/ Synapse</td><td>agentic</td><td>12.67</td></tr>
+        <tr><td>2</td><td>EXAONE-Forecast-Agent</td><td>agentic</td><td>18.30</td></tr>
+        <tr><td>3</td><td>CastStar</td><td>agentic</td><td>19.38</td></tr>
+        <tr><td>4</td><td>LS-Agent</td><td>agentic</td><td>20.92</td></tr>
+        <tr><td>5</td><td>Falcon-Agent</td><td>agentic</td><td>21.72</td></tr>
+        <tr><td>6</td><td>limix_moe</td><td>agentic</td><td>23.34</td></tr>
+        <tr><td>7</td><td>RacineCast-1-NC</td><td>agentic</td><td>24.07</td></tr>
+        <tr><td>8</td><td><strong>TimesFM-3</strong></td><td><strong>zero-shot</strong></td><td><strong>24.33</strong></td></tr>
+      </tbody>
+    </table>
+
+    <p>
+      Sixteen of the top twenty are agentic. An agentic tier has formed above the foundation models on a benchmark built to compare foundation models, and Google's qualifier is a plain description of that split rather than a hedge.
+    </p>
+    <p>
+      What I care about is the size of the gap. TimesFM-3's normalised CRPS of 0.4557 is 8.9% behind the top agentic entry at 0.4185. That is what the agentic tier buys, and you pay for it with an orchestrated system that calls models repeatedly per forecast, against 330 million parameters answering once.
+    </p>
+    <p>
+      I cannot price that properly. Most of the agentic entries publish no weights and no per-forecast cost, and I am not going to invent a figure for how many calls a system I cannot inspect makes. But it is the same trade as test-time scaling everywhere else, where the last few percent costs a different order of magnitude, and whether it is worth paying depends on how many forecasts you run. For most people running forecasts in a loop, it is not.
+    </p>
+
+    <h2>The leakage column is the one they got right</h2>
+
+    <p>
+      I went in expecting contamination to be the story. Time-series foundation models have a worse structural problem with it than language models do, because the universe of text is effectively unbounded while the universe of public forecasting datasets is a few dozen collections that everybody reuses. Train on all the public time series and you have very likely trained on the benchmark.
+    </p>
+    <p>
+      Salesforce handled that in the design. Alongside GIFT-Eval they ship <a href="https://huggingface.co/datasets/Salesforce/GiftEvalPretrain" target="_blank" rel="noopener">GiftEvalPretrain</a>, roughly 230 billion data points under Apache-2.0, and the dataset card says the collection "has no leakage issue with the train/test split and can be used to pretrain foundation models that can be fairly evaluated on GIFT-Eval". Pretrain on the sanctioned split and the zero-shot claim holds by construction rather than by assertion.
+    </p>
+    <p>
+      TimesFM-3's model card says that is what it did.
+    </p>
+
+    <figure class="blog-fig">
+      <div class="ui-shot"><img src="../assets/img/blog/gift-eval-licence-column/timesfm3-data-section.png" alt="The Data section of the TimesFM 3.0 model card, listing four pretraining sources: GiftEvalPretrain excluding the datasets that overlap with fev-bench, Wikipedia Pageviews with a November 2023 cutoff, Google Trends top queries with an end of 2022 cutoff, and synthetic and augmented data." loading="lazy" width="770" height="260"></div>
+      <figcaption><b>The Data section of the TimesFM 3.0 model card</b>, <a href="https://huggingface.co/google/timesfm-3.0-pytorch" target="_blank" rel="noopener">google/timesfm-3.0-pytorch</a>, read 3 September 2026.</figcaption>
+    </figure>
+
+    <p>
+      That first bullet is doing two things. It uses the non-leaking split for GIFT-Eval, and it additionally excludes the datasets overlapping fev-bench, which is a different benchmark and which nobody required them to disclose.
+    </p>
+    <p>
+      So the leakage declarations line up sensibly. Every submission self-declares a <code>testdata_leakage</code> bit in its <code>config.json</code>, and 17 of 125 say Yes. The Yes list is almost entirely models trained before the non-leaking split existed or against a different corpus: TimesFM 1.0 and 2.0, four Chronos variants, IBM's TTM R1 and R2, Lag-Llama. Google declared Yes for 1.0 and 2.0 and No for 2.5 and 3.0, which is what honest declaration looks like from a lab that changed its corpus.
+    </p>
+    <p>
+      That the old leakage was material rather than theoretical has been checked by someone other than me. Cisco's <a href="https://arxiv.org/abs/2511.19841" target="_blank" rel="noopener">time series model technical report</a> built its own filtered GIFT-Eval, removing "those datasets known to be part of the TimesFM 2.0 training corpus", and on that filtered board TimesFM-2.5 finished behind Chronos-2 and Toto-1.0. Their metric convention is raw rather than normalised so those numbers do not map onto mine, and I am citing the practice rather than the ranking.
+    </p>
+    <p>
+      The bit is still only a bit. One value per submission, no dataset list, no audit, filled in by the submitter. But a benchmark that hands submitters a clean corpus and then asks them to declare has done considerably better than one that only asks them to declare, and this is the part of the board I came away impressed by.
+    </p>
+
+    <h2>The column that is not there</h2>
+
+    <p>
+      Every submission's <code>config.json</code> carries <code>model</code>, <code>model_type</code>, <code>model_dtype</code>, <code>model_link</code>, <code>code_link</code>, <code>org</code>, <code>testdata_leakage</code>, <code>replication_code_available</code>. The rendered board turns three of those into filters.
+    </p>
+    <p>
+      The licence sits one hop from <code>model_link</code>, as a tag on the Hugging Face repo it already points at. Joining it is the twenty lines above. Across the snapshot that gives 41 Apache-2.0, 6 CC-BY-NC-4.0, 5 MIT, 4 CC-BY-4.0, 4 CC-BY-NC-SA-4.0, 3 <code>other</code>, 1 OpenMDW-1.0, 6 with an unstated licence, and 56 entries that link no weights at all.
+    </p>
+    <p>
+      I nearly wrote something stupid about that last number. Thirty-five of those 56 have nothing to publish by construction: six statistical baselines, nine deep-learning models trained per dataset, and twenty agentic systems that are pipelines rather than checkpoints. No weights link mostly does not mean hiding something, and I have not counted any of them as failing the licence test.
+    </p>
+    <p>
+      TimesFM-3 is one of the three tagged <code>other</code>. Reading its licence file confirms what the repository README already says.
+    </p>
+
+    <figure class="blog-fig">
+<svg id="lgp" viewBox="0 0 760 450" width="760" height="450" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="lgt lgd">
+<title id="lgt">The GIFT-Eval top thirty, before and after filtering for a licence you can ship</title>
+<desc id="lgd">Two strips on a shared axis of normalised CRPS. The upper strip is the leaderboard's top thirty entries. The lower strip keeps only those whose weights carry a commercially usable licence. The left end of the axis, where the best scores are, empties out: TimesFM-3 and the six agentic systems ahead of it all disappear.</desc>
+<rect width="760" height="450" fill="var(--bg-subtle)"/>
+<text class="ttl" x="24" y="28">What the licence filter removes</text>
+<text class="sub" x="24" y="48">GIFT-Eval top 30 by mean CRPS rank. Horizontal position is normalised CRPS, lower is better. Snapshot b6cb733, 2026-09-03.</text>
+<line class="grid" x1="96.0" y1="96" x2="96.0" y2="340"/>
+<text class="tick" x="96.0" y="88" text-anchor="middle">0.41</text>
+<line class="grid" x1="169.4" y1="96" x2="169.4" y2="340"/>
+<text class="tick" x="169.4" y="88" text-anchor="middle">0.42</text>
+<line class="grid" x1="242.8" y1="96" x2="242.8" y2="340"/>
+<text class="tick" x="242.8" y="88" text-anchor="middle">0.43</text>
+<line class="grid" x1="316.2" y1="96" x2="316.2" y2="340"/>
+<text class="tick" x="316.2" y="88" text-anchor="middle">0.45</text>
+<line class="grid" x1="389.6" y1="96" x2="389.6" y2="340"/>
+<text class="tick" x="389.6" y="88" text-anchor="middle">0.46</text>
+<line class="grid" x1="463.1" y1="96" x2="463.1" y2="340"/>
+<text class="tick" x="463.1" y="88" text-anchor="middle">0.47</text>
+<line class="grid" x1="536.5" y1="96" x2="536.5" y2="340"/>
+<text class="tick" x="536.5" y="88" text-anchor="middle">0.48</text>
+<line class="grid" x1="609.9" y1="96" x2="609.9" y2="340"/>
+<text class="tick" x="609.9" y="88" text-anchor="middle">0.49</text>
+<line class="grid" x1="683.3" y1="96" x2="683.3" y2="340"/>
+<text class="tick" x="683.3" y="88" text-anchor="middle">0.50</text>
+<text class="tick" x="96" y="72">better</text>
+<path d="M 140 68 L 122 68" class="axis" marker-end="url(#lgarrow)"/>
+<defs><marker id="lgarrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 8 4 L 0 8 z" fill="var(--text-muted)"/></marker></defs>
+<line class="axis" x1="96" y1="158" x2="720" y2="158"/>
+<text class="row" x="24" y="122">the board as published</text>
+<text class="cnt" x="24" y="137">30 entries. 7 of the top 8 are agentic systems, not single models.</text>
+<circle cx="156.6" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="121.7" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="318.4" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="335.2" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="385.5" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="373.3" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="423.3" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="394.6" cy="158" r="6" fill="var(--accent)"/>
+<circle cx="424.8" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="396.4" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="444.1" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="441.7" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="451.5" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="426.4" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="469.5" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="393.7" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="485.2" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="451.7" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="497.7" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="472.5" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="392.7" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="452.1" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="555.7" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="385.3" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="454.6" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="515.9" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="479.0" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="528.8" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="551.5" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="496.9" cy="158" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<line class="axis" x1="96" y1="272" x2="720" y2="272"/>
+<text class="row" x="24" y="236">weights you can put in a product</text>
+<text class="cnt" x="24" y="251">6 of the same 30 survive the filter.</text>
+<circle cx="424.8" cy="272" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="451.5" cy="272" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="451.7" cy="272" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="479.0" cy="272" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="528.8" cy="272" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<circle cx="496.9" cy="272" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<line class="lead" x1="394.6" y1="166" x2="394.6" y2="200"/>
+<text class="lblo" x="394.6" y="214" text-anchor="middle">TimesFM-3, position 8, non-commercial</text>
+<line class="lead" x1="479.0" y1="280" x2="479.0" y2="300"/>
+<text class="lbl" x="487.0" y="304">Granite-PatchTST-FM-r2, position 27</text>
+<line class="lead" x1="477.3" y1="280" x2="477.3" y2="314"/>
+<text class="lbl" x="485.3" y="318">TiRex-2-Pretrained, position 33</text>
+<circle cx="30" cy="360" r="6" fill="var(--accent)"/>
+<text class="lgd" x="42" y="364">TimesFM-3</text>
+<circle cx="142" cy="360" r="4.5" fill="none" stroke="var(--link)" stroke-width="1.6" opacity="0.75"/>
+<text class="lgd" x="154" y="364">every other entry</text>
+<text class="note" x="24" y="392">Commercially usable means the weights carry apache-2.0, mit, bsd-3-clause, cc-by-4.0 or openmdw-1.0.</text>
+<text class="note" x="24" y="406">An entry that publishes no weights cannot pass the filter, which removes every statistical baseline and most</text>
+<text class="note" x="24" y="420">of the agentic systems. Aggregation is the leaderboard's own; the licence join is mine.</text>
+</svg>
+      <figcaption><b>Drawn, mine.</b> The board's top thirty on a shared axis of normalised CRPS, then the same thirty with only the commercially licensed weights kept. The axis is zoomed to 0.415 to 0.500, linear and unbroken, because the region is dense; the numbers appear in the text too. Aggregation is the leaderboard's own, at snapshot <code>b6cb733</code>. The licence join is mine.</figcaption>
+    </figure>
+
+    <p>
+      Six of the top thirty survive the filter, and the left end of the axis, which is the only part anyone reads, empties out.
+    </p>
+    <p>
+      Take the systems out too, so what is left is one model answering in one forward pass, the same thing TimesFM-3 is:
+    </p>
+
+<pre><code>--- and with the systems removed, one model one forward pass (43) ---
+ new  was  model                         org                       lic             CRPS  CRPSrank
+   1   27  Granite-PatchTST-FM-r2        IBM TSFM &amp; Rensselaer Pol openmdw-1.0   0.4672     35.19
+   2   33  TiRex-2-Pretrained            NXAI                      apache-2.0    0.4669     39.86
+   3   37  Toto-2.0-2.5B                 Datadog                   apache-2.0    0.4759     41.88
+   4   38  Toto-2.0-1B                   Datadog                   apache-2.0    0.4784     43.24
+   5   39  TiRex-2-Zeroshot              NXAI                      apache-2.0    0.4781     43.54
+   6   40  Toto-2.0-313m                 Datadog                   apache-2.0    0.4814     43.81
+   7   42  Chronos-2                     AWS                       apache-2.0    0.4854     44.66
+   8   46  tafsut                        Tafsut-FM (Huawei GTS x E mit           0.4809     47.59
+   9   49  FlowState-r1.1                IBM TSFM                  apache-2.0    0.4866     49.70
+  10   50  Granite-PatchTST-FM-r1        IBM TSFM &amp; Rensselaer Pol apache-2.0    0.4877     50.10
+
+--- where every TimesFM submission sits ---
+model                 lic             leak    pos    CRPS  CRPSrank
+TimesFM-3             other           No        8  0.4557     24.33
+TimesFM-2.5           apache-2.0      No       51  0.4903     50.14
+timesfm_2_0_500m      apache-2.0      Yes      73  0.5504     72.42
+TimesFM               apache-2.0      Yes     102  0.6804     94.46
+</code></pre>
+
+    <p>
+      IBM, NXAI, Datadog, Huawei, Amazon. TimesFM-2.5, the Apache-2.0 Google model, is at 51, below all of them.
+    </p>
+
+    <figure class="blog-fig">
+<svg id="lcs" viewBox="0 0 760 340" width="760" height="340" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="lct lcd">
+<title id="lct">The two ways to obey the TimesFM 3.0 licence, and what each costs</title>
+<desc id="lcd">TimesFM-3 sits at position 8 with a normalised CRPS of 0.4557 and a non-commercial licence. Two escape routes. Changing vendor to IBM's Granite-PatchTST-FM-r2 costs 2.5 percent CRPS and drops you to position 27. Staying with Google and falling back to the Apache-2.0 TimesFM-2.5 costs 7.6 percent and drops you to position 51. Staying costs three times as much as switching.</desc>
+<rect width="760" height="340" fill="var(--bg-subtle)"/>
+<text class="ttl" x="24" y="28">Two ways to obey the licence</text>
+<text class="sub" x="24" y="48">Normalised CRPS on GIFT-Eval, relative to what you cannot ship. Lower is better.</text>
+<defs><marker id="lcarrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 8 4 L 0 8 z" fill="var(--text-muted)"/></marker></defs>
+<rect class="boxh" x="266" y="70" width="228" height="62" rx="6"/>
+<text class="hdo" x="280" y="92">TimesFM-3</text>
+<text class="mono" x="280" y="110">position 8   CRPS 0.4557</text>
+<text class="bd" x="280" y="125">TimesFM Non-Commercial License v1.0</text>
+<path class="arr" d="M 330 132 L 330 156 L 150 156 L 150 182" marker-end="url(#lcarrow)"/>
+<path class="arr" d="M 430 132 L 430 156 L 610 156 L 610 182" marker-end="url(#lcarrow)"/>
+<text class="cap" x="150" y="150" text-anchor="middle">change vendor</text>
+<text class="cap" x="610" y="150" text-anchor="middle">stay with Google</text>
+<rect class="box" x="12" y="186" width="276" height="86" rx="6"/>
+<text class="hd" x="28" y="208">Granite-PatchTST-FM-r2</text>
+<text class="bd" x="28" y="223">IBM, OpenMDW-1.0</text>
+<text class="mono" x="28" y="242">position 27   CRPS 0.4672</text>
+<text class="big" x="272" y="262" text-anchor="end">+2.5%</text>
+<rect class="box" x="472" y="186" width="276" height="86" rx="6"/>
+<text class="hd" x="488" y="208">TimesFM-2.5</text>
+<text class="bd" x="488" y="223">Google Research, Apache-2.0</text>
+<text class="mono" x="488" y="242">position 51   CRPS 0.4903</text>
+<text class="big" x="732" y="262" text-anchor="end">+7.6%</text>
+<text class="note" x="24" y="300">Staying inside the Google line costs 3.0 times what changing vendor costs. The licence-constrained best choice is not a Google model.</text>
+<text class="note" x="24" y="318">Positions are out of 126 full-coverage entries. Both alternatives are single models answering in one forward pass, like TimesFM-3 itself.</text>
+</svg>
+      <figcaption><b>Drawn, mine.</b> The two routes out of the licence and what each costs, from the same re-derived board. Positions are out of 126 full-coverage entries; the percentages are normalised CRPS relative to TimesFM-3.</figcaption>
+    </figure>
+
+    <p>
+      Somebody who reads that Google's forecasting model is number one, tries to deploy it, hits the licence, and falls back to the previous Google version lands 24 places below where they would have landed by changing vendor, for three times the accuracy cost. The fallback most people will reach for is the worst of the available options, which is the sort of thing a licence column would have caught.
+    </p>
+    <p>
+      None of which is an accusation. Google can license its weights however it likes, and the blog post says a BigQuery integration is coming, so the commercial route is the paid service. That is a coherent business decision whose consequence happens to be invisible on the leaderboard where the model is evaluated.
+    </p>
+
+    <h2>Two things I found by recomputing</h2>
+
+    <p>
+      The two headline metrics disagree, and the board sorts on one of them. The normalised geometric mean asks how much error you removed on average. The mean rank asks how often you beat the other 125 entries. Those are different questions and they can invert. <code>ForecastMate</code> has a marginally better normalised CRPS than TimesFM-3, 0.4554 against 0.4557, and a mean CRPS rank seven places worse, 31.79 against 24.33. Read the value column and read the rank column and you get different winners, so say which one you sorted on whenever you quote a position from this board.
+    </p>
+    <p>
+      There are also two data-quality defects, both silent. The Zeus submission's CSV labels 83 of its 97 rows <code>Zeus</code> and the other 14 <code>GestaltCog/Zeus-100M</code>, so the aggregation emits two partial entries and places them at 39 and 45, each averaged over fewer configurations than everybody else. That is where my 128th row came from. Separately, the iTransformer submission's <code>config.json</code> names the model <code>i_transformer</code> while its CSV says <code>iTransformer</code>, so no metadata joins to it and it appears with no organisation, no model type and no leakage declaration.
+    </p>
+    <p>
+      Neither changes any conclusion here. Both only show up if you recompute instead of reading, which is roughly the argument for recomputing.
+    </p>
+
+    <h2>What I would take from this</h2>
+
+    <p>
+      <strong>A leaderboard encodes which failure modes its authors were worried about.</strong> GIFT-Eval's authors were worried about contamination, so they built a non-leaking pretraining split and a declaration field, and both work. Licensing was not on the list, so there is no column, and now there is a model at the top that most readers cannot use. Read a board's column list as a statement about what its designers expected to go wrong, then check the gaps yourself.
+    </p>
+    <p>
+      <strong>Rank distance and error distance are different distances.</strong> TimesFM-3 is 43 places above TimesFM-2.5 and 7.6% better. The board is dense near the top, so a large jump in position can be a small jump in error. Quote the value alongside the rank, especially in a release post.
+    </p>
+    <p>
+      <strong>Do the re-derivation.</strong> A couple of hours, about a hundred and fifty lines, and it produced a filter nobody had applied, two defects nobody had noticed, and a recommendation that inverts the obvious one. The raw results were in a public directory the whole time. Most leaderboards publish theirs the same way and almost nobody opens them.
+    </p>
+    <p>
+      <strong>Say the qualifier.</strong> "Rank #1 among pre-trained foundation models" is a careful sentence and Google wrote it. Every piece of coverage I read shortened it, and the seven entries it excludes are where the actual news was.
+    </p>
+
+    <hr>
+
+    <p style="font-size:0.88rem;color:var(--text-muted)">
+      Every number here comes from the GIFT-Eval leaderboard's own published results at snapshot <code>b6cb73323064b1c114680e12b4455a262d8d41e8</code>, aggregated by the leaderboard's own <code>src/utils.py</code>, read 3 September 2026. The licence join, the filtered boards, the two figures and the two defects are mine. Sources: <a href="https://research.google/blog/timesfm-3-a-zero-shot-foundation-model-for-multivariate-forecasting/" target="_blank" rel="noopener">Google Research on TimesFM-3</a>, <a href="https://huggingface.co/google/timesfm-3.0-pytorch" target="_blank" rel="noopener">the model card</a>, <a href="https://arxiv.org/abs/2410.10393" target="_blank" rel="noopener">the GIFT-Eval paper</a>, and <a href="https://arxiv.org/abs/2511.19841" target="_blank" rel="noopener">the Cisco time series model report</a>.
+    </p>
+
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-icons">
+      <a href="mailto:arpitsinghgautam777@gmail.com" title="Email"><i class="fas fa-envelope" aria-hidden="true"></i></a>
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap" aria-hidden="true"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+      <a href="https://topmate.io/arpit_singh_gautam/" title="TopMate" target="_blank" rel="noopener"><i class="fas fa-calendar-check" aria-hidden="true"></i></a>
+    </div>
+    <span>&copy; 2026 Arpit Singh Gautam &middot; Bengaluru, India</span>
+  </div>
+</footer>
+
+<script>
+  function toggleTheme(){var cur=document.documentElement.getAttribute('data-theme');var next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);localStorage.setItem('theme',next);document.getElementById('theme-toggle').textContent=next==='dark'?'\u2600\ufe0f':'\ud83c\udf19';}
+  (function(){var t=document.documentElement.getAttribute('data-theme');var btn=document.getElementById('theme-toggle');if(btn)btn.textContent=t==='dark'?'\u2600\ufe0f':'\ud83c\udf19';})();
+  var btt=document.getElementById('back-to-top');
+  window.addEventListener('scroll',function(){if(window.scrollY>300){btt.classList.add('visible');}else{btt.classList.remove('visible');}});
+  btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+</body>
+</html>
