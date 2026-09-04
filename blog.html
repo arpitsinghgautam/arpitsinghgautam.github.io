@@ -61,6 +61,26 @@
 
   <h2 class="section-title">Posts</h2>
 
+  <!-- GSQ-RCO: reading the per-tensor allocation shipped with the release -->
+  <div class="blog-entry">
+    <img class="blog-img" src="assets/img/blog/where-a-learned-quantizer-spends-its-last-bit-thumb.png" alt="Mean bits assigned per weight rising from the first quarter of the network to the last, at four bit budgets" decoding="async" loading="lazy">
+    <div class="blog-info">
+      <div class="blog-title"><a href="/blog/where-a-learned-quantizer-spends-its-last-bit">Where a Learned Quantizer Spends Its Last Bit</a></div>
+      <div class="blog-excerpt">ISTA-DASLab shipped GGUF quantizations of Qwen3.8-27B together with the per-tensor allocation its optimizer chose, which almost nobody does. Parsing those files shows the deepest quarter of the network gets 0.8 more bits than the first, the embedding is crushed to 1.75 bits while the output head is protected, and the SSM gates are never quantized at all. Meanwhile the task-lossless headline rests on one question out of 198.</div>
+      <div class="blog-date">Sep 2026 · 11 min read · Quantization · Efficiency · Benchmarks</div>
+    </div>
+  </div>
+
+  <!-- GIFT-Eval: re-deriving the board and adding the licence column -->
+  <div class="blog-entry">
+    <img class="blog-img" src="assets/img/blog/gift-eval-licence-column-thumb.png" alt="Position on GIFT-Eval for TimesFM-3, Granite-PatchTST-FM-r2 and TimesFM-2.5, with the non-commercial entry hatched" decoding="async" loading="lazy">
+    <div class="blog-info">
+      <div class="blog-title"><a href="/blog/gift-eval-licence-column">The Forecasting Leaderboard Needs a Licence Column</a></div>
+      <div class="blog-excerpt">TimesFM-3 is rank #1 on GIFT-Eval among pre-trained foundation models, the claim is precise and correct, and the weights are non-commercial. I re-derived the board from its own published results and joined the one column it does not have. Obeying the licence costs 2.5% by changing vendor and 7.6% by staying with Google, plus two silent data-quality defects found along the way.</div>
+      <div class="blog-date">Sep 2026 · 12 min read · Benchmarks · Evaluation · Time Series</div>
+    </div>
+  </div>
+
   <!-- Block quantization: the metadata budget -->
   <div class="blog-entry">
     <img class="blog-img" src="assets/img/blog/nobody-ships-4-bit-thumb.png" alt="Scale-factor overhead in bits per weight for MXFP4, NVFP4 and HBQ-A" decoding="async" loading="lazy">

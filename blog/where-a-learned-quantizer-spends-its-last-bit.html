@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6P1E490Z0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X6P1E490Z0');</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ISTA-DASLab shipped GGUF quantizations of Qwen3.8-27B together with the per-tensor allocation its optimizer chose. Reading that file shows RCO gives the deepest quarter of the network 0.8 more bits than the first, crushes the embedding to 1.75 bits while protecting the output head, and never quantizes the SSM gates at all. The task-lossless headline rests on one question out of 198.">
+  <link rel="canonical" href="https://arpitsinghgautam.me/blog/where-a-learned-quantizer-spends-its-last-bit">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Arpit Singh Gautam">
+  <meta property="og:title" content="Where a Learned Quantizer Spends Its Last Bit - Arpit Singh Gautam">
+  <meta property="og:description" content="ISTA-DASLab shipped GGUF quantizations of Qwen3.8-27B together with the per-tensor allocation its optimizer chose. Reading that file shows RCO gives the deepest quarter of the network 0.8 more bits than the first, crushes the embedding to 1.75 bits while protecting the output head, and never quantizes the SSM gates at all. The task-lossless headline rests on one question out of 198.">
+  <meta property="og:url" content="https://arpitsinghgautam.me/blog/where-a-learned-quantizer-spends-its-last-bit">
+  <meta property="og:image" content="https://arpitsinghgautam.me/assets/img/blog/where-a-learned-quantizer-spends-its-last-bit-thumb.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@Asg_Wolverine">
+  <meta name="twitter:creator" content="@Asg_Wolverine">
+  <meta name="twitter:title" content="Where a Learned Quantizer Spends Its Last Bit - Arpit Singh Gautam">
+  <meta name="twitter:description" content="ISTA-DASLab shipped GGUF quantizations of Qwen3.8-27B together with the per-tensor allocation its optimizer chose. Reading that file shows RCO gives the deepest quarter of the network 0.8 more bits than the first, crushes the embedding to 1.75 bits while protecting the output head, and never quantizes the SSM gates at all. The task-lossless headline rests on one question out of 198.">
+  <meta name="twitter:image" content="https://arpitsinghgautam.me/assets/img/blog/where-a-learned-quantizer-spends-its-last-bit-thumb.png">
+  <title>Where a Learned Quantizer Spends Its Last Bit - Arpit Singh Gautam</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="../assets/css/fontawesome.css">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Where a Learned Quantizer Spends Its Last Bit", "image": "https://arpitsinghgautam.me/assets/img/blog/where-a-learned-quantizer-spends-its-last-bit-thumb.png", "datePublished": "2026-09-05", "author": {"@type": "Person", "name": "Arpit Singh Gautam", "url": "https://arpitsinghgautam.me/"}, "publisher": {"@type": "Person", "name": "Arpit Singh Gautam"}, "mainEntityOfPage": "https://arpitsinghgautam.me/blog/where-a-learned-quantizer-spends-its-last-bit"}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arpitsinghgautam.me/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://arpitsinghgautam.me/blog"}, {"@type": "ListItem", "position": 3, "name": "Where a Learned Quantizer Spends Its Last Bit", "item": "https://arpitsinghgautam.me/blog/where-a-learned-quantizer-spends-its-last-bit"}]}
+  </script>
+  <style>
+    /* Figure-local classes for the three drawn figures on this page. */
+  #bmr .ttl  { fill: var(--text); font-size: 14px; font-weight: 700; }
+  #bmr .sub  { fill: var(--text-muted); font-size: 11px; }
+  #bmr .hd   { fill: var(--text); font-size: 11.5px; font-weight: 700; }
+  #bmr .lbl  { fill: var(--text-muted); font-size: 10px; }
+  #bmr .lblo { fill: var(--accent); font-size: 10.5px; font-weight: 700; }
+  #bmr .tick { fill: var(--text-muted); font-size: 9.5px; }
+  #bmr .mono { fill: var(--text); font-size: 10.5px; font-family: var(--font-mono); }
+  #bmr .note { fill: var(--text-muted); font-size: 10.5px; }
+  #bmr .axis { stroke: var(--border); stroke-width: 1.2; fill: none; }
+  #bmr .grid { stroke: var(--border); stroke-width: 1; stroke-dasharray: 2 4; fill: none; }
+  #bmr .ser  { fill: none; stroke: var(--link); stroke-width: 1.6;
+                 stroke-linejoin: round; stroke-linecap: round; }
+  #bmr .dot  { fill: var(--link); }
+  #bmr .acc  { stroke: var(--accent); stroke-width: 1.6; fill: none; }
+  #bmr .accf { fill: var(--accent); }
+  #bmr .lead { stroke: var(--accent); stroke-width: 1; stroke-dasharray: 2 3; fill: none; }
+  #dgr .ttl  { fill: var(--text); font-size: 14px; font-weight: 700; }
+  #dgr .sub  { fill: var(--text-muted); font-size: 11px; }
+  #dgr .hd   { fill: var(--text); font-size: 11.5px; font-weight: 700; }
+  #dgr .lbl  { fill: var(--text-muted); font-size: 10px; }
+  #dgr .lblo { fill: var(--accent); font-size: 10.5px; font-weight: 700; }
+  #dgr .tick { fill: var(--text-muted); font-size: 9.5px; }
+  #dgr .mono { fill: var(--text); font-size: 10.5px; font-family: var(--font-mono); }
+  #dgr .note { fill: var(--text-muted); font-size: 10.5px; }
+  #dgr .axis { stroke: var(--border); stroke-width: 1.2; fill: none; }
+  #dgr .grid { stroke: var(--border); stroke-width: 1; stroke-dasharray: 2 4; fill: none; }
+  #dgr .ser  { fill: none; stroke: var(--link); stroke-width: 1.6;
+                 stroke-linejoin: round; stroke-linecap: round; }
+  #dgr .dot  { fill: var(--link); }
+  #dgr .acc  { stroke: var(--accent); stroke-width: 1.6; fill: none; }
+  #dgr .accf { fill: var(--accent); }
+  #dgr .lead { stroke: var(--accent); stroke-width: 1; stroke-dasharray: 2 3; fill: none; }
+  #mon .ttl  { fill: var(--text); font-size: 14px; font-weight: 700; }
+  #mon .sub  { fill: var(--text-muted); font-size: 11px; }
+  #mon .hd   { fill: var(--text); font-size: 11.5px; font-weight: 700; }
+  #mon .lbl  { fill: var(--text-muted); font-size: 10px; }
+  #mon .lblo { fill: var(--accent); font-size: 10.5px; font-weight: 700; }
+  #mon .tick { fill: var(--text-muted); font-size: 9.5px; }
+  #mon .mono { fill: var(--text); font-size: 10.5px; font-family: var(--font-mono); }
+  #mon .note { fill: var(--text-muted); font-size: 10.5px; }
+  #mon .axis { stroke: var(--border); stroke-width: 1.2; fill: none; }
+  #mon .grid { stroke: var(--border); stroke-width: 1; stroke-dasharray: 2 4; fill: none; }
+  #mon .ser  { fill: none; stroke: var(--link); stroke-width: 1.6;
+                 stroke-linejoin: round; stroke-linecap: round; }
+  #mon .dot  { fill: var(--link); }
+  #mon .acc  { stroke: var(--accent); stroke-width: 1.6; fill: none; }
+  #mon .accf { fill: var(--accent); }
+  #mon .lead { stroke: var(--accent); stroke-width: 1; stroke-dasharray: 2 3; fill: none; }
+
+    /* The model card's own plot is a white matplotlib figure, so it sits on a white
+       plate rather than bleeding into a dark-theme page. Same job .ui-shot does for
+       dark interface captures. */
+    .paper-shot { background: #ffffff; border: 1px solid var(--border); border-radius: 8px;
+                  padding: 10px; }
+    .paper-shot img { border: none; border-radius: 3px; }
+  </style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<button id="back-to-top" title="Back to top" aria-label="Back to top"><i class="fas fa-arrow-up" aria-hidden="true"></i></button>
+
+<header class="site-header">
+  <div class="header-top">
+    <a class="nav-brand" href="/">Arpit Singh <span class="brand-accent">Gautam</span></a>
+    <div class="header-icons">
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap" aria-hidden="true"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle dark mode">&#127769;</button>
+    </div>
+  </div>
+  <div class="header-nav">
+    <a href="/">About</a>
+    <a href="/publications">Publications</a>
+    <a href="/experience">Experience</a>
+    <a href="/media-awards">Media &amp; Awards</a>
+    <a href="/projects">Projects</a>
+    <a href="/blog" class="active">Blog</a>
+    <a href="/misc">Misc</a>
+  </div>
+</header>
+
+<main class="page-wrap" id="main" tabindex="-1">
+
+  <div class="blog-post-hero">
+    <div class="breadcrumb"><a href="/blog">&larr; Blog</a></div>
+    <h1>Where a Learned Quantizer Spends Its Last Bit</h1>
+    <div class="blog-post-meta">
+      <span><i class="fas fa-calendar-alt" aria-hidden="true"></i> Sep 2026</span>
+      <span><i class="fas fa-clock" aria-hidden="true"></i> 11 min read</span>
+      <span><i class="fas fa-tag" aria-hidden="true"></i> Quantization &middot; Efficiency &middot; Benchmarks</span>
+    </div>
+  </div>
+
+  <div class="blog-post-body">
+
+    <p>
+      A quantization release normally hands you weights and a table. This one hands you the decision.
+    </p>
+    <p>
+      ISTA-DASLab, Dan Alistarh’s group at the Institute of Science and Technology Austria, put up <a href="https://huggingface.co/ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF" target="_blank" rel="noopener">GGUF quantizations of Qwen3.8-27B</a> at four sizes, from 2.50 to 3.50 bits per weight. Alongside each file sits a 25&nbsp;kB text file listing the quantization type assigned to every one of the model’s 851 tensors, plus the importance matrix used to produce them. The methods are two of their own papers, <a href="https://arxiv.org/abs/2604.18556" target="_blank" rel="noopener">GSQ</a> and <a href="https://arxiv.org/abs/2605.00649" target="_blank" rel="noopener">RCO</a>.
+    </p>
+    <p>
+      I downloaded all four allocation dumps and parsed them. Where the bits went turned out to be more interesting than the benchmark table, which hinges on a single question out of 198.
+    </p>
+
+    <h2>Two problems wearing one coat</h2>
+
+    <p>
+      “Quantize this model to N bits” is really two questions.
+    </p>
+    <p>
+      The first is the quantizer. Given one weight tensor and a target format, where do you put the grid points and the group scales? Scalar methods like GPTQ and AWQ answer this well down to about 3 or 4 bits and then plateau. Vector and trellis methods like QTIP and AQLM do better below that, at the cost of a format ordinary inference kernels cannot read. GSQ argues the gap is not fundamental: relax the discrete choice of grid point with a Gumbel-Softmax whose cardinality matches the handful of levels you actually have at 2 to 3 bits, learn assignments and scales together, and a scalar quantizer recovers most of the vector frontier while still producing something <code>llama.cpp</code> can execute today.
+    </p>
+    <p>
+      The second is the allocator. This model has 402 weight tensors worth quantizing and they are not equally fragile. Given K candidate formats, N tensors and a total file size, which format does each tensor get? Model loss does not decompose across tensors, so a greedy per-tensor answer is wrong. Evolutionary search sees the true loss but has no gradient. Penalty methods get a gradient but only approximately satisfy the budget, and you tune the penalty weight per problem.
+    </p>
+    <p>
+      RCO’s move is geometric. Under a softmax relaxation the budget constraint turns out to describe a smooth Riemannian manifold in logit space whose normal vector has a closed form. So you can run Adam on the actual loss, project onto the tangent space, retract with a binary search, and land exactly on the budget with no constraint hyperparameter at all.
+    </p>
+    <p>
+      Quantize every tensor at every candidate type, search for the assignment, stitch the winners into one standard GGUF. The result runs unmodified in <code>llama.cpp</code> and Ollama.
+    </p>
+
+    <h2>Every score in the table is an integer in disguise</h2>
+
+    <p>
+      The model card leads with the 3.50 bpw file and calls it task-lossless: identical to the BF16 base on AIME25 and LiveCodeBench v6, and 0.51 points behind on GPQA-Diamond, at roughly a fifth of the size.
+    </p>
+    <p>
+      Those three benchmarks hold 30, 198 and 175 items respectively. So I multiplied every published score by <math data-tex="n/100"><mi>n</mi><mo>/</mo><mn>100</mn></math> to see whether it came back to a whole number of problems. All 24 of them did, to within 0.01. That confirms the denominators, and it converts the whole table into something more legible than percentages.
+    </p>
+    <p>Once you can read it that way:</p>
+    <ul>
+      <li>“trails by 0.51 points on GPQA-Diamond” is one question out of 198.</li>
+      <li>“leads by 3.33 points on AIME25” is one problem out of 30.</li>
+      <li>“leads by 1.71 on LiveCodeBench” is three problems out of 175.</li>
+      <li>The reported task-average gap, 91.70 against 91.87, is that one GPQA question divided by three.</li>
+    </ul>
+
+    <p>
+      A benchmark cannot express a difference smaller than one item, which is 3.33 points on AIME25, 0.51 on GPQA-Diamond and 0.57 on LiveCodeBench. Three of the four headline numbers are sitting on that floor.
+    </p>
+    <figure class="blog-fig">
+<svg id="bmr" viewBox="0 0 760 446" width="760" height="446" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="bmrt bmrd">
+<title id="bmrt">Every published gap in the GSQ-RCO release converted into a count of benchmark items</title>
+<desc id="bmrd">Six comparisons drawn as horizontal bars whose length is the number of benchmark items separating two models. The three gaps the model card leads with, all at 3.50 bits per weight, are one question, one problem and three problems. The three at 2.50 bits per weight are three problems, eight problems and seventeen GPQA-Diamond questions. A dashed vertical line at one item marks the smallest difference any of these benchmarks can express. Only the seventeen question gap stands clearly above that floor.</desc>
+<rect width="760" height="446" fill="var(--bg-subtle)"/>
+<text class="ttl" x="24" y="28">Every gap in the release, in problems</text>
+<text class="sub" x="24" y="48">The three reasoning benchmarks hold 30, 198 and 175 items. Each published gap converted back into items.</text>
+<line class="grid" x1="288.3" y1="78" x2="288.3" y2="360"/>
+<text class="lblo" x="294.3" y="74">1 item = the smallest difference the benchmark can express</text>
+<text class="hd" x="24" y="96">the three gaps the card leads with, at 3.50 bpw</text>
+<text class="lbl" x="24" y="125">GPQA-Diamond</text>
+<text class="mono" x="140" y="125">IQ3_S vs BF16</text>
+<rect class="dot" x="270" y="115" width="18.3" height="13" rx="2" fill-opacity="0.55"/>
+<text class="lbl" x="296.3" y="125">1 question  (0.51 pts)</text>
+<text class="note" x="270" y="142" font-size="9.5">the card's headline claim: trails by 0.51 points</text>
+<text class="lbl" x="24" y="165">AIME25</text>
+<text class="mono" x="140" y="165">IQ3_S vs UD-IQ3_S</text>
+<rect class="dot" x="270" y="155" width="18.3" height="13" rx="2" fill-opacity="0.55"/>
+<text class="lbl" x="296.3" y="165">1 problem  (3.33 pts)</text>
+<text class="note" x="270" y="182" font-size="9.5">leads by 3.33 points</text>
+<text class="lbl" x="24" y="205">LiveCodeBench</text>
+<text class="mono" x="140" y="205">IQ3_S vs UD-IQ3_S</text>
+<rect class="dot" x="270" y="195" width="55.0" height="13" rx="2" fill-opacity="0.55"/>
+<text class="lbl" x="333.0" y="205">3 problems  (1.71 pts)</text>
+<text class="note" x="270" y="222" font-size="9.5">leads by 1.71</text>
+<text class="hd" x="24" y="248">the same comparison at 2.50 bpw, matched file size</text>
+<text class="lbl" x="24" y="277">AIME25</text>
+<text class="mono" x="140" y="277">IQ2_XS vs UD-IQ2_S</text>
+<rect class="dot" x="270" y="267" width="55.0" height="13" rx="2" fill-opacity="0.55"/>
+<text class="lbl" x="333.0" y="277">3 problems  (10.00 pts)</text>
+<text class="lbl" x="24" y="303">LiveCodeBench</text>
+<text class="mono" x="140" y="303">IQ2_XS vs UD-IQ2_S</text>
+<rect class="dot" x="270" y="293" width="146.7" height="13" rx="2" fill-opacity="0.55"/>
+<text class="lbl" x="424.7" y="303">8 problems  (4.57 pts)</text>
+<text class="lbl" x="24" y="329">GPQA-Diamond</text>
+<text class="mono" x="140" y="329">IQ2_XS vs UD-IQ2_S</text>
+<rect class="accf" x="270" y="319" width="311.7" height="13" rx="2"/>
+<text class="lblo" x="589.7" y="329">17 questions  (8.59 pts)</text>
+<text class="note" x="270" y="346" font-size="9.5">the only gap here a benchmark this size can resolve</text>
+<line class="axis" x1="270" y1="366" x2="600" y2="366"/>
+<line class="axis" x1="270.0" y1="366" x2="270.0" y2="371"/>
+<text class="tick" x="270.0" y="383" text-anchor="middle">0</text>
+<line class="axis" x1="361.7" y1="366" x2="361.7" y2="371"/>
+<text class="tick" x="361.7" y="383" text-anchor="middle">5</text>
+<line class="axis" x1="453.3" y1="366" x2="453.3" y2="371"/>
+<text class="tick" x="453.3" y="383" text-anchor="middle">10</text>
+<line class="axis" x1="545.0" y1="366" x2="545.0" y2="371"/>
+<text class="tick" x="545.0" y="383" text-anchor="middle">15</text>
+<text class="lbl" x="435" y="401" text-anchor="middle">items separating the two models</text>
+<text class="note" x="24" y="420">Gaps are the card’s, item counts are mine. Unpaired binomial standard error on a difference at n=198 is about 3 to 4 points,</text>
+<text class="note" x="24" y="435">so the top bar sits at 0.17 sigma and the bottom one at 2.17.</text></svg>
+      <figcaption><b>Every published gap, converted into items.</b> Gaps are the model card’s; the item counts and the sigma figures are mine, from the harness linked at the end. The dashed line is the resolution floor: no difference smaller than one item can exist.</figcaption>
+    </figure>
+
+    <p>
+      The standard error makes the same point less charitably. For a difference of two proportions at <math data-tex="n = 198"><mi>n</mi><mo>=</mo><mn>198</mn></math>, the unpaired binomial standard error is
+    </p>
+    <p style="text-align:center">
+      <math data-tex="\mathrm{SE} = \sqrt{\frac{p_1(1-p_1)}{n} + \frac{p_2(1-p_2)}{n}} \approx 3.1 \text{ to } 4.0 \text{ points}"><mi mathvariant="normal">SE</mi><mo>=</mo><msqrt><mrow><mfrac><mrow><msub><mi>p</mi><mn>1</mn></msub><mo form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>p</mi><mn>1</mn></msub><mo form="postfix">)</mo></mrow><mi>n</mi></mfrac><mo>+</mo><mfrac><mrow><msub><mi>p</mi><mn>2</mn></msub><mo form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>p</mi><mn>2</mn></msub><mo form="postfix">)</mo></mrow><mi>n</mi></mfrac></mrow></msqrt><mo>≈</mo><mn>3.1</mn><mtext>to</mtext><mn>4.0</mn><mtext>points</mtext></math>
+    </p>
+
+    <p>
+      which puts the flagship 0.51-point gap at 0.17 sigma. These evaluations run on identical items, so a paired test would be tighter and fairer, but per-item results are not published, so nobody outside the lab can run one.
+    </p>
+    <p>
+      AIME25 is the worst offender and it is not really the release’s fault. The base model scores 30 out of 30. A saturated benchmark cannot report a degradation smaller than one problem, and “the quantized model also got 30 out of 30” tells you almost nothing about the quantizer.
+    </p>
+
+    <h2>The result that survives is at the other end</h2>
+
+    <p>
+      Run the same conversion at the tightest budget, where the GSQ-RCO file at 8.4 GB meets Unsloth’s dynamic quantization at the same 8.4 GB:
+    </p>
+    <ul>
+      <li>GPQA-Diamond: 84.85 against 76.26. Seventeen questions.</li>
+      <li>LiveCodeBench v6: 76.57 against 72.00. Eight problems.</li>
+      <li>AIME25: 96.67 against 86.67. Three problems.</li>
+    </ul>
+
+    <p>
+      Seventeen questions out of 198 is 2.17 sigma even on the conservative unpaired test. That is a real result, and it is the one the card mentions third.
+    </p>
+    <p>
+      It is also visible in the lab’s own chart, at the far left, where the two 2.5-bit points sit 7.7 task-average points apart. By 3.5 bits the same gap is 1.5 points and everything has converged onto the base model’s line.
+    </p>
+    <figure class="blog-fig">
+      <div class="paper-shot"><img src="../assets/img/blog/where-a-learned-quantizer-spends-its-last-bit/cardplot-task-avg-vs-bit-width.png" alt="The model card’s own scatter plot of task average against average bit-width. The four GSQ-RCO points rise steeply from 86.0 at 2.5 bits to 91.7 at 3.5 bits and flatten against a dashed line marking the BF16 base at 91.87. Three grey Unsloth dynamic points sit below the curve, the lowest at 78.3 at 2.49 bits." loading="lazy" width="1080" height="690"></div>
+      <figcaption><b>The lab’s own plot of the same result.</b> Task average is the mean of AIME25, GPQA-Diamond and LiveCodeBench v6. From the model card for <a href="https://huggingface.co/ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF" target="_blank" rel="noopener">ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF</a>, read 5 September 2026. The gap worth looking at is on the left of their chart, not the right.</figcaption>
+    </figure>
+
+    <p>
+      Learned allocation earns its keep exactly where the budget is too tight for a bad assignment to be absorbed. That is also where hand-tuning is hardest, which is presumably why the gap is there. At 3.50 bpw both allocators are close enough to the base model that these benchmarks cannot tell them apart, and reporting a win there is reporting a coin flip.
+    </p>
+
+    <h2>The cheap metric behaved and the expensive one did not</h2>
+
+    <p>
+      All three perplexity columns fall monotonically as the budget grows. Wikitext2 goes 7.69, 7.39, 7.20, 7.07. C4 and FineWeb-Edu do the same, without an inversion.
+    </p>
+    <p>
+      The five-task zero-shot average goes 74.54, 75.70, 74.81, 74.47. The 2.50 bpw model beats the 3.50 bpw model on it. All four quantized models also score above the BF16 base’s 74.34, which is where the recovery figures of 100.3%, 101.8%, 100.6% and 100.2% come from.
+    </p>
+    <figure class="blog-fig">
+<svg id="mon" viewBox="0 0 760 322" width="760" height="322" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="mont mond">
+<title id="mont">Perplexity is monotone in the bit budget and the zero-shot average is not</title>
+<desc id="mond">Two line charts sharing an x axis of bit budget at 2.50, 2.75, 3.00 and 3.50 bits per weight. The left shows wikitext2 perplexity falling cleanly from 7.69 to 7.39 to 7.20 to 7.07. The right shows the five-task zero-shot average moving from 74.54 up to 75.70, back down to 74.81 and then to 74.47, crossing above and below a dashed line marking the BF16 base model's 74.34. The smallest model scores higher than the largest on this second metric.</desc>
+<rect width="760" height="322" fill="var(--bg-subtle)"/>
+<text class="ttl" x="24" y="28">One of these two metrics ranks the four models correctly</text>
+<text class="sub" x="24" y="48">Both columns come from the same results table. Only one is monotone in the bit budget.</text>
+<text class="hd" x="60" y="78">wikitext2 perplexity, lower is better</text>
+<line class="axis" x1="60" y1="232" x2="340" y2="232"/>
+<polyline class="ser" points="60.0,115.6 153.3,159.8 246.7,187.8 340.0,206.9"/>
+<circle class="dot" cx="60.0" cy="115.6" r="3.4"/>
+<text class="mono" x="60.0" y="105.6" text-anchor="middle" font-size="10">7.69</text>
+<text class="tick" x="60.0" y="247" text-anchor="middle">2.50</text>
+<circle class="dot" cx="153.3" cy="159.8" r="3.4"/>
+<text class="mono" x="153.3" y="149.8" text-anchor="middle" font-size="10">7.39</text>
+<text class="tick" x="153.3" y="247" text-anchor="middle">2.75</text>
+<circle class="dot" cx="246.7" cy="187.8" r="3.4"/>
+<text class="mono" x="246.7" y="177.8" text-anchor="middle" font-size="10">7.20</text>
+<text class="tick" x="246.7" y="247" text-anchor="middle">3.00</text>
+<circle class="dot" cx="340.0" cy="206.9" r="3.4"/>
+<text class="mono" x="340.0" y="196.9" text-anchor="middle" font-size="10">7.07</text>
+<text class="tick" x="340.0" y="247" text-anchor="middle">3.50</text>
+<text class="lbl" x="200" y="265" text-anchor="middle">bit budget (bpw)</text>
+<text class="note" x="60" y="294" font-size="9.5">Strictly monotone. So are c4 and fineweb-edu.</text>
+<text class="hd" x="440" y="78">five-task zero-shot average, higher is better</text>
+<line class="axis" x1="440" y1="232" x2="700" y2="232"/>
+<line class="lead" x1="440" y1="221.1" x2="700" y2="221.1"/>
+<text class="lblo" x="444" y="235.1" font-size="9.5">BF16 base, 74.34</text>
+<polyline class="ser" points="440.0,205.6 526.7,115.3 613.3,184.6 700.0,211.0"/>
+<circle class="dot" cx="440.0" cy="205.6" r="3.4"/>
+<text class="mono" x="440.0" y="195.6" text-anchor="middle" font-size="10">74.54</text>
+<text class="tick" x="440.0" y="247" text-anchor="middle">2.50</text>
+<circle class="dot" cx="526.7" cy="115.3" r="3.4"/>
+<text class="mono" x="526.7" y="105.3" text-anchor="middle" font-size="10">75.70</text>
+<text class="tick" x="526.7" y="247" text-anchor="middle">2.75</text>
+<circle class="dot" cx="613.3" cy="184.6" r="3.4"/>
+<text class="mono" x="613.3" y="174.6" text-anchor="middle" font-size="10">74.81</text>
+<text class="tick" x="613.3" y="247" text-anchor="middle">3.00</text>
+<circle class="dot" cx="700.0" cy="211.0" r="3.4"/>
+<text class="mono" x="700.0" y="201.0" text-anchor="middle" font-size="10">74.47</text>
+<text class="tick" x="700.0" y="247" text-anchor="middle">3.50</text>
+<text class="lbl" x="570" y="265" text-anchor="middle">bit budget (bpw)</text>
+<text class="note" x="440" y="294" font-size="9.5">Not monotone. The 2.50 bpw model beats the 3.50 by 0.07.</text>
+<text class="note" x="440" y="307" font-size="9.5">The card’s recovery column is computed from this one.</text></svg>
+      <figcaption><b>Two columns from the same table.</b> Perplexity ranks the four files in budget order without an inversion. The zero-shot average does not, and every quantized model sits above its own base model on it.</figcaption>
+    </figure>
+
+    <p>
+      A quantized model does not acquire capability its base model lacked. Four recovery numbers above 100% are four measurements of the noise floor on those five tasks. And the recovery column, which is the card’s fidelity metric, is computed from the column that wanders. Perplexity, the proxy everyone is trained to distrust, is the one that ranks these four files correctly.
+    </p>
+
+    <h2>What the allocator actually decided</h2>
+
+    <p>
+      The harness that produces every number below is in the post’s research folder.
+    </p>
+    <p>
+      One caveat on method. Bits per weight for the IQ types are the figures <code>llama.cpp</code>’s own quantize tool prints. Every mean below is unweighted over tensors, so it describes the pattern of decisions and not the file’s true bit-width, which would need tensor shapes I do not have.
+    </p>
+    <p>
+      The first thing the dump gives you is the architecture, which the card never mentions. Sixty-four blocks. Blocks 3, 7, 11 and every fourth through 63, sixteen in total, are full attention with separate <code>attn_q</code>, <code>attn_k</code>, <code>attn_v</code> and <code>attn_output</code>. The other 48 carry a fused <code>attn_qkv</code>, an <code>attn_gate</code> and an SSM mixer. Qwen3.8-27B is a 3:1 hybrid and you can read that straight off a list of tensor names.
+    </p>
+    <pre><code># RCO per-tensor GGUF allocation
+# Target whole-file bpw: 3.50
+# Tensor count: 851
+# Quant-type counts: BF16=96, F32=353, IQ1_M=1, IQ2_S=17, IQ2_XS=9, IQ2_XXS=5,
+#                    IQ3_S=144, IQ3_XXS=78, IQ4_XS=96, Q2_K=13, Q4_K=39
+blk.0.attn_qkv.weight: IQ4_XS
+blk.0.ffn_down.weight: IQ2_S
+blk.0.ffn_gate.weight: IQ2_XS
+blk.0.ffn_up.weight: IQ2_XXS
+blk.0.ssm_alpha.weight: BF16
+blk.0.ssm_beta.weight: BF16</code></pre>
+
+    <p>
+      RCO chooses for 402 of the 851 tensors. Of the rest, 353 stay F32, which is the usual norms and biases, and 96 stay BF16. Those 96 are exactly <code>ssm_alpha.weight</code> and <code>ssm_beta.weight</code>, one pair per SSM block, and the set is identical in all four files including the 2.50 bpw one. The SSM gating parameters are never quantized at any budget. That looks like a constraint someone imposed rather than something the optimizer discovered, and it is defensible: in a recurrent mixer an error in the state transition does not stay local to one token, it rides along the sequence. It is still worth knowing before you quote “2.50 bits per weight” at somebody.
+    </p>
+
+    <h3>Deeper layers get more bits</h3>
+
+    <p>
+      Mean assigned bits rise monotonically with depth, in every one of the four files.
+    </p>
+    <figure class="blog-fig">
+<svg id="dgr" viewBox="0 0 760 430" width="760" height="430" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="dgrt dgrd">
+<title id="dgrt">RCO assigns more bits to deeper blocks, consistently across all four size budgets</title>
+<desc id="dgrd">Two panels. The left plots mean assigned bits per weight for each of the 64 blocks at the 3.50 bits per weight budget, with red bars marking the four quartile means at 3.10, 3.41, 3.77 and 3.92 bits. Individual blocks scatter widely but the quartile means rise steadily with depth. The right panel plots quartile means for all four budgets as four parallel rising lines, showing the same gradient of roughly 0.8 bits from the first quarter of the network to the last, whether the total budget is 2.50, 2.75, 3.00 or 3.50 bits per weight.</desc>
+<rect width="760" height="430" fill="var(--bg-subtle)"/>
+<text class="ttl" x="24" y="28">Deeper layers get more bits, at every budget</text>
+<text class="sub" x="24" y="48">Mean bits per weight assigned by RCO across the 402 tensors it chooses for. Unweighted by tensor size,</text>
+<text class="sub" x="24" y="62">so this is the decision pattern, not the file’s true bit-width.</text>
+<text class="hd" x="52" y="84">3.50 bpw budget, all 64 blocks</text>
+<line class="grid" x1="52" y1="315.7" x2="400" y2="315.7"/>
+<text class="tick" x="44" y="318.7" text-anchor="end">2.0</text>
+<line class="grid" x1="52" y1="269.9" x2="400" y2="269.9"/>
+<text class="tick" x="44" y="272.9" text-anchor="end">2.5</text>
+<line class="grid" x1="52" y1="224.2" x2="400" y2="224.2"/>
+<text class="tick" x="44" y="227.2" text-anchor="end">3.0</text>
+<line class="grid" x1="52" y1="178.4" x2="400" y2="178.4"/>
+<text class="tick" x="44" y="181.4" text-anchor="end">3.5</text>
+<line class="grid" x1="52" y1="132.6" x2="400" y2="132.6"/>
+<text class="tick" x="44" y="135.6" text-anchor="end">4.0</text>
+<circle class="dot" cx="52.0" cy="199.4" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="57.5" cy="211.8" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="63.0" cy="183.1" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="68.6" cy="211.9" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="74.1" cy="207.1" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="79.6" cy="173.5" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="85.1" cy="183.9" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="90.7" cy="218.4" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="96.2" cy="207.1" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="101.7" cy="216.4" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="107.2" cy="228.0" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="112.8" cy="246.3" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="118.3" cy="239.4" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="123.8" cy="248.0" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="129.3" cy="256.7" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="134.9" cy="205.3" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="140.4" cy="212.7" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="145.9" cy="235.6" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="151.4" cy="222.2" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="157.0" cy="209.4" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="162.5" cy="190.9" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="168.0" cy="170.8" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="173.5" cy="195.5" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="179.0" cy="156.1" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="184.6" cy="171.5" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="190.1" cy="189.7" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="195.6" cy="165.0" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="201.1" cy="143.2" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="206.7" cy="167.7" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="212.2" cy="200.5" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="217.7" cy="183.1" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="223.2" cy="179.9" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="228.8" cy="170.8" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="234.3" cy="215.6" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="239.8" cy="183.1" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="245.3" cy="143.2" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="250.9" cy="130.6" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="256.4" cy="114.5" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="261.9" cy="165.0" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="267.4" cy="127.6" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="273.0" cy="140.2" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="278.5" cy="195.5" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="284.0" cy="148.8" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="289.5" cy="113.8" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="295.0" cy="122.1" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="300.6" cy="195.5" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="306.1" cy="173.5" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="311.6" cy="139.9" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="317.1" cy="175.5" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="322.7" cy="145.0" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="328.2" cy="122.1" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="333.7" cy="133.4" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="339.2" cy="130.6" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="344.8" cy="126.8" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="350.3" cy="122.1" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="355.8" cy="136.7" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="361.3" cy="139.2" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="366.9" cy="134.4" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="372.4" cy="135.5" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="377.9" cy="162.7" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="383.4" cy="146.8" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="389.0" cy="152.6" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="394.5" cy="143.0" r="2.1" fill-opacity="0.5"/>
+<circle class="dot" cx="400.0" cy="127.6" r="2.1" fill-opacity="0.5"/>
+<line class="acc" x1="52.0" y1="215.0" x2="134.9" y2="215.0" stroke-width="2.4"/>
+<text class="lblo" x="93.4" y="208.0" text-anchor="middle" font-size="9.5">3.10</text>
+<line class="acc" x1="140.4" y1="186.5" x2="223.2" y2="186.5" stroke-width="2.4"/>
+<text class="lblo" x="181.8" y="179.5" text-anchor="middle" font-size="9.5">3.41</text>
+<line class="acc" x1="228.8" y1="154.0" x2="311.6" y2="154.0" stroke-width="2.4"/>
+<text class="lblo" x="270.2" y="147.0" text-anchor="middle" font-size="9.5">3.77</text>
+<line class="acc" x1="317.1" y1="139.6" x2="400.0" y2="139.6" stroke-width="2.4"/>
+<text class="lblo" x="358.6" y="132.6" text-anchor="middle" font-size="9.5">3.92</text>
+<line class="axis" x1="52" y1="334" x2="400" y2="334"/>
+<text class="tick" x="52.0" y="349" text-anchor="middle">0</text>
+<text class="tick" x="140.4" y="349" text-anchor="middle">16</text>
+<text class="tick" x="228.8" y="349" text-anchor="middle">32</text>
+<text class="tick" x="317.1" y="349" text-anchor="middle">48</text>
+<text class="tick" x="400.0" y="349" text-anchor="middle">63</text>
+<text class="lbl" x="226" y="366" text-anchor="middle">block index</text>
+<text class="lbl" x="18" y="215" text-anchor="middle" transform="rotate(-90 18 215)">bits per weight</text>
+<text class="note" x="52" y="384" font-size="9.5">Dots are single blocks. Red bars are the quartile means.</text>
+<text class="note" x="52" y="397" font-size="9.5">Individual blocks are noisy. The trend is not.</text>
+<text class="hd" x="452" y="84">quartile means, all four budgets</text>
+<line class="grid" x1="452" y1="315.7" x2="736" y2="315.7"/>
+<line class="grid" x1="452" y1="269.9" x2="736" y2="269.9"/>
+<line class="grid" x1="452" y1="224.2" x2="736" y2="224.2"/>
+<line class="grid" x1="452" y1="178.4" x2="736" y2="178.4"/>
+<line class="grid" x1="452" y1="132.6" x2="736" y2="132.6"/>
+<polyline class="ser" points="452.0,300.9 535.5,284.8 619.1,263.1 702.6,230.7" stroke-opacity="0.42"/>
+<circle class="dot" cx="452.0" cy="300.9" r="2.6" fill-opacity="0.42"/>
+<circle class="dot" cx="535.5" cy="284.8" r="2.6" fill-opacity="0.42"/>
+<circle class="dot" cx="619.1" cy="263.1" r="2.6" fill-opacity="0.42"/>
+<circle class="dot" cx="702.6" cy="230.7" r="2.6" fill-opacity="0.42"/>
+<text class="lbl" x="710.6" y="233.7" fill-opacity="0.6">2.50 bpw</text>
+<polyline class="ser" points="452.0,280.2 535.5,263.4 619.1,241.9 702.6,205.0" stroke-opacity="0.6"/>
+<circle class="dot" cx="452.0" cy="280.2" r="2.6" fill-opacity="0.6"/>
+<circle class="dot" cx="535.5" cy="263.4" r="2.6" fill-opacity="0.6"/>
+<circle class="dot" cx="619.1" cy="241.9" r="2.6" fill-opacity="0.6"/>
+<circle class="dot" cx="702.6" cy="205.0" r="2.6" fill-opacity="0.6"/>
+<text class="lbl" x="710.6" y="208.0" fill-opacity="0.6">2.75 bpw</text>
+<polyline class="ser" points="452.0,260.6 535.5,236.9 619.1,208.3 702.6,182.3" stroke-opacity="0.78"/>
+<circle class="dot" cx="452.0" cy="260.6" r="2.6" fill-opacity="0.78"/>
+<circle class="dot" cx="535.5" cy="236.9" r="2.6" fill-opacity="0.78"/>
+<circle class="dot" cx="619.1" cy="208.3" r="2.6" fill-opacity="0.78"/>
+<circle class="dot" cx="702.6" cy="182.3" r="2.6" fill-opacity="0.78"/>
+<text class="lbl" x="710.6" y="185.3" fill-opacity="0.78">3.00 bpw</text>
+<polyline class="ser" points="452.0,215.0 535.5,186.5 619.1,154.0 702.6,139.6" stroke-opacity="1.0"/>
+<circle class="dot" cx="452.0" cy="215.0" r="2.6" fill-opacity="1.0"/>
+<circle class="dot" cx="535.5" cy="186.5" r="2.6" fill-opacity="1.0"/>
+<circle class="dot" cx="619.1" cy="154.0" r="2.6" fill-opacity="1.0"/>
+<circle class="dot" cx="702.6" cy="139.6" r="2.6" fill-opacity="1.0"/>
+<text class="lbl" x="710.6" y="142.6" fill-opacity="1.0">3.50 bpw</text>
+<line class="axis" x1="452" y1="334" x2="736" y2="334"/>
+<text class="tick" x="452.0" y="349" text-anchor="middle">Q1</text>
+<text class="tick" x="535.5" y="349" text-anchor="middle">Q2</text>
+<text class="tick" x="619.1" y="349" text-anchor="middle">Q3</text>
+<text class="tick" x="702.6" y="349" text-anchor="middle">Q4</text>
+<text class="lbl" x="594" y="366" text-anchor="middle">blocks 0-15, 16-31, 32-47, 48-63</text>
+<text class="note" x="452" y="384" font-size="9.5">Four separate optimizations, same slope:</text>
+<text class="note" x="452" y="397" font-size="9.5">Spearman +0.74, +0.75, +0.80, +0.77.</text>
+<text class="note" x="24" y="420">Parsed from the four tensor-allocation dumps shipped with the release. Bit-widths per quant type are llama.cpp’s own figures.</text></svg>
+      <figcaption><b>Where RCO put the precision.</b> Parsed from the four <code>tensor-allocation/*.rco-allocation.txt</code> files shipped with the release. The left panel is one budget across all 64 blocks; the right is all four budgets summarised by quartile.</figcaption>
+    </figure>
+
+    <p>
+      The gap from the first quarter of the network to the last is +0.77, +0.82, +0.85 and +0.82 bits at the four budgets. Spearman correlation between block index and mean assigned bits is +0.74, +0.75, +0.80 and +0.77. Four independent optimizations, same slope, and nothing in the setup told it to do this.
+    </p>
+
+    <h3>The embedding gets sacrificed, the head does not</h3>
+
+    <p>
+      At 2.50 bpw, <code>token_embd.weight</code> is IQ1_M, 1.75 bits, the most crushed tensor in the file. <code>output.weight</code> is IQ4_XS at 4.25 bits, near the top of the ladder. That ordering holds at all four budgets.
+    </p>
+    <p>
+      Compare that to <code>llama.cpp</code>’s own quantizer, which hard-codes a floor for these tensors: <a href="https://github.com/ggml-org/llama.cpp/blob/master/src/llama-quant.cpp" target="_blank" rel="noopener"><code>llama_tensor_get_type</code></a> forces <code>output.weight</code> up to Q5_K when the rest of the file is on IQ1, IQ2 or IQ3 types, and Q6_K otherwise. An untied <code>token_embd</code>, which is what this model has, gets no such protection.
+    </p>
+    <p>
+      So <code>llama.cpp</code> protects the head by rule and leaves the embedding exposed, and RCO arrives at the same shape from the loss alone. With two twists. It puts the head at 4.25 bits, below the Q5_K floor <code>llama.cpp</code> would have forced, so it is less conservative than the hand-written rule. And it is far more aggressive on the embedding than any default would dare.
+    </p>
+    <p>
+      An embedding lookup error is a fixed offset entering a 64-block residual stream that has every opportunity to absorb it. The output projection writes straight into the logits with nothing downstream to correct it.
+    </p>
+
+    <h3>The allocations are not nested, and that matters</h3>
+
+    <p>
+      Raising the budget sometimes takes bits away from a tensor.
+    </p>
+    <p>
+      Between adjacent budgets, 14.7%, 14.2% and 6.7% of the 402 tensors get <em>fewer</em> bits than they had at the smaller budget. Comparing the 2.50 bpw file to the 3.50 bpw file, a 40% larger budget, seven tensors still end up lower. <code>blk.11.attn_k.weight</code> goes from Q4_K down to IQ2_S, losing two full bits while the file around it gains. And <code>blk.13.ffn_gate.weight</code> runs IQ1_S, IQ1_M, IQ4_XS, IQ1_M across the four budgets; it is the only tensor still on a 1-bit type in the 3.50 bpw file.
+    </p>
+    <p>
+      My reading is that this is what a flat objective looks like. Many allocations reach nearly the same loss, each budget is solved independently, and the search lands somewhere different each time. The aggregate pattern barely moves while the individual assignments shuffle.
+    </p>
+    <p>
+      So a single tensor’s assignment is not a sensitivity measurement and should not be read as one. If you were about to look up your favourite layer in the dump and conclude something about it, do not. The depth gradient and the embedding result are worth trusting because they survive four separate optimizations. The <code>blk.13</code> curiosity is exactly the kind of thing that does not.
+    </p>
+
+    <h2>Three ways to answer the same question</h2>
+
+    <p>
+      I should declare an interest here. I built <a href="https://arxiv.org/a/gautam_a_1" target="_blank" rel="noopener">RAMP</a>, which solves per-layer bit allocation as a constrained MDP with Soft Actor-Critic, so I have spent a while inside this problem and I am not a neutral party on it.
+    </p>
+    <p>
+      There are now three families of answers:
+    </p>
+    <p>
+      <strong>Heuristics</strong>, including Unsloth’s hand-tuned dynamic quants and <code>llama.cpp</code>’s built-in type rules. Cheap, transparent, and the baseline this release beats by 17 GPQA questions at 2.50 bpw and ties at 3.50.
+    </p>
+    <p>
+      <strong>Learned policies</strong>, which is what RAMP does. Expensive to train once, then applied to a new model with no new search.
+    </p>
+    <p>
+      <strong>Constrained continuous optimization</strong>, which is RCO. Exact budget, no constraint hyperparameter, optimizes the real loss.
+    </p>
+    <p>
+      The axis nobody states is amortized against per-instance. RCO is not a competitor to a learned policy so much as a better solver for a single instance, and it pays that cost every time: a new model or a new budget means a new search. The four non-nested allocations in this release are that property showing through. A learned policy trades some per-instance quality for the ability to skip the search entirely. Which one you want depends on whether you are quantizing one model carefully or forty models on a schedule.
+    </p>
+
+    <h2>What I would take from this</h2>
+
+    <p>
+      If you are choosing a file: the 2.50 bpw one is where this method is actually doing something for you. At 3.50 bpw you are picking between allocators that these benchmarks cannot distinguish, so pick on file size and move on.
+    </p>
+    <p>
+      If you are reading a quantization result: divide by the number of items before you believe a gap. Published quantization comparisons report GPQA-Diamond to two decimal places. One question is worth 0.51 points, so everything after the first decimal is decoration.
+    </p>
+    <p>
+      If you are shipping a quantized model: ship the allocation. It cost this release 25 kB per file and it is the only reason this post has anything in it beyond arithmetic. I would not have found the depth gradient, the untouched SSM gates or the non-nested solves from the weights alone, and neither can anyone else.
+    </p>
+    <hr>
+
+    <p style="font-size:0.88rem;color:var(--text-muted)">
+      The GSQ-RCO release, the results table and the plot above are ISTA-DASLab’s, from <a href="https://huggingface.co/ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF" target="_blank" rel="noopener">the model card</a>, read 5 September 2026. The methods are Dadgarnia, Tabesh, Nikdan, Helcig, Kurtic, Kleinegger and Alistarh (<a href="https://arxiv.org/abs/2604.18556" target="_blank" rel="noopener">GSQ</a>) and Helcig and Alistarh (<a href="https://arxiv.org/abs/2605.00649" target="_blank" rel="noopener">RCO</a>). Benchmark sizes: GPQA-Diamond 198 questions, AIME 2025 30 problems, <a href="https://github.com/livecodebench/livecodebench" target="_blank" rel="noopener">LiveCodeBench</a> v6 175. The item-count conversion, the standard errors, the allocation parse and the three drawn figures are mine, and the harness that reproduces every number is in the post’s research folder.
+    </p>
+
+  </div>
+
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-icons">
+      <a href="mailto:arpitsinghgautam777@gmail.com" title="Email"><i class="fas fa-envelope" aria-hidden="true"></i></a>
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap" aria-hidden="true"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+      <a href="https://topmate.io/arpit_singh_gautam/" title="TopMate" target="_blank" rel="noopener"><i class="fas fa-calendar-check" aria-hidden="true"></i></a>
+    </div>
+    <span>&copy; 2026 Arpit Singh Gautam &middot; Bengaluru, India</span>
+  </div>
+</footer>
+
+<script>
+  function toggleTheme(){var cur=document.documentElement.getAttribute('data-theme');var next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);localStorage.setItem('theme',next);document.getElementById('theme-toggle').textContent=next==='dark'?'\u2600\ufe0f':'\ud83c\udf19';}
+  (function(){var t=document.documentElement.getAttribute('data-theme');var btn=document.getElementById('theme-toggle');if(btn)btn.textContent=t==='dark'?'\u2600\ufe0f':'\ud83c\udf19';})();
+  var btt=document.getElementById('back-to-top');
+  window.addEventListener('scroll',function(){if(window.scrollY>300){btt.classList.add('visible');}else{btt.classList.remove('visible');}});
+  btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+</body>
+</html>

@@ -47,6 +47,18 @@
 
   <!-- Blog posts -->
   <url>
+    <loc>https://arpitsinghgautam.me/blog/where-a-learned-quantizer-spends-its-last-bit</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://arpitsinghgautam.me/blog/gift-eval-licence-column</loc>
+    <lastmod>2026-09-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://arpitsinghgautam.me/blog/nobody-ships-4-bit</loc>
     <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
