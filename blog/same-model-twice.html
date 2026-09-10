@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6P1E490Z0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X6P1E490Z0');</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="GPT-6 Astra and Claude Fable 5.1 charge the same for input, output and cache writes. The cache read is $1.00 against $0.25, and that single line is the whole economic difference between them. Solving both labs' competing cost claims gives an exchange rate of 67 cache-read tokens per output token, and the same announcement pages show Fable 5.1 at 55.8 percent and Mythos 5.1 at 60.9 percent on Terminal-Bench 4.0 from identical weights.">
+  <link rel="canonical" href="https://arpitsinghgautam.me/blog/same-model-twice">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Arpit Singh Gautam">
+  <meta property="og:title" content="The Week Both Labs Shipped the Same Model Twice - Arpit Singh Gautam">
+  <meta property="og:description" content="GPT-6 Astra and Claude Fable 5.1 charge the same for input, output and cache writes. The cache read is $1.00 against $0.25, and that single line is the whole economic difference between them. Solving both labs' competing cost claims gives an exchange rate of 67 cache-read tokens per output token, and the same announcement pages show Fable 5.1 at 55.8 percent and Mythos 5.1 at 60.9 percent on Terminal-Bench 4.0 from identical weights.">
+  <meta property="og:url" content="https://arpitsinghgautam.me/blog/same-model-twice">
+  <meta property="og:image" content="https://arpitsinghgautam.me/assets/img/blog/same-model-twice-thumb.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@Asg_Wolverine">
+  <meta name="twitter:creator" content="@Asg_Wolverine">
+  <meta name="twitter:title" content="The Week Both Labs Shipped the Same Model Twice - Arpit Singh Gautam">
+  <meta name="twitter:description" content="GPT-6 Astra and Claude Fable 5.1 charge the same for input, output and cache writes. The cache read is $1.00 against $0.25, and that single line is the whole economic difference between them. Solving both labs' competing cost claims gives an exchange rate of 67 cache-read tokens per output token, and the same announcement pages show Fable 5.1 at 55.8 percent and Mythos 5.1 at 60.9 percent on Terminal-Bench 4.0 from identical weights.">
+  <meta name="twitter:image" content="https://arpitsinghgautam.me/assets/img/blog/same-model-twice-thumb.png">
+  <title>The Week Both Labs Shipped the Same Model Twice - Arpit Singh Gautam</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="../assets/css/fontawesome.css">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BlogPosting", "headline": "The Week Both Labs Shipped the Same Model Twice", "image": "https://arpitsinghgautam.me/assets/img/blog/same-model-twice-thumb.png", "datePublished": "2026-09-06", "author": {"@type": "Person", "name": "Arpit Singh Gautam", "url": "https://arpitsinghgautam.me/"}, "publisher": {"@type": "Person", "name": "Arpit Singh Gautam"}, "mainEntityOfPage": "https://arpitsinghgautam.me/blog/same-model-twice"}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arpitsinghgautam.me/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://arpitsinghgautam.me/blog"}, {"@type": "ListItem", "position": 3, "name": "The Week Both Labs Shipped the Same Model Twice", "item": "https://arpitsinghgautam.me/blog/same-model-twice"}]}
+  </script>
+  <style>
+    /* Figure-local classes for the two drawn figures on this page. */
+  #cx, #sw { --bg-hover: var(--bg-subtle); --grid: var(--border);
+             font-family: inherit; }
+  #cx rect[fill="var(--bg)"], #sw rect[fill="var(--bg)"] { fill: transparent; }
+  #cx .ttl {fill:var(--text);font-size:13.5px;font-weight:600;}
+  #cx .sub {fill:var(--text-muted);font-size:11px;}
+  #cx .ax {fill:var(--text-muted);font-size:10px;}
+  #cx .xl {fill:var(--text);font-size:11px;font-weight:600;}
+  #cx .lb {fill:var(--text-muted);font-size:10.5px;}
+  #cx .key {fill:var(--text);font-size:10.5px;}
+  #cx .zn {fill:var(--text-muted);font-size:10px;font-style:italic;}
+  #sw .ttl {fill:var(--text); font-size:13.5px; font-weight:600;}
+  #sw .sub {fill:var(--text-muted); font-size:11px;}
+  #sw .lab {fill:var(--text); font-size:12px; font-weight:600;}
+  #sw .bx {fill:var(--text); font-size:10.5px;}
+  #sw .bxm {fill:var(--text-muted); font-size:10px;}
+  #sw .num {fill:var(--text); font-size:12.5px; font-weight:600;}
+  #sw .cap {fill:var(--text-muted); font-size:10px;}
+  #sw .hdr {fill:var(--text-muted); font-size:9.5px; font-weight:600; letter-spacing:0.06em;}
+
+    /* The captures are light vendor pages and one dark one, so each sits on its own
+       plate rather than bleeding into the page in either theme. */
+    .paper-shot { background: #ffffff; border: 1px solid var(--border); border-radius: 8px;
+                  padding: 10px; }
+    .paper-shot img { border: none; border-radius: 3px; }
+  </style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<button id="back-to-top" title="Back to top" aria-label="Back to top"><i class="fas fa-arrow-up" aria-hidden="true"></i></button>
+
+<header class="site-header">
+  <div class="header-top">
+    <a class="nav-brand" href="/">Arpit Singh <span class="brand-accent">Gautam</span></a>
+    <div class="header-icons">
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap" aria-hidden="true"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle dark mode">&#127769;</button>
+    </div>
+  </div>
+  <div class="header-nav">
+    <a href="/">About</a>
+    <a href="/publications">Publications</a>
+    <a href="/experience">Experience</a>
+    <a href="/media-awards">Media &amp; Awards</a>
+    <a href="/projects">Projects</a>
+    <a href="/blog" class="active">Blog</a>
+    <a href="/misc">Misc</a>
+  </div>
+</header>
+
+<main class="page-wrap" id="main" tabindex="-1">
+
+  <div class="blog-post-hero">
+    <div class="breadcrumb"><a href="/blog">&larr; Blog</a></div>
+    <h1>The Week Both Labs Shipped the Same Model Twice</h1>
+    <div class="blog-post-meta">
+      <span><i class="fas fa-calendar-alt" aria-hidden="true"></i> Sep 2026</span>
+      <span><i class="fas fa-clock" aria-hidden="true"></i> 10 min read</span>
+      <span><i class="fas fa-tag" aria-hidden="true"></i> Evaluation &middot; Pricing &middot; Agents</span>
+    </div>
+  </div>
+
+  <div class="blog-post-body">
+
+    <p>
+      I opened both pricing pages side by side expecting to find the usual spread. Input,
+      output, cache write, all identical to the cent. One line differs.
+    </p>
+    <p>
+      Anthropic announced <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" rel="noopener">Claude Fable 5.1 and Claude Mythos 5.1</a> on
+      1 September. OpenAI announced <a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">GPT-6 Astra</a> on 3 September. Coverage
+      split cleanly down the middle: the Anthropic stories were about price, the OpenAI
+      stories were about AGI claims and cyber capability. I wanted to know what the price
+      change was actually worth on my own workloads, so I did the arithmetic. It took me
+      somewhere I did not expect.
+    </p>
+
+    <h2>One line differs, by 4x</h2>
+
+    <p>Per million tokens, as of 6 September 2026:</p>
+
+    <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr><th></th><th>GPT-6 Astra</th><th>Claude Fable 5.1</th><th>Claude Fable 5</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Input</td><td>$10.00</td><td>$10.00</td><td>$10.00</td></tr>
+        <tr><td>Output</td><td>$50.00</td><td>$50.00</td><td>$50.00</td></tr>
+        <tr><td>Cache write</td><td>$12.50</td><td>$12.50 (5&nbsp;min)</td><td>$12.50 (5&nbsp;min)</td></tr>
+        <tr><td><b>Cache read</b></td><td><b>$1.00</b></td><td><b>$0.25</b></td><td>$1.00</td></tr>
+        <tr><td>Long context</td><td>over 272K billed at 2x input and cache, 1.5x output, for the whole request</td><td>1M at standard rates</td><td>1M at standard rates</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <figure class="blog-fig">
+      <img src="../assets/img/blog/same-model-twice/openai-astra-pricing.png" alt="The GPT-6 Astra pricing panel: input $10.00, cached input $1.00, cache writes $12.50, output $50.00, with a note that prompts over 272K input tokens are priced at 2x input and cache rates and 1.5x output for the full request." loading="lazy" width="1872" height="520">
+      <figcaption><b>Astra’s published token prices.</b> From the <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">GPT-6 Astra model page</a>, read 6 September 2026. The 272K line is the one that decides long agent sessions.</figcaption>
+    </figure>
+
+    <p>
+      Anthropic&rsquo;s <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">pricing page</a> carries the footnote that makes the
+      intent explicit. Cache hits on Fable 5.1 and Mythos 5.1 are priced at 0.025x base
+      input, and &ldquo;All other models use the standard 0.1x multiplier.&rdquo; OpenAI&rsquo;s
+      cached input is $1.00 against a $10.00 input price, which is that same standard 0.1x
+      that Anthropic just broke for exactly one model generation.
+    </p>
+
+    <figure class="blog-fig">
+      <img src="../assets/img/blog/same-model-twice/anthropic-pricing-table.png" alt="The Claude model pricing table, showing Fable 5.1 and Mythos 5.1 with cache hits at $0.25 per million tokens while Fable 5 and Mythos 5 sit at $1, and every Opus, Sonnet and Haiku row at the standard tenth of base input." loading="lazy" width="1720" height="996">
+      <figcaption><b>The same table for Claude.</b> From <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">the Claude pricing docs</a>, read 6 September 2026. Fable 5.1 and Mythos 5.1 are the only rows off the standard multiplier.</figcaption>
+    </figure>
+
+    <p>
+      So Anthropic did not cut its prices. It cut one multiplier, on one model family, and
+      left Opus, Sonnet and Haiku where they were.
+    </p>
+
+    <h2>What one output token is worth in cache reads</h2>
+
+    <p>Both labs made a cost claim this week and both claims live in the same equation:</p>
+
+    <math class="eqn" display="block" data-tex="C = \frac{F \cdot p_{in} + R \cdot p_{cache} + O \cdot p_{out}}{10^6}"><mi>C</mi><mo>=</mo><mfrac><mrow><mi>F</mi><mo>⋅</mo><msub><mi>p</mi><mrow><mi>i</mi><mi>n</mi></mrow></msub><mo>+</mo><mi>R</mi><mo>⋅</mo><msub><mi>p</mi><mrow><mi>c</mi><mi>a</mi><mi>c</mi><mi>h</mi><mi>e</mi></mrow></msub><mo>+</mo><mi>O</mi><mo>⋅</mo><msub><mi>p</mi><mrow><mi>o</mi><mi>u</mi><mi>t</mi></mrow></msub></mrow><msup><mn>10</mn><mn>6</mn></msup></mfrac></math>
+
+    <p>
+      with <math data-tex="F"><mi>F</mi></math> fresh input tokens, <math data-tex="R"><mi>R</mi></math>
+      cache-read tokens and <math data-tex="O"><mi>O</mi></math> output tokens. Since
+      <math data-tex="p_{in}"><msub><mi>p</mi><mrow><mi>i</mi><mi>n</mi></mrow></msub></math> and <math data-tex="p_{out}"><msub><mi>p</mi><mrow><mi>o</mi><mi>u</mi><mi>t</mi></mrow></msub></math> match, the two
+      labs are pulling different terms. Anthropic pulled
+      <math data-tex="p_{cache}"><msub><mi>p</mi><mrow><mi>c</mi><mi>a</mi><mi>c</mi><mi>h</mi><mi>e</mi></mrow></msub></math>, from $1.00 down to $0.25. OpenAI pulled
+      <math data-tex="R"><mi>R</mi></math> and <math data-tex="O"><mi>O</mi></math>, claiming Astra needs fewer
+      tokens per task. Its Terminal-Bench 4.0 line puts Astra at 57.9 percent against Fable
+      5.1&rsquo;s 55.8 percent &ldquo;at approximately 63% lower estimated API cost per
+      task&rdquo;, and with identical unit prices that number can only come from token counts.
+    </p>
+    <p>
+      The exchange rate between the two levers falls straight out of the tables. A million
+      output tokens costs $50. A million cache-read tokens of Anthropic discount is worth
+      $0.75. So
+    </p>
+
+    <math class="eqn" display="block" data-tex="\frac{50}{0.75} \approx 66.7"><mfrac><mn>50</mn><mn>0.75</mn></mfrac><mo>≈</mo><mn>66.7</mn></math>
+
+    <p>
+      One output token saved is worth about 67 cache-read tokens of Anthropic&rsquo;s
+      discount. Below 272K tokens, holding fresh input equal, Astra is cheaper exactly when
+    </p>
+
+    <math class="eqn" display="block" data-tex="R &lt; 66.7 \cdot (O_{Fable} - O_{Astra})"><mi>R</mi><mo>&lt;</mo><mn>66.7</mn><mo>⋅</mo><mo form="prefix">(</mo><msub><mi>O</mi><mrow><mi>F</mi><mi>a</mi><mi>b</mi><mi>l</mi><mi>e</mi></mrow></msub><mo>−</mo><msub><mi>O</mi><mrow><mi>A</mi><mi>s</mi><mi>t</mi><mi>r</mi><mi>a</mi></mrow></msub><mo form="postfix">)</mo></math>
+
+    <h2>Solving Anthropic&rsquo;s own two numbers</h2>
+
+    <p>
+      Anthropic says Fable 5.1 costs about 25 percent less than Fable 5 for typical workloads
+      and up to about 45 percent less for highly agentic work, and that the whole reduction
+      comes from cache reads.
+    </p>
+
+    <figure class="blog-fig">
+      <img src="../assets/img/blog/same-model-twice/anthropic-price-paragraph.png" alt="Anthropic's price paragraph, stating that Fable 5.1 will cost an estimated 25 percent less than Fable 5 for typical workloads because of reduced cache read pricing, and that for highly agentic work the savings will often be much larger, up to approximately 45 percent." loading="lazy" width="1344" height="326">
+      <figcaption><b>The two numbers the calculation below is solved from.</b> From the <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" rel="noopener">Fable 5.1 announcement</a>, read 6 September 2026.</figcaption>
+    </figure>
+
+    <p>Only <math data-tex="p_{cache}"><msub><mi>p</mi><mrow><mi>c</mi><mi>a</mi><mi>c</mi><mi>h</mi><mi>e</mi></mrow></msub></math> moved, so the saving fraction is</p>
+
+    <math class="eqn" display="block" data-tex="s = \frac{0.75R}{10F + 1.00R + 50O}"><mi>s</mi><mo>=</mo><mfrac><mrow><mn>0.75</mn><mi>R</mi></mrow><mrow><mn>10</mn><mi>F</mi><mo>+</mo><mn>1.00</mn><mi>R</mi><mo>+</mo><mn>50</mn><mi>O</mi></mrow></mfrac></math>
+
+    <p>
+      Set <math data-tex="s"><mi>s</mi></math> to each published value and solve. At 25 percent,
+      <math data-tex="R = 5F + 25O"><mi>R</mi><mo>=</mo><mn>5</mn><mi>F</mi><mo>+</mo><mn>25</mn><mi>O</mi></math>. At 45 percent,
+      <math data-tex="R = 15F + 75O"><mi>R</mi><mo>=</mo><mn>15</mn><mi>F</mi><mo>+</mo><mn>75</mn><mi>O</mi></math>. With no fresh input at all these become floors:
+      to reach 25 percent a workload has to read at least 25 tokens from cache for every
+      token it emits, and to reach 45 percent, at least 75. Any fresh input pushes both
+      floors up.
+    </p>
+    <p>
+      Read backwards, the two marketing numbers describe the workloads Anthropic measured.
+      Take a session that re-reads a large stable context every turn, say
+      <math data-tex="R = 400O"><mi>R</mi><mo>=</mo><mn>400</mn><mi>O</mi></math>. Hitting 45 percent then needs
+      <math data-tex="F \approx 21.7O"><mi>F</mi><mo>≈</mo><mn>21.7</mn><mi>O</mi></math>, which is a cache hit rate on input tokens of
+      about 95 percent. That is the shape behind the number: input outweighing output by
+      roughly 400 to 1, almost all of it hitting cache.
+    </p>
+
+    <h2>Where the discount does nothing</h2>
+
+    <p>
+      Anthropic&rsquo;s own docs carry a worked example of a cached session: 10,000 uncached
+      input tokens, 40,000 cache reads, 15,000 output tokens. Repricing it on the two frontier
+      models:
+    </p>
+
+    <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th></th><th>Fable 5.1</th><th>GPT-6 Astra</th></tr></thead>
+      <tbody>
+        <tr><td>Fresh input, 10,000</td><td>$0.100</td><td>$0.100</td></tr>
+        <tr><td>Cache reads, 40,000</td><td>$0.010</td><td>$0.040</td></tr>
+        <tr><td>Output, 15,000</td><td>$0.750</td><td>$0.750</td></tr>
+        <tr><td><b>Total</b></td><td><b>$0.860</b></td><td><b>$0.890</b></td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p>
+      Three cents. The cache ratio here is 2.67 to 1, nowhere near 66.7, so output swamps
+      everything and the 4x cache advantage buys you nothing.
+    </p>
+    <p>
+      Now scale to a long agent session. Forty turns re-reading a 200K-token context, 500
+      output tokens a turn, gives 8,000,000 cache reads against 20,000 output tokens. The
+      cache line goes from $2.00 on Fable 5.1 to $8.00 on Astra, against $1.00 of output on
+      both. A line worth one percent of the small bill is now worth two thirds of the large
+      one. Push the context past 272K and Astra&rsquo;s cache read doubles again to $2.00 per
+      million, an 8x gap, because Anthropic bills a 900K request at the same per-token rate
+      as a 9K one and OpenAI does not.
+    </p>
+    <p>
+      Both of those assume equal token counts, which is the assumption OpenAI&rsquo;s own
+      claims dispute. So I plotted the whole family instead, letting Astra need some fraction
+      <math data-tex="k"><mi>k</mi></math> of Fable&rsquo;s tokens for the same task:
+    </p>
+
+    <figure class="blog-fig">
+<svg id="cx" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" width="720" height="520" role="img" aria-labelledby="cxt cxd">
+<title id="cxt">When Anthropic's cheaper cache reads overtake OpenAI's cheaper tokens</title>
+<desc id="cxd">Relative API cost of GPT-6 Astra against Claude Fable 5.1 as a function of how many cache-read tokens a session consumes per output token. Both models charge ten dollars per million input tokens and fifty per million output tokens; the cache read line is one dollar against twenty-five cents. Four curves assume Astra needs the same, seventy, fifty and thirty-seven percent of Fable's tokens for the same task. Each curve crosses parity at a different ratio, and all the crossings fall inside the range that long agentic sessions occupy.</desc>
+
+<rect width="720" height="520" fill="var(--bg)"/>
+<text class="ttl" x="74" y="26">Which lever wins depends on one ratio</text>
+<text class="sub" x="74" y="44">Relative cost of GPT-6 Astra against Claude Fable 5.1. Below 1.0 Astra is cheaper. Fresh input held equal.</text>
+<line x1="74" y1="344.0" x2="686" y2="344.0" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="66" y="347.5" text-anchor="end">0.0x</text>
+<line x1="74" y1="308.8" x2="686" y2="308.8" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="66" y="312.2" text-anchor="end">0.5x</text>
+<line x1="74" y1="273.5" x2="686" y2="273.5" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="66" y="277.0" text-anchor="end">1.0x</text>
+<line x1="74" y1="238.2" x2="686" y2="238.2" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="66" y="241.8" text-anchor="end">1.5x</text>
+<line x1="74" y1="203.0" x2="686" y2="203.0" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="66" y="206.5" text-anchor="end">2.0x</text>
+<line x1="74" y1="167.8" x2="686" y2="167.8" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="66" y="171.2" text-anchor="end">2.5x</text>
+<line x1="74" y1="132.5" x2="686" y2="132.5" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="66" y="136.0" text-anchor="end">3.0x</text>
+<line x1="74" y1="97.2" x2="686" y2="97.2" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="66" y="100.8" text-anchor="end">3.5x</text>
+<line x1="74" y1="62.0" x2="686" y2="62.0" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="66" y="65.5" text-anchor="end">4.0x</text>
+<line x1="74.0" y1="62" x2="74.0" y2="344" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="74.0" y="359" text-anchor="middle">1</text>
+<line x1="171.3" y1="62" x2="171.3" y2="344" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="171.3" y="359" text-anchor="middle">3</text>
+<line x1="278.0" y1="62" x2="278.0" y2="344" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="278.0" y="359" text-anchor="middle">10</text>
+<line x1="375.3" y1="62" x2="375.3" y2="344" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="375.3" y="359" text-anchor="middle">30</text>
+<line x1="482.0" y1="62" x2="482.0" y2="344" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="482.0" y="359" text-anchor="middle">100</text>
+<line x1="579.3" y1="62" x2="579.3" y2="344" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="579.3" y="359" text-anchor="middle">300</text>
+<line x1="686.0" y1="62" x2="686.0" y2="344" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="686.0" y="359" text-anchor="middle">1000</text>
+<line x1="74" y1="273.5" x2="686" y2="273.5" stroke="var(--text)" stroke-width="1.4" stroke-dasharray="5 4" opacity="0.65"/>
+<text class="lb" x="682" y="267.5" text-anchor="end">parity</text>
+<line x1="359.2" y1="62" x2="359.2" y2="344" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="2 3" opacity="0.75"/>
+<text class="lb" x="363.2" y="96" >25:1</text>
+<line x1="456.5" y1="62" x2="456.5" y2="344" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="2 3" opacity="0.75"/>
+<text class="lb" x="460.5" y="96" >75:1</text>
+<text class="zn" x="84.0" y="77">dotted lines: the floors implied by Anthropic's own 25% and 45% claims</text>
+<polyline points="74.0,272.4 79.2,272.4 84.3,272.3 89.5,272.2 94.6,272.2 99.8,272.1 105.0,272.0 110.1,271.9 115.3,271.8 120.5,271.7 125.6,271.6 130.8,271.5 135.9,271.4 141.1,271.3 146.3,271.1 151.4,271.0 156.6,270.8 161.8,270.7 166.9,270.5 172.1,270.3 177.2,270.2 182.4,270.0 187.6,269.8 192.7,269.5 197.9,269.3 203.1,269.1 208.2,268.8 213.4,268.5 218.5,268.2 223.7,267.9 228.9,267.6 234.0,267.3 239.2,266.9 244.4,266.5 249.5,266.1 254.7,265.7 259.8,265.2 265.0,264.7 270.2,264.2 275.3,263.7 280.5,263.2 285.7,262.6 290.8,261.9 296.0,261.3 301.1,260.6 306.3,259.9 311.5,259.1 316.6,258.3 321.8,257.5 327.0,256.6 332.1,255.7 337.3,254.7 342.4,253.7 347.6,252.6 352.8,251.5 357.9,250.3 363.1,249.1 368.3,247.8 373.4,246.4 378.6,245.0 383.7,243.6 388.9,242.0 394.1,240.4 399.2,238.8 404.4,237.0 409.6,235.3 414.7,233.4 419.9,231.5 425.0,229.5 430.2,227.4 435.4,225.3 440.5,223.1 445.7,220.8 450.9,218.5 456.0,216.1 461.2,213.6 466.3,211.0 471.5,208.5 476.7,205.8 481.8,203.1 487.0,200.3 492.2,197.5 497.3,194.7 502.5,191.8 507.6,188.8 512.8,185.8 518.0,182.8 523.1,179.8 528.3,176.8 533.5,173.7 538.6,170.6 543.8,167.5 548.9,164.5 554.1,161.4 559.3,158.3 564.4,155.3 569.6,152.2 574.8,149.2 579.9,146.3 585.1,143.3 590.2,140.4 595.4,137.6 600.6,134.8 605.7,132.0 610.9,129.3 616.1,126.7 621.2,124.1 626.4,121.6 631.5,119.1 636.7,116.7 641.9,114.4 647.0,112.1 652.2,109.9 657.4,107.8 662.5,105.7 667.7,103.8 672.8,101.8 678.0,100.0 683.2,98.2" fill="none" stroke="var(--accent)" stroke-width="2.1" stroke-linejoin="round"/>
+<polyline points="74.0,293.9 79.2,293.9 84.3,293.8 89.5,293.8 94.6,293.7 99.8,293.7 105.0,293.6 110.1,293.5 115.3,293.5 120.5,293.4 125.6,293.3 130.8,293.3 135.9,293.2 141.1,293.1 146.3,293.0 151.4,292.9 156.6,292.8 161.8,292.7 166.9,292.6 172.1,292.4 177.2,292.3 182.4,292.2 187.6,292.0 192.7,291.9 197.9,291.7 203.1,291.5 208.2,291.4 213.4,291.2 218.5,291.0 223.7,290.7 228.9,290.5 234.0,290.3 239.2,290.0 244.4,289.8 249.5,289.5 254.7,289.2 259.8,288.9 265.0,288.5 270.2,288.2 275.3,287.8 280.5,287.4 285.7,287.0 290.8,286.6 296.0,286.1 301.1,285.6 306.3,285.1 311.5,284.6 316.6,284.0 321.8,283.4 327.0,282.8 332.1,282.2 337.3,281.5 342.4,280.8 347.6,280.0 352.8,279.2 357.9,278.4 363.1,277.5 368.3,276.6 373.4,275.7 378.6,274.7 383.7,273.7 388.9,272.6 394.1,271.5 399.2,270.3 404.4,269.1 409.6,267.9 414.7,266.6 419.9,265.2 425.0,263.8 430.2,262.4 435.4,260.9 440.5,259.3 445.7,257.8 450.9,256.1 456.0,254.4 461.2,252.7 466.3,250.9 471.5,249.1 476.7,247.3 481.8,245.4 487.0,243.4 492.2,241.5 497.3,239.5 502.5,237.4 507.6,235.4 512.8,233.3 518.0,231.2 523.1,229.1 528.3,226.9 533.5,224.8 538.6,222.6 543.8,220.5 548.9,218.3 554.1,216.2 559.3,214.0 564.4,211.9 569.6,209.8 574.8,207.7 579.9,205.6 585.1,203.5 590.2,201.5 595.4,199.5 600.6,197.5 605.7,195.6 610.9,193.7 616.1,191.9 621.2,190.1 626.4,188.3 631.5,186.6 636.7,184.9 641.9,183.3 647.0,181.7 652.2,180.1 657.4,178.7 662.5,177.2 667.7,175.8 672.8,174.5 678.0,173.2 683.2,171.9" fill="none" stroke="#0b7285" stroke-width="2.1" stroke-linejoin="round"/>
+<circle cx="384.7" cy="273.5" r="4" fill="#0b7285" stroke="var(--bg)" stroke-width="1.5"/>
+<text class="lb" x="384.7" y="291.5" text-anchor="middle" fill="#0b7285">33:1</text>
+<polyline points="74.0,308.2 79.2,308.2 84.3,308.2 89.5,308.1 94.6,308.1 99.8,308.0 105.0,308.0 110.1,308.0 115.3,307.9 120.5,307.9 125.6,307.8 130.8,307.8 135.9,307.7 141.1,307.6 146.3,307.6 151.4,307.5 156.6,307.4 161.8,307.3 166.9,307.3 172.1,307.2 177.2,307.1 182.4,307.0 187.6,306.9 192.7,306.8 197.9,306.7 203.1,306.5 208.2,306.4 213.4,306.3 218.5,306.1 223.7,306.0 228.9,305.8 234.0,305.6 239.2,305.4 244.4,305.3 249.5,305.1 254.7,304.8 259.8,304.6 265.0,304.4 270.2,304.1 275.3,303.9 280.5,303.6 285.7,303.3 290.8,303.0 296.0,302.6 301.1,302.3 306.3,301.9 311.5,301.6 316.6,301.2 321.8,300.7 327.0,300.3 332.1,299.8 337.3,299.3 342.4,298.8 347.6,298.3 352.8,297.7 357.9,297.1 363.1,296.5 368.3,295.9 373.4,295.2 378.6,294.5 383.7,293.8 388.9,293.0 394.1,292.2 399.2,291.4 404.4,290.5 409.6,289.6 414.7,288.7 419.9,287.7 425.0,286.7 430.2,285.7 435.4,284.6 440.5,283.5 445.7,282.4 450.9,281.2 456.0,280.0 461.2,278.8 466.3,277.5 471.5,276.2 476.7,274.9 481.8,273.5 487.0,272.2 492.2,270.8 497.3,269.3 502.5,267.9 507.6,266.4 512.8,264.9 518.0,263.4 523.1,261.9 528.3,260.4 533.5,258.8 538.6,257.3 543.8,255.8 548.9,254.2 554.1,252.7 559.3,251.2 564.4,249.6 569.6,248.1 574.8,246.6 579.9,245.1 585.1,243.7 590.2,242.2 595.4,240.8 600.6,239.4 605.7,238.0 610.9,236.7 616.1,235.3 621.2,234.0 626.4,232.8 631.5,231.6 636.7,230.4 641.9,229.2 647.0,228.1 652.2,227.0 657.4,225.9 662.5,224.9 667.7,223.9 672.8,222.9 678.0,222.0 683.2,221.1" fill="none" stroke="#8250df" stroke-width="2.1" stroke-linejoin="round"/>
+<circle cx="482.0" cy="273.5" r="4" fill="#8250df" stroke="var(--bg)" stroke-width="1.5"/>
+<text class="lb" x="482.0" y="291.5" text-anchor="middle" fill="#8250df">100:1</text>
+<polyline points="74.0,317.5 79.2,317.5 84.3,317.5 89.5,317.5 94.6,317.4 99.8,317.4 105.0,317.4 110.1,317.3 115.3,317.3 120.5,317.3 125.6,317.2 130.8,317.2 135.9,317.1 141.1,317.1 146.3,317.0 151.4,317.0 156.6,316.9 161.8,316.9 166.9,316.8 172.1,316.7 177.2,316.7 182.4,316.6 187.6,316.5 192.7,316.4 197.9,316.4 203.1,316.3 208.2,316.2 213.4,316.1 218.5,316.0 223.7,315.9 228.9,315.7 234.0,315.6 239.2,315.5 244.4,315.3 249.5,315.2 254.7,315.0 259.8,314.9 265.0,314.7 270.2,314.5 275.3,314.3 280.5,314.1 285.7,313.9 290.8,313.6 296.0,313.4 301.1,313.1 306.3,312.9 311.5,312.6 316.6,312.3 321.8,312.0 327.0,311.7 332.1,311.3 337.3,311.0 342.4,310.6 347.6,310.2 352.8,309.8 357.9,309.3 363.1,308.9 368.3,308.4 373.4,307.9 378.6,307.4 383.7,306.8 388.9,306.3 394.1,305.7 399.2,305.1 404.4,304.4 409.6,303.8 414.7,303.1 419.9,302.4 425.0,301.6 430.2,300.9 435.4,300.1 440.5,299.3 445.7,298.4 450.9,297.5 456.0,296.7 461.2,295.7 466.3,294.8 471.5,293.8 476.7,292.9 481.8,291.9 487.0,290.8 492.2,289.8 497.3,288.7 502.5,287.7 507.6,286.6 512.8,285.5 518.0,284.4 523.1,283.2 528.3,282.1 533.5,281.0 538.6,279.8 543.8,278.7 548.9,277.6 554.1,276.4 559.3,275.3 564.4,274.2 569.6,273.0 574.8,271.9 579.9,270.8 585.1,269.8 590.2,268.7 595.4,267.6 600.6,266.6 605.7,265.6 610.9,264.6 616.1,263.6 621.2,262.6 626.4,261.7 631.5,260.8 636.7,259.9 641.9,259.0 647.0,258.2 652.2,257.4 657.4,256.6 662.5,255.8 667.7,255.1 672.8,254.4 678.0,253.7 683.2,253.1" fill="none" stroke="#1a7f37" stroke-width="2.1" stroke-linejoin="round"/>
+<circle cx="567.5" cy="273.5" r="4" fill="#1a7f37" stroke="var(--bg)" stroke-width="1.5"/>
+<text class="lb" x="567.5" y="291.5" text-anchor="middle" fill="#1a7f37">262:1</text>
+<text class="xl" x="380" y="380" text-anchor="middle">cache-read tokens per output token</text>
+<text class="xl" transform="translate(20,203) rotate(-90)" text-anchor="middle">Astra cost / Fable 5.1 cost</text>
+<text class="xl" x="74" y="406">Astra needs, for the same task:</text>
+<line x1="74" y1="420" x2="96" y2="420" stroke="var(--accent)" stroke-width="2.1"/>
+<text class="key" x="104" y="424">1.00 of Fable's tokens <tspan class="lb">(same token count)</tspan></text>
+<line x1="74" y1="436" x2="96" y2="436" stroke="#0b7285" stroke-width="2.1"/>
+<text class="key" x="104" y="440">0.70 of Fable's tokens <tspan class="lb">(30% fewer tokens)</tspan></text>
+<line x1="74" y1="452" x2="96" y2="452" stroke="#8250df" stroke-width="2.1"/>
+<text class="key" x="104" y="456">0.50 of Fable's tokens <tspan class="lb">(half the tokens)</tspan></text>
+<line x1="74" y1="468" x2="96" y2="468" stroke="#1a7f37" stroke-width="2.1"/>
+<text class="key" x="104" y="472">0.37 of Fable's tokens <tspan class="lb">(OpenAI's implied 63% cut)</tspan></text>
+<text class="lb" x="686" y="500" text-anchor="end">Prices per million tokens, 6 September 2026. Cache read $1.00 vs $0.25. Chart is my own calculation.</text>
+</svg>
+      <figcaption><b>Which lever wins depends on one ratio.</b> My calculation from the two
+      published price tables. Each curve crosses parity at a different point, and all of them
+      fall inside the range Anthropic&rsquo;s own 45 percent figure puts long agentic sessions
+      in.</figcaption>
+    </figure>
+
+    <p>
+      If Astra needs 70 percent of the tokens, Fable 5.1 takes the lead past 33 cache reads
+      per output token. At half the tokens, past 100. Even taking OpenAI&rsquo;s 63 percent
+      cost claim at face value, which implies <math data-tex="k \approx 0.37"><mi>k</mi><mo>≈</mo><mn>0.37</mn></math>, the
+      crossover is at 263 to 1.
+    </p>
+    <p>
+      Neither lab is being dishonest. They are quoting different terms of the same equation,
+      and which term dominates is a property of your workload, not of either model. If you
+      run short, output-heavy calls, the cache line is noise and token efficiency decides it.
+      If you run long sessions over a stable context, the cache line decides it and the 272K
+      threshold matters more than any benchmark.
+    </p>
+
+    <h2>The number under Fable 5.1 was not all Fable 5.1</h2>
+
+    <p>
+      While I was in the announcement pages for the pricing, the benchmark table stopped me.
+    </p>
+
+    <figure class="blog-fig">
+      <img src="../assets/img/blog/same-model-twice/anthropic-benchmark-table.png" alt="Anthropic's benchmark comparison table. The agentic coding row for Terminal-Bench 4.0 shows Fable 5.1 at 55.8 percent with 60.9 percent for Mythos 5.1 directly beneath it, against Fable 5 at 42.0 percent, Opus 5 at 52.3 percent and GPT-5.6 Sol at 37.3 percent." loading="lazy" width="1840" height="1408">
+      <figcaption><b>Two numbers, one set of weights.</b> Benchmark comparison from the <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" rel="noopener">Fable 5.1 announcement</a>, read 6 September 2026. Anthropic states that Fable 5.1 and Mythos 5.1 are the same model with different levels of safeguards.</figcaption>
+    </figure>
+
+    <p>
+      Fable 5.1 scores 55.8 percent on Terminal-Bench 4.0. Directly beneath, in the same cell,
+      Mythos 5.1 scores 60.9 percent. Anthropic states plainly that the two are the same model
+      with different levels of safeguards. So 5.1 points of agentic coding performance is the
+      price of the safeguard configuration, quantified by the lab, on its own launch page.
+    </p>
+    <p>The footnote under that table goes further:</p>
+
+    <figure class="blog-fig">
+      <img src="../assets/img/blog/same-model-twice/anthropic-safeguard-footnote.png" alt="Footnote reading: Fable 5.1 was evaluated with its production safeguards enabled. On tasks where these safeguards intervened, Fable 5.1 and Fable 5 scored a zero on OSWorld 2.0, and Fable 5 scored a zero on AutomationBench. In all other interventions from our safeguards, cybersecurity tasks were completed by Claude Opus 4.8, and biology tasks were completed by Claude Opus 5. This likely reduces the performance of Fable 5.1 and Fable 5 on these benchmarks." loading="lazy" width="1352" height="266">
+      <figcaption><b>The footnote under the same table.</b> From the <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" rel="noopener">Fable 5.1 announcement</a>, read 6 September 2026.</figcaption>
+    </figure>
+
+    <p>
+      Where safeguards intervened, the task was handed to a different model and that result
+      counted. On some rows the number printed under &ldquo;Fable 5.1&rdquo; was produced
+      partly by Opus 4.8 and Opus 5. The row measures a routing system. Anthropic says so, and
+      says which direction the bias runs, which is more than the reader of a leaderboard
+      aggregating that row will ever see.
+    </p>
+    <p>
+      OpenAI does the mirror image. Astra&rsquo;s cyber results, 100 percent on ExploitBench
+      against 78.5 percent for GPT-5.6 Sol, 42.4 percent on ExploitGym, 88.0 percent on
+      SRE-Bench at the first attempt against 55.9 percent, were all measured &ldquo;without
+      production safeguards&rdquo;. The Astra you can call refuses proof-of-concept exploit
+      generation. OpenAI plans to lift that for vetted defenders through a programme called
+      Daybreak.
+    </p>
+
+    <figure class="blog-fig">
+<svg id="sw" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 508" width="720" height="508" role="img" aria-labelledby="swt swd">
+  <title id="swt">One set of weights, two safeguard regimes, two different published numbers</title>
+  <desc id="swd">Both labs ship the same weights twice. Anthropic names the two configurations Fable 5.1 and Mythos 5.1: production safeguards, generally available, 55.8 percent on Terminal-Bench 4.0; cyber and life-science safeguards, vetted organisations only, 60.9 percent on the same benchmark. OpenAI ships GPT-6 Astra under one name: production safeguards for all paid tiers, which refuse proof-of-concept exploit generation, while its published cyber numbers of 100 percent on ExploitBench and 88 percent on SRE-Bench were measured with safeguards off, a configuration nobody can call, with looser safeguards promised to vetted defenders through Daybreak.</desc>
+  
+
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-muted)"/>
+    </marker>
+  </defs>
+
+  <rect width="720" height="508" fill="var(--bg)"/>
+
+  <text class="ttl" x="16" y="24">The scoreboard row is a configuration, not a model</text>
+  <text class="sub" x="16" y="42">Both labs shipped one set of weights under two safeguard regimes this week, and published numbers from both.</text>
+
+  <text class="hdr" x="16" y="66">WEIGHTS</text>
+  <text class="hdr" x="176" y="66">SAFEGUARD REGIME</text>
+  <text class="hdr" x="342" y="66">WHO CAN RUN IT</text>
+  <text class="hdr" x="516" y="66">WHAT GETS PUBLISHED</text>
+
+  <!-- ============ ANTHROPIC ============ -->
+  <text class="lab" x="16" y="92">Anthropic, 1 September</text>
+
+  <rect x="16" y="104" width="140" height="96" rx="6" fill="var(--bg-subtle)" stroke="var(--accent)" stroke-width="1.6"/>
+  <text class="bx" x="86" y="140" text-anchor="middle" font-weight="600">one model</text>
+  <text class="bxm" x="86" y="156" text-anchor="middle">Fable 5.1 and Mythos 5.1</text>
+  <text class="bxm" x="86" y="170" text-anchor="middle">are the same weights</text>
+
+  <!-- lane 1 -->
+  <line x1="156" y1="128" x2="174" y2="128" stroke="var(--text-muted)" stroke-width="1.2" marker-end="url(#ar)"/>
+  <rect x="176" y="108" width="152" height="40" rx="5" fill="var(--bg-subtle)" stroke="var(--border)"/>
+  <text class="bx" x="186" y="124">production safeguards</text>
+  <text class="bxm" x="186" y="139">cyber tasks redirected</text>
+  <line x1="328" y1="128" x2="340" y2="128" stroke="var(--text-muted)" stroke-width="1.2" marker-end="url(#ar)"/>
+  <rect x="342" y="108" width="158" height="40" rx="5" fill="var(--bg-subtle)" stroke="var(--border)"/>
+  <text class="bx" x="352" y="124">anyone</text>
+  <text class="bxm" x="352" y="139">generally available</text>
+  <line x1="500" y1="128" x2="512" y2="128" stroke="var(--text-muted)" stroke-width="1.2" marker-end="url(#ar)"/>
+  <rect x="514" y="108" width="190" height="40" rx="5" fill="var(--bg-hover)" stroke="var(--border)"/>
+  <text class="num" x="524" y="125">Terminal-Bench 4.0: 55.8%</text>
+  <text class="bxm" x="524" y="139">labelled Fable 5.1</text>
+
+  <!-- lane 2 -->
+  <line x1="156" y1="176" x2="174" y2="176" stroke="var(--text-muted)" stroke-width="1.2" marker-end="url(#ar)"/>
+  <rect x="176" y="156" width="152" height="40" rx="5" fill="var(--bg-subtle)" stroke="var(--border)"/>
+  <text class="bx" x="186" y="172">looser cyber and</text>
+  <text class="bx" x="186" y="186">life-science safeguards</text>
+  <line x1="328" y1="176" x2="340" y2="176" stroke="var(--text-muted)" stroke-width="1.2" marker-end="url(#ar)"/>
+  <rect x="342" y="156" width="158" height="40" rx="5" fill="var(--bg-subtle)" stroke="var(--border)"/>
+  <text class="bx" x="352" y="172">vetted organisations</text>
+  <text class="bxm" x="352" y="187">CVP and LSVP, US only</text>
+  <line x1="500" y1="176" x2="512" y2="176" stroke="var(--text-muted)" stroke-width="1.2" marker-end="url(#ar)"/>
+  <rect x="514" y="156" width="190" height="40" rx="5" fill="var(--bg-hover)" stroke="var(--border)"/>
+  <text class="num" x="524" y="173">Terminal-Bench 4.0: 60.9%</text>
+  <text class="bxm" x="524" y="187">labelled Mythos 5.1</text>
+
+  <text class="cap" x="176" y="216">Same weights, 5.1 points apart. The gap is the safeguard configuration.</text>
+
+  <line x1="16" y1="234" x2="704" y2="234" stroke="var(--border)" stroke-width="1"/>
+
+  <!-- ============ OPENAI ============ -->
+  <text class="lab" x="16" y="262">OpenAI, 3 September</text>
+
+  <rect x="16" y="274" width="140" height="96" rx="6" fill="var(--bg-subtle)" stroke="var(--accent)" stroke-width="1.6"/>
+  <text class="bx" x="86" y="310" text-anchor="middle" font-weight="600">one model</text>
+  <text class="bxm" x="86" y="326" text-anchor="middle">GPT-6 Astra, shipped</text>
+  <text class="bxm" x="86" y="340" text-anchor="middle">under a single name</text>
+
+  <!-- lane 1 -->
+  <line x1="156" y1="298" x2="174" y2="298" stroke="var(--text-muted)" stroke-width="1.2" marker-end="url(#ar)"/>
+  <rect x="176" y="278" width="152" height="40" rx="5" fill="var(--bg-subtle)" stroke="var(--border)"/>
+  <text class="bx" x="186" y="294">production safeguards</text>
+  <text class="bxm" x="186" y="309">refuses PoC exploits</text>
+  <line x1="328" y1="298" x2="340" y2="298" stroke="var(--text-muted)" stroke-width="1.2" marker-end="url(#ar)"/>
+  <rect x="342" y="278" width="158" height="40" rx="5" fill="var(--bg-subtle)" stroke="var(--border)"/>
+  <text class="bx" x="352" y="294">paid tiers and the API</text>
+  <text class="bxm" x="352" y="309">off by default for Enterprise</text>
+  <line x1="500" y1="298" x2="512" y2="298" stroke="var(--text-muted)" stroke-width="1.2" marker-end="url(#ar)"/>
+  <rect x="514" y="278" width="190" height="40" rx="5" fill="var(--bg-hover)" stroke="var(--border)"/>
+  <text class="num" x="524" y="295">Terminal-Bench 4.0: 57.9%</text>
+  <text class="bxm" x="524" y="309">the model you can call</text>
+
+  <!-- lane 2 -->
+  <line x1="156" y1="346" x2="174" y2="346" stroke="var(--text-muted)" stroke-width="1.2" marker-end="url(#ar)"/>
+  <rect x="176" y="326" width="152" height="40" rx="5" fill="var(--bg-subtle)" stroke="var(--border)" stroke-dasharray="4 3"/>
+  <text class="bx" x="186" y="342">safeguards off</text>
+  <text class="bxm" x="186" y="357">evaluation configuration</text>
+  <line x1="328" y1="346" x2="340" y2="346" stroke="var(--text-muted)" stroke-width="1.2" marker-end="url(#ar)"/>
+  <rect x="342" y="326" width="158" height="40" rx="5" fill="var(--bg-subtle)" stroke="var(--border)" stroke-dasharray="4 3"/>
+  <text class="bx" x="352" y="342">nobody, today</text>
+  <text class="bxm" x="352" y="357">Daybreak, in coming weeks</text>
+  <line x1="500" y1="346" x2="512" y2="346" stroke="var(--text-muted)" stroke-width="1.2" marker-end="url(#ar)"/>
+  <rect x="514" y="326" width="190" height="40" rx="5" fill="var(--bg-hover)" stroke="var(--border)"/>
+  <text class="num" x="524" y="343">ExploitBench: 100%</text>
+  <text class="bxm" x="524" y="357">SRE-Bench 88.0% first try</text>
+
+  <text class="cap" x="176" y="386">The cyber numbers in the announcement come from a configuration nobody can call today.</text>
+
+  <line x1="16" y1="404" x2="704" y2="404" stroke="var(--border)" stroke-width="1"/>
+
+  <text class="lab" x="16" y="428">What the two have in common</text>
+  <text class="cap" x="16" y="448">Neither product name identifies a fixed object. Price, capability and risk all move with the safeguard regime and the</text>
+  <text class="cap" x="16" y="463">account class, so a benchmark row is only meaningful with its configuration attached.</text>
+
+  <text class="cap" x="16" y="490">Sources: anthropic.com/claude-fable-and-mythos-5-1 and openai.com/index/gpt-6-astra, both read 6 September 2026. Diagram mine.</text>
+</svg>
+      <figcaption><b>One set of weights, two safeguard regimes, two published numbers.</b>
+      Drawn from both announcement pages, read 6 September 2026. Anthropic gave the two
+      configurations different product names; OpenAI kept one name and tiered the access
+      underneath it.</figcaption>
+    </figure>
+
+    <p>
+      Both then built a vetting programme to unlock the looser regime: the Cyber Verification
+      Program and the Life Sciences Verification Program on one side, Daybreak on the other.
+    </p>
+
+    <h2>Two risk labels that cannot be compared</h2>
+
+    <p>
+      OpenAI says Astra &ldquo;meets the Critical threshold in cybersecurity under our
+      Preparedness Framework&rdquo;, the first model to do so. Anthropic says Mythos 5.1
+      &ldquo;demonstrates the strongest cyber capabilities of any model we&rsquo;ve released,
+      though it still falls within the lower category of risk in our Frontier Compliance
+      Framework.&rdquo;
+    </p>
+    <p>
+      Two frontier models five days apart, comparable agentic coding scores, opposite-sounding
+      labels. These are different documents with different thresholds, so this says nothing
+      about which model is more dangerous. It says the labels do not survive being read across
+      labs, and they are increasingly read that way.
+    </p>
+    <p>
+      What each lab did in practice is closer than the labels suggest. Anthropic loosened
+      Fable 5.1&rsquo;s cyber safeguards to around 60 percent fewer interventions per Claude
+      Code session and now allows vulnerability discovery, while still redirecting penetration
+      testing, exploit generation and binary-based vulnerability scanning to Opus models.
+      OpenAI shipped Astra able to do secure code review and patching while refusing
+      proof-of-concept exploits. Same shape, different vocabulary.
+    </p>
+
+    <h2>The flag count and the instrument</h2>
+
+    <p>
+      One more number is worth handling carefully. Astra&rsquo;s deployment simulation reports
+      about 53 percent fewer flags for higher-severity misaligned behaviour than GPT-5.6 Sol,
+      34 flags against 73 across 54,218 tasks.
+    </p>
+    <p>
+      In the same release, OpenAI reports that its evaluations found Astra&rsquo;s written
+      reasoning harder to monitor than Sol&rsquo;s, which it attributes to Astra controlling
+      its written reasoning more and solving problems in fewer written steps. OpenAI flags the
+      decline itself and calls improving monitorability a research priority.
+    </p>
+    <p>
+      A flag count is a property of the monitor as much as of the model. When the monitored
+      channel gets less informative in the same release that the flag count falls, the fall is
+      consistent with better behaviour and also consistent with less visible behaviour, and
+      the count alone cannot separate them. That is not a claim that Astra is misaligned. It
+      is a claim that this particular number cannot carry the weight a reader will put on it,
+      for the same reason you cannot compare instrument readings across a calibration change.
+    </p>
+
+    <h2>What I take from it</h2>
+
+    <p>Three things I will do differently after this week.</p>
+    <p>
+      Price on your own token shape, not on the sticker. Pull <math data-tex="F"><mi>F</mi></math>,
+      <math data-tex="R"><mi>R</mi></math> and <math data-tex="O"><mi>O</mi></math> out of your last month of
+      usage, put them in the equation above, and the vendor comparison answers itself. The two
+      headline cost claims from this week are both true and neither one is about your workload.
+    </p>
+    <p>
+      Record the safeguard configuration next to any benchmark number you cite. Fable 5.1 at
+      55.8 and Mythos 5.1 at 60.9 are the same weights. Astra at 100 percent on ExploitBench is
+      a configuration nobody can call. A score without its configuration is missing half its
+      identity.
+    </p>
+    <p>
+      Treat cross-lab risk labels as internal to each lab until someone publishes a mapping.
+      Critical and lower-category are not points on a shared scale.
+    </p>
+    <p>
+      Astra also reports 99.9 percent on ARC-AGI-3. I competed in that benchmark and
+      <a href="/blog/arc-agi-challenge">wrote about why its design resisted the
+      usual routes to a high score</a>, so I have been waiting to see that number move. It
+      moved.
+    </p>
+
+    <hr>
+
+    <p style="font-size:0.88rem;color:var(--text-muted)">
+      Prices, benchmark figures and safeguard details are Anthropic&rsquo;s and
+      OpenAI&rsquo;s, from the <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" rel="noopener">Fable 5.1 and Mythos 5.1 announcement</a>, the
+      <a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">GPT-6 Astra announcement</a>, the
+      <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">Astra model page</a> and the
+      <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Claude pricing docs</a>, all read 6 September 2026. The five screenshots
+      are unmodified captures of those pages. The cost model, the exchange rate, the workload
+      shapes solved out of Anthropic&rsquo;s 25 and 45 percent figures, and both drawn figures
+      are mine, and every number traces to a record in the post&rsquo;s research folder.
+    </p>
+
+  </div>
+
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-icons">
+      <a href="mailto:arpitsinghgautam777@gmail.com" title="Email"><i class="fas fa-envelope" aria-hidden="true"></i></a>
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap" aria-hidden="true"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+      <a href="https://topmate.io/arpit_singh_gautam/" title="TopMate" target="_blank" rel="noopener"><i class="fas fa-calendar-check" aria-hidden="true"></i></a>
+    </div>
+    <span>&copy; 2026 Arpit Singh Gautam &middot; Bengaluru, India</span>
+  </div>
+</footer>
+
+<script>
+  function toggleTheme(){var cur=document.documentElement.getAttribute('data-theme');var next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);localStorage.setItem('theme',next);document.getElementById('theme-toggle').textContent=next==='dark'?'\u2600\ufe0f':'\ud83c\udf19';}
+  (function(){var t=document.documentElement.getAttribute('data-theme');var btn=document.getElementById('theme-toggle');if(btn)btn.textContent=t==='dark'?'\u2600\ufe0f':'\ud83c\udf19';})();
+  var btt=document.getElementById('back-to-top');
+  window.addEventListener('scroll',function(){if(window.scrollY>300){btt.classList.add('visible');}else{btt.classList.remove('visible');}});
+  btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+</body>
+</html>
