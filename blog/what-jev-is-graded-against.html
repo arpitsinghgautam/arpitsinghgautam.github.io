@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6P1E490Z0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X6P1E490Z0');</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="TypeSafe's Jev returns a typed decision and a probability instead of text, bills nothing for output and answers in under half a second. The architecture explains all of it. The benchmark behind the headline numbers grades Jev against the averaged answers of GPT-6 Astra and Claude Fable 5.1, which prices the decision and leaves the calibration claim untested, and TypeSafe's own docs show the model's probabilities summing to 1.19.">
+  <link rel="canonical" href="https://arpitsinghgautam.me/blog/what-jev-is-graded-against">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Arpit Singh Gautam">
+  <meta property="og:title" content="Everyone Is Quoting Jev's Price. Look at What It Is Graded Against. - Arpit Singh Gautam">
+  <meta property="og:description" content="TypeSafe's Jev returns a typed decision and a probability instead of text, bills nothing for output and answers in under half a second. The architecture explains all of it. The benchmark behind the headline numbers grades Jev against the averaged answers of GPT-6 Astra and Claude Fable 5.1, which prices the decision and leaves the calibration claim untested, and TypeSafe's own docs show the model's probabilities summing to 1.19.">
+  <meta property="og:url" content="https://arpitsinghgautam.me/blog/what-jev-is-graded-against">
+  <meta property="og:image" content="https://arpitsinghgautam.me/assets/img/blog/what-jev-is-graded-against-thumb.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@Asg_Wolverine">
+  <meta name="twitter:creator" content="@Asg_Wolverine">
+  <meta name="twitter:title" content="Everyone Is Quoting Jev's Price. Look at What It Is Graded Against. - Arpit Singh Gautam">
+  <meta name="twitter:description" content="TypeSafe's Jev returns a typed decision and a probability instead of text, bills nothing for output and answers in under half a second. The architecture explains all of it. The benchmark behind the headline numbers grades Jev against the averaged answers of GPT-6 Astra and Claude Fable 5.1, which prices the decision and leaves the calibration claim untested, and TypeSafe's own docs show the model's probabilities summing to 1.19.">
+  <meta name="twitter:image" content="https://arpitsinghgautam.me/assets/img/blog/what-jev-is-graded-against-thumb.png">
+  <title>Everyone Is Quoting Jev's Price. Look at What It Is Graded Against. - Arpit Singh Gautam</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="../assets/css/fontawesome.css">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Everyone Is Quoting Jev's Price. Look at What It Is Graded Against.", "image": "https://arpitsinghgautam.me/assets/img/blog/what-jev-is-graded-against-thumb.png", "datePublished": "2026-09-21", "author": {"@type": "Person", "name": "Arpit Singh Gautam", "url": "https://arpitsinghgautam.me/"}, "publisher": {"@type": "Person", "name": "Arpit Singh Gautam"}, "mainEntityOfPage": "https://arpitsinghgautam.me/blog/what-jev-is-graded-against"}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arpitsinghgautam.me/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://arpitsinghgautam.me/blog"}, {"@type": "ListItem", "position": 3, "name": "Everyone Is Quoting Jev's Price. Look at What It Is Graded Against.", "item": "https://arpitsinghgautam.me/blog/what-jev-is-graded-against"}]}
+  </script>
+  <style>
+    /* Figure-local classes for the two drawn figures on this page. The inlined SVGs
+       carry no <style> of their own, so every rule is scoped to its id here. */
+  #jv1, #jv2 { --grid: var(--border); --accent2: #31527a; font-family: inherit; }
+  [data-theme="dark"] #jv1, [data-theme="dark"] #jv2 { --accent2: #58a6ff; }
+  #jv1 rect[fill="var(--bg)"], #jv2 rect[fill="var(--bg)"] { fill: transparent; }
+  #jv1 .ttl, #jv2 .ttl {fill:var(--text);font-size:13.5px;font-weight:600;}
+  #jv1 .sub, #jv2 .sub {fill:var(--text-muted);font-size:11px;}
+  #jv1 .ax,  #jv2 .ax  {fill:var(--text-muted);font-size:10px;}
+  #jv1 .xl,  #jv2 .xl  {fill:var(--text);font-size:11px;font-weight:600;}
+  #jv1 .lb,  #jv2 .lb  {fill:var(--text-muted);font-size:10.5px;}
+  #jv1 .key, #jv2 .key {fill:var(--text);font-size:10.5px;}
+  #jv1 .zn,  #jv2 .zn  {fill:var(--text-muted);font-size:10px;font-style:italic;}
+  #jv1 .mono  {fill:var(--text);font-size:10px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
+  #jv1 .monom {fill:var(--text-muted);font-size:9.5px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
+
+    /* The three captures are TypeSafe's own dark documentation pages, so each sits on
+       its own dark plate rather than glaring against the page in light theme. */
+    .docs-shot { background: #0d1117; border: 1px solid var(--border); border-radius: 8px;
+                 padding: 10px; }
+    .docs-shot img { border: none; border-radius: 3px; display: block; width: 100%; }
+  </style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<button id="back-to-top" title="Back to top" aria-label="Back to top"><i class="fas fa-arrow-up" aria-hidden="true"></i></button>
+
+<header class="site-header">
+  <div class="header-top">
+    <a class="nav-brand" href="/">Arpit Singh <span class="brand-accent">Gautam</span></a>
+    <div class="header-icons">
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap" aria-hidden="true"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle dark mode">&#127769;</button>
+    </div>
+  </div>
+  <div class="header-nav">
+    <a href="/">About</a>
+    <a href="/publications">Publications</a>
+    <a href="/experience">Experience</a>
+    <a href="/media-awards">Media &amp; Awards</a>
+    <a href="/projects">Projects</a>
+    <a href="/blog" class="active">Blog</a>
+    <a href="/misc">Misc</a>
+  </div>
+</header>
+
+<main class="page-wrap" id="main" tabindex="-1">
+
+  <div class="blog-post-hero">
+    <div class="breadcrumb"><a href="/blog">&larr; Blog</a></div>
+    <h1>Everyone Is Quoting Jev's Price. Look at What It Is Graded Against.</h1>
+    <div class="blog-post-meta">
+      <span><i class="fas fa-calendar-alt" aria-hidden="true"></i> Sep 2026</span>
+      <span><i class="fas fa-clock" aria-hidden="true"></i> 11 min read</span>
+      <span><i class="fas fa-tag" aria-hidden="true"></i> Evaluation &middot; Inference &middot; Calibration</span>
+    </div>
+  </div>
+
+  <div class="blog-post-body">
+
+    <p>
+      TypeSafe AI came out of two years of stealth on 15 September with Jev, a model that
+      does not write anything. You hand it program state and a set of typed questions, and
+      it hands back a value for each one plus a probability. No tokens streaming, no
+      parsing, no schema validation. The founder, Diogo Almeida, co-invented RLHF and
+      worked on the research behind ChatGPT, which is a strange pedigree for someone
+      shipping a model whose whole pitch is that chat was the wrong target.
+    </p>
+    <p>
+      I spent yesterday afternoon in their
+      <a href="https://docs.typesafe.ai/concepts/system-one" target="_blank" rel="noopener">docs</a>, the
+      <a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev" target="_blank" rel="noopener">launch blog</a>
+      and the <a href="https://evals.typesafe.ai/" target="_blank" rel="noopener">workflow eval site</a>.
+      TypeSafe publish more fine print than most labs manage at launch, including a page
+      listing nine ways their own model fails. The fine print is where this gets
+      interesting, because the coverage so far has compressed three different claims into
+      one word, and the word is &ldquo;reliable&rdquo;.
+    </p>
+
+    <h2>The part that is exactly as good as it sounds</h2>
+
+    <p>
+      Jev is priced at $0.042 per million input tokens. Output tokens are free.
+      TypeSafe&rsquo;s phrase is &ldquo;too cheap to meter&rdquo;.
+    </p>
+    <p>
+      That price is a description of the architecture. An autoregressive model answers you
+      in two phases. Prefill reads your prompt in one parallel, compute-bound pass. Decode
+      writes the answer one token at a time, and every single token requires pulling the
+      whole model&rsquo;s weights and the KV cache out of memory, which makes it sequential
+      and bandwidth-bound. Decode is where the latency lives and where most of the marginal
+      cost lives, which is why every vendor charges more for output than input.
+      TypeSafe&rsquo;s own comparison table puts the usual ratio at about five times.
+    </p>
+    <p>
+      Jev has no decode phase. Their docs put it plainly: &ldquo;Jev ingests the state once
+      and evaluates every question against it in parallel.&rdquo; One forward pass over the
+      state, every question answered off that single reading, all of them at once.
+    </p>
+
+    <figure class="blog-fig">
+      <div class="docs-shot">
+        <img src="../assets/img/blog/what-jev-is-graded-against/docs-models-pricing.png" alt="TypeSafe's Current models table: Jev 1.13, model ID jev-1.13.0, price 42 dollars per billion input tokens and 0.042 dollars per million, rate limits 250,000 tokens per second and 1,200 requests per minute, context 64k per request with 32k for state plus the longest question, text input only." loading="lazy" width="962" height="520">
+      </div>
+      <figcaption><b>The whole cost model on one screen.</b> From the
+        <a href="https://docs.typesafe.ai/models" target="_blank" rel="noopener">TypeSafe models page</a>,
+        read 21 September 2026. Every number in the arithmetic below comes off this table.</figcaption>
+    </figure>
+
+    <p>
+      Once you see it that way the rest of the price sheet stops being surprising. There is
+      no output to bill because nothing is written. The 250,000 tokens per second rate limit
+      is a prefill-shaped number, because prefill batches well and decode does not.
+      End-to-end latency of 70 to 500 milliseconds against 3 to 329 seconds for frontier
+      models is one pass against hundreds of passes.
+    </p>
+
+    <figure class="blog-fig">
+      <svg id="jv1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 400" width="760" height="400" role="img" aria-labelledby="m1t m1d">
+<title id="m1t">Where the money goes in a decision: sequential decode against one shared pass</title>
+<desc id="m1d">Two panels. On the left, an autoregressive language model answering five questions: the prompt is read once per call, then the answer is written one token at a time, and each written token is a separate memory-bandwidth-bound step that the vendor bills at roughly five times the input rate. Five questions means five calls, so the state is re-read five times. On the right, Jev: the state is read once in a single compute-bound pass, and every question is evaluated against that one reading in parallel, each returning a typed value and a probability. Nothing is written token by token, so there is no output to bill and the marginal cost of the fifth question is only the length of the question itself.</desc>
+<rect width="760" height="400" fill="var(--bg)"/>
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-muted)"/></marker><marker id="ara" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent)"/></marker></defs>
+<text class="ttl" x="28" y="28">The price sheet is a readout of the architecture</text>
+<text class="sub" x="28" y="46">Cost anatomy of one decision that needs five independent judgements about the same state.</text>
+<line x1="380" y1="64" x2="380" y2="372" stroke="var(--border)" stroke-width="1" stroke-dasharray="3 4"/>
+<text class="xl" x="28" y="84">Autoregressive LLM, five calls</text>
+<text class="lb" x="28" y="100">state re-read once per call</text>
+<rect x="28" y="118" width="120" height="26" rx="4" fill="var(--bg-subtle)" stroke="var(--border)"/>
+<text class="monom" x="36" y="135">state (again)</text>
+<rect x="160" y="123" width="16" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.2"/>
+<line x1="176" y1="131" x2="181" y2="131" stroke="var(--accent)" stroke-width="1" marker-end="url(#ara)"/>
+<rect x="181" y="123" width="16" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.2"/>
+<line x1="197" y1="131" x2="202" y2="131" stroke="var(--accent)" stroke-width="1" marker-end="url(#ara)"/>
+<rect x="202" y="123" width="16" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.2"/>
+<line x1="218" y1="131" x2="223" y2="131" stroke="var(--accent)" stroke-width="1" marker-end="url(#ara)"/>
+<rect x="223" y="123" width="16" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.2"/>
+<line x1="239" y1="131" x2="244" y2="131" stroke="var(--accent)" stroke-width="1" marker-end="url(#ara)"/>
+<rect x="244" y="123" width="16" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.2"/>
+<line x1="260" y1="131" x2="265" y2="131" stroke="var(--accent)" stroke-width="1" marker-end="url(#ara)"/>
+<rect x="265" y="123" width="16" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.2"/>
+<text class="monom" x="290" y="135">...</text>
+<rect x="28" y="156" width="120" height="26" rx="4" fill="var(--bg-subtle)" stroke="var(--border)"/>
+<text class="monom" x="36" y="173">state (again)</text>
+<rect x="160" y="161" width="16" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.2"/>
+<line x1="176" y1="169" x2="181" y2="169" stroke="var(--accent)" stroke-width="1" marker-end="url(#ara)"/>
+<rect x="181" y="161" width="16" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.2"/>
+<line x1="197" y1="169" x2="202" y2="169" stroke="var(--accent)" stroke-width="1" marker-end="url(#ara)"/>
+<rect x="202" y="161" width="16" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.2"/>
+<line x1="218" y1="169" x2="223" y2="169" stroke="var(--accent)" stroke-width="1" marker-end="url(#ara)"/>
+<rect x="223" y="161" width="16" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.2"/>
+<line x1="239" y1="169" x2="244" y2="169" stroke="var(--accent)" stroke-width="1" marker-end="url(#ara)"/>
+<rect x="244" y="161" width="16" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.2"/>
+<line x1="260" y1="169" x2="265" y2="169" stroke="var(--accent)" stroke-width="1" marker-end="url(#ara)"/>
+<rect x="265" y="161" width="16" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.2"/>
+<text class="monom" x="290" y="173">...</text>
+<rect x="28" y="194" width="120" height="26" rx="4" fill="var(--bg-subtle)" stroke="var(--border)"/>
+<text class="monom" x="36" y="211">state (again)</text>
+<rect x="160" y="199" width="16" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.2"/>
+<line x1="176" y1="207" x2="181" y2="207" stroke="var(--accent)" stroke-width="1" marker-end="url(#ara)"/>
+<rect x="181" y="199" width="16" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.2"/>
+<line x1="197" y1="207" x2="202" y2="207" stroke="var(--accent)" stroke-width="1" marker-end="url(#ara)"/>
+<rect x="202" y="199" width="16" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.2"/>
+<line x1="218" y1="207" x2="223" y2="207" stroke="var(--accent)" stroke-width="1" marker-end="url(#ara)"/>
+<rect x="223" y="199" width="16" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.2"/>
+<line x1="239" y1="207" x2="244" y2="207" stroke="var(--accent)" stroke-width="1" marker-end="url(#ara)"/>
+<rect x="244" y="199" width="16" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.2"/>
+<line x1="260" y1="207" x2="265" y2="207" stroke="var(--accent)" stroke-width="1" marker-end="url(#ara)"/>
+<rect x="265" y="199" width="16" height="16" rx="3" fill="none" stroke="var(--accent)" stroke-width="1.2"/>
+<text class="monom" x="290" y="211">...</text>
+<text class="lb" x="28" y="236">two more calls</text>
+<rect x="28" y="258" width="322" height="76" rx="5" fill="var(--bg-subtle)" stroke="var(--border)"/>
+<text class="key" x="40" y="280">What you are billed for</text>
+<text class="lb" x="40" y="298">5 x the state, read five times over, at the input rate.</text>
+<text class="lb" x="40" y="314">Every outlined square is an output token at about 5x input.</text>
+<text class="zn" x="40" y="328">Each square is also one full pass over the weights.</text>
+<text class="xl" x="404" y="84">Jev, one call</text>
+<text class="lb" x="404" y="100">state read once, questions answered in parallel</text>
+<rect x="404" y="118" width="120" height="64" rx="4" fill="var(--bg-subtle)" stroke="var(--border)"/>
+<text class="mono" x="416" y="142">state</text>
+<text class="monom" x="416" y="158">read once</text>
+<text class="monom" x="416" y="172">one pass</text>
+<line x1="524" y1="150" x2="554" y2="131" stroke="var(--text-muted)" stroke-width="1" marker-end="url(#ar)"/>
+<rect x="556" y="118" width="176" height="26" rx="4" fill="none" stroke="var(--accent2)" stroke-width="1.2"/>
+<text class="monom" x="564" y="135">category</text>
+<text class="mono" x="662" y="135">"billing"</text>
+<line x1="524" y1="150" x2="554" y2="163" stroke="var(--text-muted)" stroke-width="1" marker-end="url(#ar)"/>
+<rect x="556" y="150" width="176" height="26" rx="4" fill="none" stroke="var(--accent2)" stroke-width="1.2"/>
+<text class="monom" x="564" y="167">bug_severity</text>
+<text class="mono" x="662" y="167">1.4</text>
+<line x1="524" y1="150" x2="554" y2="195" stroke="var(--text-muted)" stroke-width="1" marker-end="url(#ar)"/>
+<rect x="556" y="182" width="176" height="26" rx="4" fill="none" stroke="var(--accent2)" stroke-width="1.2"/>
+<text class="monom" x="564" y="199">has_repro</text>
+<text class="mono" x="662" y="199">0.31</text>
+<line x1="524" y1="150" x2="554" y2="227" stroke="var(--text-muted)" stroke-width="1" marker-end="url(#ar)"/>
+<rect x="556" y="214" width="176" height="26" rx="4" fill="none" stroke="var(--accent2)" stroke-width="1.2"/>
+<text class="monom" x="564" y="231">refund_asked</text>
+<text class="mono" x="662" y="231">0.95</text>
+<line x1="524" y1="150" x2="554" y2="259" stroke="var(--text-muted)" stroke-width="1" marker-end="url(#ar)"/>
+<rect x="556" y="246" width="176" height="26" rx="4" fill="none" stroke="var(--accent2)" stroke-width="1.2"/>
+<text class="monom" x="564" y="263">frustration</text>
+<text class="mono" x="662" y="263">1.9</text>
+<rect x="404" y="288" width="328" height="76" rx="5" fill="var(--bg-subtle)" stroke="var(--border)"/>
+<text class="key" x="416" y="310">What you are billed for</text>
+<text class="lb" x="416" y="328">1 x the state, plus the text of the five questions.</text>
+<text class="lb" x="416" y="344">Nothing on the right-hand side. Output tokens are free.</text>
+<text class="zn" x="416" y="358">The fifth question costs its own length and nothing else.</text>
+<text class="lb" x="28" y="388">Source: TypeSafe docs, Models and Speculative fan-out, and the launch blog’s sampling row. Read 2026-09-21. Diagram is mine.</text>
+</svg>
+      <figcaption><b>Where the money goes in a decision.</b> Five independent judgements
+        about the same state. On the left the state is re-read once per call and every
+        answer is written token by token; on the right it is read once and all five answers
+        come back off that single reading. Mine, from TypeSafe&rsquo;s description of the
+        sampler.</figcaption>
+    </figure>
+
+    <p>
+      They already have a documented pattern for this, called speculative fan-out. Because
+      the questions all read the same prefilled state,
+      adding a question costs you the length of the question and almost nothing in time. So
+      you send every question your decision tree could possibly need, including the branches
+      that will turn out irrelevant, and discard what you do not use. Under sequential
+      decode that idea is absurd. Here it is obviously correct, and it quietly changes how
+      you would write the surrounding code.
+    </p>
+
+    <h2>Doing the arithmetic on their numbers</h2>
+
+    <p>
+      Since output is free and input is a flat rate, any published dollar figure divides
+      straight back into tokens. That is a rare thing to be able to do to a model vendor.
+    </p>
+    <p>
+      The side-by-side demo on their home page reports $0.000081 for a Jev call. At $0.042
+      per million that is 1,929 billed input tokens. Jev&rsquo;s point on the workflow-eval
+      chart sits at roughly $0.0004 per case, which is about 9,500 tokens. So the eval cases
+      are about five times the size of the demo, which lines up with TypeSafe telling you
+      the demo was &ldquo;highly simplified&rdquo; and that its &ldquo;relatively shorter
+      input paints our model in an advantageous light&rdquo;.
+    </p>
+    <p>
+      Keep that 9,500. It is roughly 30 percent of the 32k state budget, and it is the state
+      size at which the advertised economics were measured. Their
+      <a href="https://docs.typesafe.ai/model-jaggedness/jev-1.13" target="_blank" rel="noopener">jaggedness page</a>
+      also says accuracy falls as the state grows with material the question does not need,
+      a failure they name context rot. The cheap regime and the accurate regime are the same
+      regime, and they degrade in the same direction. Those two facts are published one
+      click apart.
+    </p>
+    <p>
+      While I was dividing things: the two numbers sitting under the &ldquo;193.6x Faster,
+      444.6x Cheaper&rdquo; banner are $0.000081 in 0.114s against $0.013880 in 8.566s.
+      Those give 171x and 75x, not 445x and 194x. The blog resolves it honestly, the banner
+      comes from the four workflow evals and the demo is a different and deliberately
+      simpler query, but it is the sort of thing worth checking before repeating either
+      pair.
+    </p>
+
+    <h2>What the benchmark&rsquo;s y-axis actually is</h2>
+
+    <p>The eval site says how the reference labels were made:</p>
+
+    <blockquote>
+      we assume that the code is correct, and measure against the current smartest large
+      models. For this eval, the reference labels are generated via an average of the
+      responses of GPT-6 Astra and Claude Fable 5.1, both at high thinking.
+    </blockquote>
+
+    <p>
+      The y-axis labelled &ldquo;accuracy&rdquo; is agreement with two frontier LLMs, scored
+      against their averaged opinion rather than against outcomes or human labels.
+    </p>
+
+    <figure class="blog-fig">
+      <div class="docs-shot">
+        <img src="../assets/img/blog/what-jev-is-graded-against/docs-workflow-evals-chart.png" alt="TypeSafe's workflow eval scatter: mean accuracy against cost per case on a log x-axis from 0.0001 to 1 dollar, four workflows averaged with equal weight. Jev sits near 68 percent at roughly 0.0004 dollars, far to the left of every other model, with the frontier line running from Jev through luna and terra up to sol near 74 percent." loading="lazy" width="709" height="485">
+      </div>
+      <figcaption><b>The chart everyone is quoting.</b> From
+        <a href="https://evals.typesafe.ai/" target="_blank" rel="noopener">evals.typesafe.ai</a>,
+        read 21 September 2026. Up and to the left is better. The values I read off it below
+        are approximate, because they are readings from a plot rather than a published
+        table.</figcaption>
+    </figure>
+
+    <p>
+      For the cost claim this is fine, and I want to be fair about that. If you already
+      trust frontier models on these judgements and you want to know what the same
+      judgements cost from Jev, this measures exactly the right thing.
+    </p>
+    <p>
+      But it caps what the chart can ever show. A model that scored 100 percent here would
+      be a perfect imitation of Astra and Fable&rsquo;s consensus. The metric cannot show
+      Jev being better than them, and it cannot say anything at all about calibration,
+      because calibration is defined against outcomes and there are no outcomes in this
+      experiment. TypeSafe&rsquo;s own AI primer defines it that way: probabilities
+      &ldquo;optimized against outcomes&rdquo;, such that things assigned 0.8 happen about
+      80 percent of the time. The training method is literally named Reinforcement Learning
+      for Calibrated Decisions. The headline benchmark does not test it.
+    </p>
+    <p>
+      That is not a contradiction and I do not think it is a trick. It is a benchmark built
+      to answer the cost question, doing that job well, and being read as though it answered
+      the reliability question too.
+    </p>
+    <p>
+      The chart also gives you the exchange rate. Jev is at about
+      67.7 percent. Matching it with an LLM costs about $0.035 a case against Jev&rsquo;s
+      $0.0004, roughly 90 times more for three tenths of a point. Buying the best point on
+      the chart, about 74 percent, costs about $0.09, roughly 230 times more for six points.
+    </p>
+    <p>
+      Turn that into a deployment number. TypeSafe&rsquo;s Doom demo makes about 10 decisions
+      a second and they put it at around $7 an hour. That is 36,000 calls. The same workload
+      on the most accurate configuration on their own chart would be about $3,200 an hour.
+    </p>
+    <p>
+      Jev is not smarter than a frontier model. It moves a whole regime, AI sitting in a
+      software inner loop at 10Hz, from economically impossible to roughly the price of
+      lunch, at about six points below frontier agreement. Whether six points is affordable
+      is a question about your application, and that is what you should be evaluating.
+    </p>
+
+    <h2>Calibrated is not coherent</h2>
+
+    <p>
+      TypeSafe&rsquo;s home page says &ldquo;Zero Hallucinations&rdquo; and the launch blog
+      says Jev &ldquo;can&rsquo;t hallucinate&rdquo;. The nuance note is more careful:
+      &ldquo;Our number is not empirical. Schema matching is guaranteed, thus we can
+      confidently add 0% into the plots.&rdquo;
+    </p>
+    <p>
+      That is a claim about types, not about truth. Jev cannot return an option you did not
+      define. It can absolutely return the wrong one of the options you did define, and the
+      jaggedness page is nine failure modes describing when: literal reading, counting, date
+      comparison, indirection, adversarial content in the state, and more.
+    </p>
+    <p>
+      The page also has a table showing their own model breaking an identity you would
+      assume holds.
+    </p>
+
+    <figure class="blog-fig">
+      <div class="docs-shot">
+        <img src="../assets/img/blog/what-jev-is-graded-against/docs-structural-invariants.png" alt="The Common-sense structural invariants section of TypeSafe's jaggedness page. The first table shows the refund question asked as a Noul returning 0.22 and the same question as a yes/no Choice returning yes 0.01, no 0.99, confidence 0.97. The second table shows a question and its negation asked as two Nouls, returning 0.72 and 0.47, summing to 1.19." loading="lazy" width="962" height="575">
+      </div>
+      <figcaption><b>TypeSafe publishing their own model breaking an identity.</b> From the
+        <a href="https://docs.typesafe.ai/model-jaggedness/jev-1.13" target="_blank" rel="noopener">jev-1.13 jaggedness page</a>,
+        read 21 September 2026. Very few vendors ship a page like this at launch.</figcaption>
+    </figure>
+
+    <p>
+      Ask &ldquo;is the customer asking for a refund&rdquo; and get 0.72. Ask &ldquo;is the
+      customer asking for something other than a refund&rdquo; and get 0.47. They sum to
+      1.19.
+    </p>
+    <p>
+      TypeSafe report this and tell you not to rely on structural invariance. They do not
+      explain why it happens, and the explanation applies to every calibrated model, not
+      only this one.
+    </p>
+    <p>
+      Calibration is a constraint on averages inside a group of predictions. It says that
+      among all the items scored 0.7, about 70 percent turn out positive. It says nothing
+      whatsoever about the relationship between two different answers on the same item.
+      Coherence, meaning the probability axioms holding across related questions about one
+      item, is a strictly stronger property, and nothing in the training objective asks for
+      it.
+    </p>
+    <p>
+      I ran the smallest simulation that makes the point. Two predictors, one for a question
+      and one for its negation, each calibrated to within a hundredth by construction,
+      200,000 items.
+    </p>
+
+    <figure class="blog-fig">
+      <svg id="jv2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 470" width="720" height="470" role="img" aria-labelledby="c1t c1d">
+<title id="c1t">Two calibrated predictors do not have to agree with each other on any single item</title>
+<desc id="c1d">A histogram of the per-item sum of two probabilities, from a seeded simulation of two hundred thousand items. One predictor states the probability that an item is a refund request, the other states the probability that it is not. Each is calibrated to within about one hundredth. Their sums are centred on one but spread from roughly 0.3 to 1.7, so the value of 1.19 that TypeSafe publish in their own documentation sits in an ordinary part of the distribution rather than in the tail. Calibration is a constraint on averages within a group of predictions and places no constraint at all on two answers about the same item.</desc>
+<rect width="720" height="470" fill="var(--bg)"/>
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-muted)"/></marker><marker id="ara" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent)"/></marker></defs>
+<text class="ttl" x="62" y="30">Calibrated does not mean coherent</text>
+<text class="sub" x="62" y="48">Two predictors, one for a question and one for its negation. Each calibrated to within 0.01. Sum of the two on the same item.</text>
+<text class="sub" x="62" y="64">Seeded simulation, 200,000 items. Ours, not TypeSafe’s. Their published pair sums to 1.19.</text>
+<line x1="62" y1="370.0" x2="696" y2="370.0" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="54" y="373.5" text-anchor="end">0.0%</text>
+<line x1="62" y1="300.5" x2="696" y2="300.5" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="54" y="304.0" text-anchor="end">1.5%</text>
+<line x1="62" y1="231.0" x2="696" y2="231.0" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="54" y="234.5" text-anchor="end">3.1%</text>
+<line x1="62" y1="161.5" x2="696" y2="161.5" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="54" y="165.0" text-anchor="end">4.6%</text>
+<line x1="62" y1="92.0" x2="696" y2="92.0" stroke="var(--grid)" stroke-width="1"/>
+<text class="ax" x="54" y="95.5" text-anchor="end">6.2%</text>
+<rect x="157.10" y="369.98" width="7.32" height="0.02" fill="var(--accent2)" opacity="0.55"/>
+<rect x="165.03" y="369.98" width="7.33" height="0.02" fill="var(--accent2)" opacity="0.55"/>
+<rect x="172.95" y="369.91" width="7.32" height="0.09" fill="var(--accent2)" opacity="0.55"/>
+<rect x="180.88" y="369.84" width="7.33" height="0.16" fill="var(--accent2)" opacity="0.55"/>
+<rect x="188.80" y="369.75" width="7.33" height="0.25" fill="var(--accent2)" opacity="0.55"/>
+<rect x="196.73" y="369.28" width="7.32" height="0.72" fill="var(--accent2)" opacity="0.55"/>
+<rect x="204.65" y="368.94" width="7.33" height="1.06" fill="var(--accent2)" opacity="0.55"/>
+<rect x="212.58" y="367.31" width="7.32" height="2.69" fill="var(--accent2)" opacity="0.55"/>
+<rect x="220.50" y="365.55" width="7.33" height="4.45" fill="var(--accent2)" opacity="0.55"/>
+<rect x="228.43" y="363.61" width="7.33" height="6.39" fill="var(--accent2)" opacity="0.55"/>
+<rect x="236.35" y="360.34" width="7.33" height="9.66" fill="var(--accent2)" opacity="0.55"/>
+<rect x="244.28" y="355.62" width="7.32" height="14.38" fill="var(--accent2)" opacity="0.55"/>
+<rect x="252.20" y="347.94" width="7.32" height="22.06" fill="var(--accent2)" opacity="0.55"/>
+<rect x="260.12" y="341.21" width="7.33" height="28.79" fill="var(--accent2)" opacity="0.55"/>
+<rect x="268.05" y="329.10" width="7.33" height="40.90" fill="var(--accent2)" opacity="0.55"/>
+<rect x="275.98" y="314.97" width="7.33" height="55.03" fill="var(--accent2)" opacity="0.55"/>
+<rect x="283.90" y="297.38" width="7.33" height="72.62" fill="var(--accent2)" opacity="0.55"/>
+<rect x="291.83" y="281.10" width="7.32" height="88.90" fill="var(--accent2)" opacity="0.55"/>
+<rect x="299.75" y="259.78" width="7.33" height="110.22" fill="var(--accent2)" opacity="0.55"/>
+<rect x="307.68" y="240.43" width="7.33" height="129.57" fill="var(--accent2)" opacity="0.55"/>
+<rect x="315.60" y="214.46" width="7.33" height="155.54" fill="var(--accent2)" opacity="0.55"/>
+<rect x="323.53" y="194.50" width="7.33" height="175.50" fill="var(--accent2)" opacity="0.55"/>
+<rect x="331.45" y="173.02" width="7.32" height="196.98" fill="var(--accent2)" opacity="0.55"/>
+<rect x="339.38" y="162.59" width="7.33" height="207.41" fill="var(--accent2)" opacity="0.55"/>
+<rect x="347.30" y="149.15" width="7.33" height="220.85" fill="var(--accent2)" opacity="0.55"/>
+<rect x="355.23" y="138.47" width="7.33" height="231.53" fill="var(--accent2)" opacity="0.55"/>
+<rect x="363.15" y="132.78" width="7.33" height="237.22" fill="var(--accent2)" opacity="0.55"/>
+<rect x="371.08" y="126.23" width="7.32" height="243.77" fill="var(--accent2)" opacity="0.55"/>
+<rect x="379.00" y="126.14" width="7.33" height="243.86" fill="var(--accent2)" opacity="0.55"/>
+<rect x="386.93" y="134.41" width="7.32" height="235.59" fill="var(--accent2)" opacity="0.55"/>
+<rect x="394.85" y="141.00" width="7.32" height="229.00" fill="var(--accent2)" opacity="0.55"/>
+<rect x="402.77" y="145.15" width="7.33" height="224.85" fill="var(--accent2)" opacity="0.55"/>
+<rect x="410.70" y="158.05" width="7.32" height="211.95" fill="var(--accent2)" opacity="0.55"/>
+<rect x="418.62" y="178.71" width="7.33" height="191.29" fill="var(--accent2)" opacity="0.55"/>
+<rect x="426.55" y="192.85" width="7.32" height="177.15" fill="var(--accent2)" opacity="0.55"/>
+<rect x="434.48" y="216.65" width="7.33" height="153.35" fill="var(--accent2)" opacity="0.55"/>
+<rect x="442.40" y="237.20" width="7.33" height="132.80" fill="var(--accent2)" opacity="0.55"/>
+<rect x="450.33" y="258.76" width="7.32" height="111.24" fill="var(--accent2)" opacity="0.55"/>
+<rect x="458.25" y="280.49" width="7.33" height="89.51" fill="var(--accent2)" opacity="0.55"/>
+<rect x="466.18" y="295.98" width="7.32" height="74.02" fill="var(--accent2)" opacity="0.55"/>
+<rect x="474.10" y="314.81" width="7.33" height="55.19" fill="var(--accent2)" opacity="0.55"/>
+<rect x="482.03" y="330.53" width="7.33" height="39.47" fill="var(--accent2)" opacity="0.55"/>
+<rect x="489.95" y="339.76" width="7.32" height="30.24" fill="var(--accent2)" opacity="0.55"/>
+<rect x="497.88" y="349.36" width="7.33" height="20.64" fill="var(--accent2)" opacity="0.55"/>
+<rect x="505.80" y="355.86" width="7.32" height="14.14" fill="var(--accent2)" opacity="0.55"/>
+<rect x="513.73" y="360.63" width="7.33" height="9.37" fill="var(--accent2)" opacity="0.55"/>
+<rect x="521.65" y="363.25" width="7.32" height="6.75" fill="var(--accent2)" opacity="0.55"/>
+<rect x="529.58" y="365.91" width="7.32" height="4.09" fill="var(--accent2)" opacity="0.55"/>
+<rect x="537.50" y="367.90" width="7.33" height="2.10" fill="var(--accent2)" opacity="0.55"/>
+<rect x="545.43" y="368.58" width="7.32" height="1.42" fill="var(--accent2)" opacity="0.55"/>
+<rect x="553.35" y="369.07" width="7.33" height="0.93" fill="var(--accent2)" opacity="0.55"/>
+<rect x="561.28" y="369.64" width="7.32" height="0.36" fill="var(--accent2)" opacity="0.55"/>
+<rect x="569.20" y="369.84" width="7.32" height="0.16" fill="var(--accent2)" opacity="0.55"/>
+<rect x="577.12" y="369.95" width="7.33" height="0.05" fill="var(--accent2)" opacity="0.55"/>
+<line x1="62" y1="370" x2="696" y2="370" stroke="var(--border)" stroke-width="1"/>
+<line x1="62.0" y1="370" x2="62.0" y2="375" stroke="var(--border)" stroke-width="1"/>
+<text class="ax" x="62.0" y="388" text-anchor="middle">0.0</text>
+<line x1="220.5" y1="370" x2="220.5" y2="375" stroke="var(--border)" stroke-width="1"/>
+<text class="ax" x="220.5" y="388" text-anchor="middle">0.5</text>
+<line x1="379.0" y1="370" x2="379.0" y2="375" stroke="var(--border)" stroke-width="1"/>
+<text class="ax" x="379.0" y="388" text-anchor="middle">1.0</text>
+<line x1="537.5" y1="370" x2="537.5" y2="375" stroke="var(--border)" stroke-width="1"/>
+<text class="ax" x="537.5" y="388" text-anchor="middle">1.5</text>
+<line x1="696.0" y1="370" x2="696.0" y2="375" stroke="var(--border)" stroke-width="1"/>
+<text class="ax" x="696.0" y="388" text-anchor="middle">2.0</text>
+<text class="xl" x="379" y="408" text-anchor="middle">P(refund) + P(not refund), same item</text>
+<line x1="379.0" y1="86" x2="379.0" y2="370" stroke="var(--text-muted)" stroke-width="1.2" stroke-dasharray="4 3"/>
+<text class="lb" x="373.0" y="102" text-anchor="end">coherent answer</text>
+<line x1="439.2" y1="112" x2="439.2" y2="370" stroke="var(--accent)" stroke-width="1.6"/>
+<text class="key" x="447.2" y="124">1.19</text>
+<text class="lb" x="447.2" y="138">TypeSafe’s own docs</text>
+<text class="lb" x="62" y="442">Middle 98 percent of the simulated sums runs 0.61 to 1.39. Calibration constrains group averages, not two answers about one item.</text>
+<text class="lb" x="62" y="458">Published pair: docs.typesafe.ai/model-jaggedness/jev-1.13, read 2026-09-21. Simulation and chart are mine.</text>
+</svg>
+      <figcaption><b>Calibration says nothing about two answers on one item.</b> My seeded
+        simulation, 200,000 items, not TypeSafe&rsquo;s data. Mean sum 1.0001, middle 98
+        percent from 0.61 to 1.39. Their published 1.19 sits inside the bulk of the
+        distribution.</figcaption>
+    </figure>
+
+    <p>
+      Mean sum 1.0001. Middle 98 percent running from 0.61 to 1.39. And 28.7 percent of
+      items land at least as far from 1 as TypeSafe&rsquo;s published example. Their 1.19 is
+      not a defect, it is an ordinary draw from what calibrated-but-independent predictions
+      look like.
+    </p>
+    <p>
+      So never combine probabilities from two separate questions with arithmetic that
+      assumes they form a joint distribution. Ask the one question you actually mean,
+      threshold that, and put the combination logic in code. Which is, to their credit,
+      exactly what TypeSafe&rsquo;s docs tell you to do.
+    </p>
+
+    <h2>One more thing worth knowing before you gate on it</h2>
+
+    <p>
+      Their <a href="https://docs.typesafe.ai/confidence" target="_blank" rel="noopener">confidence docs</a>
+      are precise in a way that is easy to skim past. <code>confidence</code> is &ldquo;a
+      statistic computed from the probability distribution&rdquo;, collapsing how peaked the
+      distribution is into a single number. The calibration story attaches to the
+      probabilities. Confidence is a derived spread measure, and they explicitly say
+      &ldquo;you are never locked into our definition&rdquo; and hand you the full
+      distribution so you can compute your own.
+    </p>
+    <p>
+      So their own routing example, which requires <code>confidence &gt; 0.9</code> before
+      executing a transfer, is not asserting that the answer is right 90 percent of the
+      time. It is asserting that the distribution was sharp. Those correlate. They are not
+      the same thing. If you are gating something destructive, threshold the probability of
+      the specific option you are about to act on, not the shape statistic.
+    </p>
+    <p>
+      Noul answers carry no confidence at all, which is the consistent choice: a single
+      probability has no distribution shape to summarise, and it is the calibrated quantity
+      directly.
+    </p>
+
+    <h2>What I take from it</h2>
+
+    <p>
+      The architecture is the real story and it is a good one. Removing the decode phase for
+      problems whose answer space is small and known is an obviously correct trade that the
+      field has been slow to make, and the free-output price is a clean consequence rather
+      than a stunt. I would use it tomorrow for routing, triage, filtering and guardrails,
+      with small states and questions written literally.
+    </p>
+    <p>
+      The three properties that the word &ldquo;reliable&rdquo; is currently carrying should
+      be kept apart. Type-safety is guaranteed and genuinely useful. Calibration is claimed,
+      plausible, and not what the headline benchmark measures. Coherence is not claimed at
+      all and their docs are clear that you should not assume it.
+    </p>
+    <p>
+      One last detail I enjoyed. Jev is named after William Stanley Jevons, and the FAQ says
+      why: they expect machine intelligence to follow coal after the steam engine, where
+      each order of magnitude off the price opened orders of magnitude more uses. Naming
+      your model after the rebound effect is a fairly direct statement of what they think
+      they are selling, and on the evidence of the price sheet they are probably right.
+    </p>
+
+  </div>
+
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-icons">
+      <a href="mailto:arpitsinghgautam777@gmail.com" title="Email"><i class="fas fa-envelope" aria-hidden="true"></i></a>
+      <a href="https://scholar.google.com/citations?hl=en&user=BqFcF_IAAAAJ" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap" aria-hidden="true"></i></a>
+      <a href="https://github.com/arpitsinghgautam" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i></a>
+      <a href="https://linkedin.com/in/arpitsinghgautam" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+      <a href="https://twitter.com/Asg_Wolverine" title="Twitter/X" target="_blank" rel="noopener"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+      <a href="https://topmate.io/arpit_singh_gautam/" title="TopMate" target="_blank" rel="noopener"><i class="fas fa-calendar-check" aria-hidden="true"></i></a>
+    </div>
+    <span>&copy; 2026 Arpit Singh Gautam &middot; Bengaluru, India</span>
+  </div>
+</footer>
+
+<script>
+  function toggleTheme(){var cur=document.documentElement.getAttribute('data-theme');var next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);localStorage.setItem('theme',next);document.getElementById('theme-toggle').textContent=next==='dark'?'\u2600\ufe0f':'\ud83c\udf19';}
+  (function(){var t=document.documentElement.getAttribute('data-theme');var btn=document.getElementById('theme-toggle');if(btn)btn.textContent=t==='dark'?'\u2600\ufe0f':'\ud83c\udf19';})();
+  var btt=document.getElementById('back-to-top');
+  window.addEventListener('scroll',function(){if(window.scrollY>300){btt.classList.add('visible');}else{btt.classList.remove('visible');}});
+  btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+</body>
+</html>
