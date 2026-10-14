@@ -64,7 +64,7 @@
       <img class="project-thumb" src="assets/img/portfolio/newt-thumb.svg" alt="nano-Triton and nano-Helion - mini-Triton JIT compiler" decoding="async" loading="lazy">
       <div class="project-info">
         <div class="project-title">nano-Triton &amp; nano-Helion <span style="font-size:0.72rem;background:var(--accent);color:#fff;padding:1px 7px;border-radius:10px;margin-left:6px;font-weight:600">~4,000 lines</span></div>
-        <div class="project-desc">The Triton + Helion GPU kernel stack rebuilt from scratch: Python JIT-compiled to real tensor-core machine code via NVRTC, raw <code>mma</code>/<code>ldmatrix</code> PTX with XOR-swizzled shared memory, and a correctness-first autotuner. Memory-bandwidth parity with Triton and 76 to 83% of its sustained fp16 matmul throughput. Read the writeup.</div>
+        <div class="project-desc">The Triton + Helion GPU kernel stack rebuilt from scratch: Python JIT-compiled to real tensor-core machine code via NVRTC, raw <code>mma</code>/<code>ldmatrix</code> PTX with XOR-swizzled shared memory, and a correctness-first autotuner. Within 2% of Triton on memory-bound kernels and 70 to 88% of its fp16 tensor-core matmul throughput on two discrete Blackwell GPUs (169.2 TFLOP/s on an RTX 5090). Read the writeup.</div>
         <div class="tags"><span class="tag">Compilers</span><span class="tag">CUDA / PTX</span><span class="tag">GPU Kernels</span><span class="tag">Triton</span></div>
         <div class="project-date" style="margin-top:6px">2026 · MIT licensed · pip install nano-triton</div>
       </div>
@@ -84,7 +84,7 @@
       <img class="project-thumb" src="assets/img/portfolio/aftermath-thumb.svg" alt="Aftermath - ground-truth LLM deception measurement" decoding="async" loading="lazy">
       <div class="project-info">
         <div class="project-title">Aftermath <span style="font-size:0.72rem;background:var(--accent);color:#fff;padding:1px 7px;border-radius:10px;margin-left:6px;font-weight:600">Paper in progress</span></div>
-        <div class="project-desc">A multi-agent survival sandbox with deterministic causation-gating, built to separate structural hoarding from genuinely emergent deception in LLMs. Stripping prompt disposition collapses reported deception by 85%, exposing severe measurement confounds in current agentic evaluations.</div>
+        <div class="project-desc">A multi-agent survival sandbox with deterministic causation-gating, built to separate structural hoarding from genuinely emergent deception in LLMs. An ungated LLM judge over-counts deception 1.44x, and stripping the selfish persona cuts causally harmful concealed deception from 0.118 to 0.018 (85%), exposing measurement confounds in current agentic evaluations.</div>
         <div class="tags"><span class="tag">AI Safety</span><span class="tag">Multi-Agent</span><span class="tag">Evaluation</span><span class="tag">Deception</span></div>
         <div class="project-date" style="margin-top:6px">2026 · GitHub ↗</div>
       </div>
@@ -124,7 +124,7 @@
       <img class="project-thumb" src="assets/img/portfolio/cognisql/cognisql-thumb.png" alt="CogniSQL-R1-Zero" onerror="this.style.display='none'" decoding="async" loading="lazy">
       <div class="project-info">
         <div class="project-title">CogniSQL-R1-Zero <i class="fas fa-external-link-alt" style="font-size:0.7rem;color:var(--text-muted)" aria-hidden="true"></i></div>
-        <div class="project-desc">Lightweight reinforced reasoning model for Text-to-SQL using GRPO RL and DeepSpeed distributed training on a 7B backbone. SOTA on the BIRD benchmark, outperforming 236B+ models.</div>
+        <div class="project-desc">Lightweight reinforced reasoning model for Text-to-SQL using GRPO RL and DeepSpeed distributed training on a 7B backbone. State of the art on BIRD at release (59.97% with a 7B model), above DeepSeek-Coder 236B and Mistral 123B.</div>
         <div class="tags"><span class="tag">Text-to-SQL</span><span class="tag">GRPO</span><span class="tag">RL</span><span class="tag">7B LLM</span></div>
         <div class="project-date" style="margin-top:6px">2025 · arXiv</div>
       </div>
