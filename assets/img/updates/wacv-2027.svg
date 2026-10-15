@@ -1,0 +1,22 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paper accepted at WACV 2027">
+  <defs>
+    <linearGradient id="wacvbg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fcfcfe"/>
+      <stop offset="1" stop-color="#eaf0f7"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#wacvbg)"/>
+  <rect width="400" height="5" fill="#1d5c8c"/>
+  <g transform="translate(70 60)">
+    <rect x="0" y="0" width="118" height="118" rx="8" fill="#ffffff" stroke="#c3cad4" stroke-width="2"/>
+    <text x="59" y="40" text-anchor="middle" font-family="-apple-system, 'Segoe UI', sans-serif" font-size="11" fill="#8a919c">QUIZ</text>
+    <text x="59" y="82" text-anchor="middle" font-family="Georgia, serif" font-size="40" font-weight="700" fill="#2e7a4e">&#10003;</text>
+  </g>
+  <g transform="translate(212 60)">
+    <rect x="0" y="0" width="118" height="118" rx="8" fill="#ffffff" stroke="#c3cad4" stroke-width="2"/>
+    <text x="59" y="40" text-anchor="middle" font-family="-apple-system, 'Segoe UI', sans-serif" font-size="11" fill="#8a919c">CAPTION</text>
+    <text x="59" y="82" text-anchor="middle" font-family="Georgia, serif" font-size="40" font-weight="700" fill="#b3261e">&#10007;</text>
+  </g>
+  <text x="200" y="230" text-anchor="middle" font-family="-apple-system, 'Segoe UI', sans-serif" font-size="22" font-weight="700" fill="#222831">WACV 2027</text>
+  <text x="200" y="256" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="12" fill="#8a919c">Accepted · Evaluations and Datasets Track</text>
+</svg>
